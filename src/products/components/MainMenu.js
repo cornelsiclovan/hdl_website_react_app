@@ -1,13 +1,46 @@
-import React from "react";
+import React, { useEffect, useState }  from "react";
+import { useHttpClient } from '../../shared/hooks/http-hook';
 
-const MainMenu = () => {
+const MainMenu = (props) => {
+    const [loadedMainMenuItems, setLoadedMainMenuItems] = useState();
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
+    useEffect(() => {
+        const fetchMainMenuItems = async () => {
+        
+            try {
+                const responseData = await sendRequest(`http://localhost:3001/api/categories`);
+
+                setLoadedMainMenuItems(responseData);
+            } catch (err) {}
+        };
+
+        fetchMainMenuItems();
+    }, [sendRequest]);
+
+    // const onMainMenuClickHandler = async (e) => {
+    //     console.log(e.target.dataset.letter);
+    // } 
+ 
     return (
         <React.Fragment>
              <div class="main-menu">
                 <nav class="main-menu__nav">
                     <ul class="main-menu__list">
-                        <li class="main-menu__item">
+                    { !isLoading && loadedMainMenuItems && loadedMainMenuItems.map(
+                                mainMenuItem => {
+                                    return (
+                                        <li class="main-menu__item">
+                                            <a href="/products" data-letter={mainMenuItem._id} onClick={props.onMainMenuClickHandler} class="main-menu__link">
+                                                {mainMenuItem.name}
+                                            </a> 
+                                        </li>
+                                    );     
+                                }
+                            ) }
+
+
+                        {/* <li class="main-menu__item">
                             <a href="#" class="main-menu__link">Bus pro</a>
                         </li>
                         <li class="main-menu__item">
@@ -27,7 +60,7 @@ const MainMenu = () => {
                         </li>
                         <li class="main-menu__item">
                             <a href="#" class="main-menu__link">IQRC</a>
-                        </li>
+                        </li> */}
                     </ul>
                 </nav>
                 
@@ -70,7 +103,7 @@ const MainMenu = () => {
                             <option value="5">Security System</option>
                             <option value="6">Communication Gateways</option>
                             <option value="7">System modules</option>
-                            <option value="5">>Power metering</option>
+                            <option value="5">Power metering</option>
                             <option value="6">Cables & accessories</option>
                             <option value="7">Powe Supply</option>
                             
@@ -85,5 +118,6 @@ const MainMenu = () => {
         </React.Fragment>
     );
 };
+
 
 export default MainMenu;

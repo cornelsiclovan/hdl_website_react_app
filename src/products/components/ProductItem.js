@@ -2,9 +2,6 @@ import React from 'react';
 
 const ProductItem = props => {
 
-
-    console.log(props.img1);
-
     return (
         <React.Fragment>
             <div class="card-item">
@@ -12,7 +9,7 @@ const ProductItem = props => {
                         <span class="card-item__heading-span">{props.name}</span>
                         
                     </h4> 
-                    <img  class="card-item__picture" src={props.image} />   
+                    <img  class="card-item__picture" src={"http:\\\\localhost:3001\\"+props.image} />   
                        
                    
                     <div class="card-item__details">

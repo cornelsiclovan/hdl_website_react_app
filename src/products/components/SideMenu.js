@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState }  from "react";
+import { useHttpClient } from '../../shared/hooks/http-hook';
 
-const SideMenu = () => {
-
+const SideMenu = (props) => {  
+ 
     return (
+        
         <React.Fragment>
              <div class="side-menu">
                 <br/> 
@@ -10,10 +12,25 @@ const SideMenu = () => {
                 <span class="side-menu__select--title">
                     Buspro
                 </span>
-                <br/>
+                <br/>  
                 <nav class="side-menu__nav">
                     <ul class="side-menu__list">
-                        <li class="side-menu__item">
+
+                        { props.loadedSideMenuItems && props.loadedSideMenuItems.map(
+                            item => {
+                                    return (
+                                        <li class="side-menu__item">
+                                        <a href="#" class="side-menu__link">{item.name}</a>
+                                    </li>
+                                    );
+                                }
+                            )     
+                        }
+                        
+
+
+
+                        {/* <li class="side-menu__item">
                             <a href="#" class="side-menu__link">Relay actuators</a>
                         </li>
                         <li class="side-menu__item">
@@ -69,7 +86,7 @@ const SideMenu = () => {
                         </li>
                         <li class="side-menu__item">
                             <a href="#" class="side-menu__link">Powe Supply</a>
-                        </li>
+                        </li> */}
                     </ul>
                 </nav>
                 <br/>
