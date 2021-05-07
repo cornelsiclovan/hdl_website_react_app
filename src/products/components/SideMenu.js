@@ -10,7 +10,7 @@ const SideMenu = (props) => {
                 <br/> 
                 <br/>
                 <span class="side-menu__select--title">
-                    Buspro
+                    { props.sideMenuName }
                 </span>
                 <br/>  
                 <nav class="side-menu__nav">
@@ -20,7 +20,7 @@ const SideMenu = (props) => {
                             item => {
                                     return (
                                         <li class="side-menu__item">
-                                        <a href="#" class="side-menu__link">{item.name}</a>
+                                        <a href="" data-letter={item._id} onClick={props.onSideMenuClickHandler} class="side-menu__link">{item.name}</a>
                                     </li>
                                     );
                                 }

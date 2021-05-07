@@ -13,6 +13,8 @@ import SideMenu from '../components/SideMenu';
 const Products = () => {
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
     const [loadedSideMenuItems, setLoadedSideMenuItems] = useState();
+    const [sideMenuName, setSideMenuName] = useState('Buspro')
+    const [loadedProducts, setLoadedProducts] = useState();
     const [mainMenuSelected, setMainMenuSelected] = useState('607420aa6eba041518483e67');
     const [sideMenuSelected, setSideMenuSelected] = useState();
 
@@ -22,31 +24,51 @@ const Products = () => {
             try {
                 const responseData = await sendRequest(`http://localhost:3001/api/types/category/${mainMenuSelected}`);
 
-                console.log(responseData);
                 setLoadedSideMenuItems(responseData);
             } catch (err) {}
         };
 
+        const fetchItems = async () => {
+
+            try {
+                const responseData = await sendRequest(`http://localhost:3001/api/products/category/${mainMenuSelected}`)
+           
+                setLoadedProducts(responseData);
+            } catch (err) {}
+        };
+
         fetchSideMenuItems();
+        fetchItems()
     }, [sendRequest]);
 
+    
 
     const onMainMenuClickHandler = async (e) => {
         e.preventDefault();
-        console.log(e.target.dataset.letter);
+        console.log(e.target.innerHTML);
+        setSideMenuName(e.target.innerHTML);
         setMainMenuSelected(e.target.dataset.letter); 
-        console.log(mainMenuSelected);
 
         const fetchSideMenuItems = async () => {
         
             try {
                 const responseData = await sendRequest(`http://localhost:3001/api/types/category/${e.target.dataset.letter}`);
-
-                console.log(responseData);
                 setLoadedSideMenuItems(responseData);
+                
+                
             } catch (err) {}
         };
 
+        const fetchItems = async () => {
+
+            try {
+                const responseData = await sendRequest(`http://localhost:3001/api/products/category/${e.target.dataset.letter}`)
+           
+                setLoadedProducts(responseData);
+            } catch (err) {}
+        };
+
+        fetchItems();
         fetchSideMenuItems();
 
     } 
@@ -54,6 +76,18 @@ const Products = () => {
     const onSideMenuClickHandler = async (e) => {
         e.preventDefault();
         console.log(e.target.dataset.letter);
+
+        const fetchItems = async () => {
+
+            try {
+                const responseData = await sendRequest(`http://localhost:3001/api/products/type/${e.target.dataset.letter}`)
+           
+                setLoadedProducts(responseData);
+            } catch (err) {}
+        };
+
+        fetchItems();
+
         setSideMenuSelected(e.target.dataset.letter);
     }
 
@@ -63,8 +97,8 @@ const Products = () => {
             <Navigation />
             <MainMenu onMainMenuClickHandler={onMainMenuClickHandler}/>
             <OrderMenu />
-            <SideMenu loadedSideMenuItems={loadedSideMenuItems} onSideMenuClickHandler={onSideMenuClickHandler}/>
-            <ProductList />
+            <SideMenu sideMenuName={sideMenuName} loadedSideMenuItems={loadedSideMenuItems} onSideMenuClickHandler={onSideMenuClickHandler}/>
+            <ProductList loadedProducts={loadedProducts} />
             <Pagination /> 
             <Footer />
         </React.Fragment>

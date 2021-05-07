@@ -1,7 +1,6 @@
-import React, { useEffect, useState }  from 'react';
+import React from 'react';
 import ProductItem from './ProductItem';
 
-import { useHttpClient } from '../../shared/hooks/http-hook';
 
 // import img1 from "../../img/HDL-MD0206_432-05.jpg" ;
 // import img2 from "../../img/HDL-MC64-DALI_431-05.jpg";
@@ -73,29 +72,14 @@ import { useHttpClient } from '../../shared/hooks/http-hook';
 // ]
 
 
-const ProductList = () => {
-    const [loadedProducts, setLoadedProducts] = useState();
-    const { isLoading, error, sendRequest, clearError } = useHttpClient();
-
-    useEffect(() => {
-        const fetchProducts = async () => {
-        
-            try {
-                const responseData = await sendRequest(`http://localhost:3001/api/products`);
-
-                setLoadedProducts(responseData);
-            } catch (err) {}
-        };
-
-        fetchProducts();
-    }, [sendRequest]);
+const ProductList = (props) => {
 
     return (
 
         <React.Fragment>
             <div class="section-products"> 
                 {
-                    !isLoading && loadedProducts && loadedProducts.map(product => {
+                    props.loadedProducts && props.loadedProducts.map(product => {
 
                         return <ProductItem 
                                 key = {product.id}

@@ -31,7 +31,7 @@ const MainMenu = (props) => {
                                 mainMenuItem => {
                                     return (
                                         <li class="main-menu__item">
-                                            <a href="/products" data-letter={mainMenuItem._id} onClick={props.onMainMenuClickHandler} class="main-menu__link">
+                                            <a href="" data-letter={mainMenuItem._id} onClick={props.onMainMenuClickHandler} class="main-menu__link">
                                                 {mainMenuItem.name}
                                             </a> 
                                         </li>
