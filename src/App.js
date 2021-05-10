@@ -2,8 +2,13 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from './home/pages/Home';
 import Products from './products/pages/Products';
+import { AuthContext } from './shared/context/auth-context';
+import { useAuth } from './shared/hooks/auth-hook';
 
 const App = () => {
+    const { token, login, logout, userId } = useAuth();
+    console.log(token);
+
    const routes = (
         <Switch>
             <Route path="/" exact>
@@ -16,11 +21,21 @@ const App = () => {
     );
 
     return (
-        <Router>
-            <main>
-                {routes}
-            </main>
-        </Router>
+        <AuthContext.Provider
+            value={{
+                isLoggedIn: !!token, 
+                token: token,
+                userId: userId,
+                login: login,
+                logout: logout 
+            }}
+        >
+            <Router>
+                <main>
+                    {routes}
+                </main>
+            </Router>
+        </AuthContext.Provider>
     );
 };
 

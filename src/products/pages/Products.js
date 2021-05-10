@@ -40,7 +40,6 @@ const Products = () => {
         fetchSideMenuItems();
         fetchItems()
     }, [sendRequest]);
-
     
 
     const onMainMenuClickHandler = async (e) => {
