@@ -15,8 +15,11 @@ const Products = () => {
     const [loadedSideMenuItems, setLoadedSideMenuItems] = useState();
     const [sideMenuName, setSideMenuName] = useState('Buspro')
     const [loadedProducts, setLoadedProducts] = useState();
+    // Sets the state for intial page of products
     const [mainMenuSelected, setMainMenuSelected] = useState('607420aa6eba041518483e67');
     const [sideMenuSelected, setSideMenuSelected] = useState();
+    const [pageNumber, setPageNumber] = useState();
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         const fetchSideMenuItems = async () => {
@@ -37,14 +40,24 @@ const Products = () => {
             } catch (err) {}
         };
 
+        const fetchPagination = async () => {
+
+            try {
+                const responseData = await sendRequest(`http://localhost:3001/api/pagination/category/${mainMenuSelected}`)
+
+                setPageNumber(Math.ceil(responseData.count/4));
+            } catch (err) {}
+        }
+
+        fetchPagination();
         fetchSideMenuItems();
-        fetchItems()
+        fetchItems();
     }, [sendRequest]);
     
 
     const onMainMenuClickHandler = async (e) => {
         e.preventDefault();
-        console.log(e.target.innerHTML);
+       
         setSideMenuName(e.target.innerHTML);
         setMainMenuSelected(e.target.dataset.letter); 
 
@@ -67,6 +80,16 @@ const Products = () => {
             } catch (err) {}
         };
 
+        const fetchPagination = async () => {
+
+            try {
+                const responseData = await sendRequest(`http://localhost:3001/api/pagination/category/${e.target.dataset.letter}`)
+
+                setPageNumber(Math.ceil(responseData.count/4));
+            } catch (err) {}
+        }
+
+        fetchPagination();
         fetchItems();
         fetchSideMenuItems();
 
@@ -74,8 +97,7 @@ const Products = () => {
 
     const onSideMenuClickHandler = async (e) => {
         e.preventDefault();
-        console.log(e.target.dataset.letter);
-
+        
         const fetchItems = async () => {
 
             try {
@@ -85,9 +107,81 @@ const Products = () => {
             } catch (err) {}
         };
 
+        const fetchPagination = async () => {
+
+            try {
+                const responseData = await sendRequest(`http://localhost:3001/api/pagination/type/${e.target.dataset.letter}`)
+
+                setPageNumber(Math.ceil(responseData.count/4));
+            } catch (err) {}
+        }
+
+        fetchPagination();
         fetchItems();
 
         setSideMenuSelected(e.target.dataset.letter);
+    }
+
+    const incrementCurrentPageClickHandler = async (e) => {
+        e.preventDefault();
+ 
+        let myPage = currentPage + 1;
+        if(myPage > pageNumber)
+            myPage=pageNumber;
+
+        setCurrentPage(myPage);
+
+
+
+        const fetchItems = async () => {
+          
+            try {
+                const responseData = await sendRequest(`http://localhost:3001/api/products/category/${mainMenuSelected}?page=${myPage}`)
+           
+                setLoadedProducts(responseData);
+            } catch (err) {}
+        };
+        
+        fetchItems();
+    }
+
+    const decrementCurrentPageClickHandler = async (e) => {
+        e.preventDefault();
+        
+        let myPage = currentPage - 1;
+        if(myPage < 1) 
+            myPage = 1;
+        setCurrentPage(myPage);
+
+        
+        const fetchItems = async () => {
+          
+            try {
+                const responseData = await sendRequest(`http://localhost:3001/api/products/category/${mainMenuSelected}?page=${myPage}`)
+           
+                setLoadedProducts(responseData);
+            } catch (err) {}
+        };
+        
+        fetchItems();
+    }
+
+    const setCurrentPageClickHandler = async (e) => {
+        e.preventDefault();
+
+        setCurrentPage(parseInt(e.target.dataset.letter));
+
+        const fetchItems = async () => {
+          
+            try {
+                const responseData = await sendRequest(`http://localhost:3001/api/products/category/${mainMenuSelected}?page=${e.target.dataset.letter}`)
+           
+                setLoadedProducts(responseData);
+            } catch (err) {}
+        };
+
+        fetchItems();
+        
     }
 
     return (
@@ -98,7 +192,16 @@ const Products = () => {
             <OrderMenu />
             <SideMenu sideMenuName={sideMenuName} loadedSideMenuItems={loadedSideMenuItems} onSideMenuClickHandler={onSideMenuClickHandler}/>
             <ProductList loadedProducts={loadedProducts} />
-            <Pagination /> 
+            {
+                pageNumber &&
+                <Pagination 
+                    pageNumber={pageNumber} 
+                    currentPage={currentPage}
+                    incrementCurrentPageClickHandler={incrementCurrentPageClickHandler}
+                    decrementCurrentPageClickHandler={decrementCurrentPageClickHandler}    
+                    setCurrentPageClickHandler={setCurrentPageClickHandler}
+                /> 
+            }
             <Footer />
         </React.Fragment>
     );

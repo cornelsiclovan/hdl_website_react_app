@@ -7,7 +7,6 @@ import { useAuth } from './shared/hooks/auth-hook';
 
 const App = () => {
     const { token, login, logout, userId } = useAuth();
-    console.log(token);
 
    const routes = (
         <Switch>

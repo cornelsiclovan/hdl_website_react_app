@@ -1,18 +1,60 @@
 import React from "react";
 
-const Pagination = () => {
+const Pagination = (props) => {
+    const pages = [];
+    let i=0;
+    const len = props.pageNumber;
+
+    while(++i <= len) pages.push(i);
 
     return (
         <React.Fragment>
             <div class="section-pagination">
                     <ul class="product-pagination"> 
                         <li class="product-pagination__item">
-                            <a class="product-pagination__link" href="#">{"|<"}</a>  
+                            <a 
+                                class="product-pagination__link" 
+                                href=""
+                                onClick={props.decrementCurrentPageClickHandler}
+                            >
+                                {"|<"}
+                            </a>  
                         </li>
-                        <li class="product-pagination__item">
-                            <a class="product-pagination__link product-pagination__link--selected"  href="#">1</a>    
-                        </li>
-                        <li class="product-pagination__item">
+                        
+                        {
+                           pages.map(  page => {
+
+                                if(props.currentPage === page)
+                                    return (
+                                        <li class="product-pagination__item">
+                                            <a 
+                                                class="product-pagination__link product-pagination__link--selected"  
+                                                href=""
+                                                onClick={props.setCurrentPageClickHandler}
+                                                data-letter={page}
+                                            >
+                                                {page}
+                                            </a>    
+                                        </li> 
+                                    )   
+                                    else 
+                                        return (
+                                            <li class="product-pagination__item">
+                                            <a 
+                                                class="product-pagination__link product-pagination__link"  
+                                                href=""
+                                                onClick={props.setCurrentPageClickHandler}
+                                                data-letter={page}
+                                            >
+                                                {page}
+                                            </a>    
+                                        </li> 
+                                        )
+                               
+                                
+                            })
+                        }
+                        {/* <li class="product-pagination__item">
                             <a class="product-pagination__link"  href="#">2</a>   
                         </li>
                         <li class="product-pagination__item">
@@ -42,9 +84,16 @@ const Pagination = () => {
                         <li class="product-pagination__item">
                             <a class="product-pagination__link"  href="#">...</a>    
                         </li>
+                        */}
                         <li class="product-pagination__item">
-                            <a class="product-pagination__link"  href="#">>|</a>    
-                        </li>
+                            <a 
+                                class="product-pagination__link"  
+                                href="" 
+                                onClick={props.incrementCurrentPageClickHandler}
+                            >
+                                {`|>`}
+                            </a>    
+                        </li> 
                     </ul>
             </div>
         </React.Fragment>
