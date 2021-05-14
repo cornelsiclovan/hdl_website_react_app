@@ -1,6 +1,7 @@
 import React from 'react';
 import Footer from '../../shared/components/UIElements/Footer';
 import Navigation from '../../shared/components/UIElements/Navigation';
+import ShoppingCart from '../../shared/components/UIElements/Shopping-cart';
 import About from '../components/About';
 import Auth from '../components/Auth';
 import Business from '../components/Business';
@@ -14,6 +15,7 @@ const Home = () => {
         <React.Fragment>
             <Header />
             <Navigation />
+            <ShoppingCart />
             <About />
             <Features />
             <Business />

@@ -8,6 +8,7 @@ import OrderMenu from '../components/OrderMenu';
 import Pagination from '../components/Pagination';
 import ProductList from '../components/ProducList';
 import SideMenu from '../components/SideMenu';
+import ShoppingCart from "../../shared/components/UIElements/Shopping-cart";
 
 
 const Products = () => {
@@ -188,6 +189,7 @@ const Products = () => {
         <React.Fragment>
             <Header />  
             <Navigation />
+            <ShoppingCart />
             <MainMenu onMainMenuClickHandler={onMainMenuClickHandler}/>
             <OrderMenu />
             <SideMenu sideMenuName={sideMenuName} loadedSideMenuItems={loadedSideMenuItems} onSideMenuClickHandler={onSideMenuClickHandler}/>

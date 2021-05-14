@@ -29,6 +29,12 @@ const Navigation = () => {
                             <li class="navigation__item navigation__item--store">
                                 <a href="#" class="navigation__link">Signup</a>
                             </li>
+                            <li class="navigation__item navigation__item--store">
+                                <Link to="/shopping-cart"><a href="#" class="navigation__link">Shopping cart</a></Link>
+                            </li>
+                            <li class="navigation__item navigation__item--store">
+                                <Link to=""><a href="#" class="navigation__link">Account data</a></Link>
+                            </li>
                         </ul>
                     </nav>
                 </div>

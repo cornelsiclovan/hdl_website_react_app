@@ -1,6 +1,5 @@
 import React from 'react';
 
-import '../../icon-font.css';
 
 const Features = () => {
     
@@ -10,7 +9,7 @@ const Features = () => {
                 <div class="row">
                     <div class="col-1-of-4">
                         <div class="feature-box">
-                            <i class="feature-box__icon icon-basic-rss"></i>
+                            {/* <i class="feature-box__icon icon-basic-rss"></i> */}
                             <h3 class="heading-tertiary u-margin-bottom-small">Wireless</h3>
                             <p class="feature-box__text">
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
@@ -21,7 +20,7 @@ const Features = () => {
                     </div>
                     <div class="col-1-of-4">
                         <div class="feature-box">
-                            <i class="feature-box__icon icon-basic-world"></i>
+                            {/* <i class="feature-box__icon icon-basic-world"></i> */}
                             <h3 class="heading-tertiary u-margin-bottom-small">Connected</h3>
                             <p class="feature-box__text">
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
@@ -32,7 +31,7 @@ const Features = () => {
                     </div>
                     <div class="col-1-of-4">
                         <div class="feature-box">
-                            <i class="feature-box__icon icon-basic-bolt"></i>  
+                            {/* <i class="feature-box__icon icon-basic-bolt"></i>   */}
                             <h3 class="heading-tertiary u-margin-bottom-small">Economy</h3>
                             <p class="feature-box__text">
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
@@ -43,7 +42,7 @@ const Features = () => {
                     </div>
                     <div class="col-1-of-4">
                         <div class="feature-box">
-                            <i class="feature-box__icon icon-basic-heart"></i>
+                            {/* <i class="feature-box__icon icon-basic-heart"></i> */}
                             <h3 class="heading-tertiary u-margin-bottom-small">Comfort</h3>
                             <p class="feature-box__text">
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
