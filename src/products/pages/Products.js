@@ -1,4 +1,4 @@
-import React, { useEffect, useState }  from "react";
+import React, { useContext, useEffect, useState }  from "react";
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import Header from '../../products/components/Header';
 import Footer from '../../shared/components/UIElements/Footer';
@@ -9,9 +9,11 @@ import Pagination from '../components/Pagination';
 import ProductList from '../components/ProducList';
 import SideMenu from '../components/SideMenu';
 import ShoppingCart from "../../shared/components/UIElements/Shopping-cart";
+import { AuthContext } from "../../shared/context/auth-context";
 
 
 const Products = () => {
+    const auth = useContext(AuthContext);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
     const [loadedSideMenuItems, setLoadedSideMenuItems] = useState();
     const [sideMenuName, setSideMenuName] = useState('Buspro')
@@ -189,7 +191,7 @@ const Products = () => {
         <React.Fragment>
             <Header />  
             <Navigation />
-            <ShoppingCart />
+            {auth.isLoggedIn &&<ShoppingCart />}
             <MainMenu onMainMenuClickHandler={onMainMenuClickHandler}/>
             <OrderMenu />
             <SideMenu sideMenuName={sideMenuName} loadedSideMenuItems={loadedSideMenuItems} onSideMenuClickHandler={onSideMenuClickHandler}/>

@@ -7,6 +7,8 @@ import { VALIDATOR_EMAIL, VALIDATOR_MIN, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE 
 import Input from '../../shared/components/FormElements/Input';
 import { AuthContext } from '../../shared/context/auth-context';
 
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+
 const Auth = () => {
     const auth = useContext(AuthContext);
     const [isLoginMode, setIsLoginMode] = useState(true);
@@ -81,22 +83,25 @@ const Auth = () => {
         console.log(formState.inputs);
 
         if(isLoginMode) {
-            const responseData = await sendRequest(
-                'http://localhost:3001/api/auth',
-                'POST',
-                JSON.stringify({
-                    email: formState.inputs.email.value,
-                    password: formState.inputs.password.value
-                }),
-                {
-                    'Content-Type': 'application/json'
-                }
-            );
+            try {
+                const responseData = await sendRequest(
+                    'http://localhost:3001/api/auth',
+                    'POST',
+                    JSON.stringify({
+                        email: formState.inputs.email.value,
+                        password: formState.inputs.password.value
+                    }),
+                    {
+                        'Content-Type': 'application/json'
+                    }
+                );
 
-            console.log(responseData)
+                console.log(responseData)
 
 
-            auth.login(responseData.userId, responseData.token);
+                auth.login(responseData.userId, responseData.token);
+            } catch(err) {}
+
         } else {
             try {
                 const responseData = await sendRequest(
@@ -120,6 +125,7 @@ const Auth = () => {
 
     return (
        <React.Fragment>
+           <ErrorModal error={error} onClear={clearError}/>
            <section class="section-book">
                 <div class="row">
                     <div class="book">
