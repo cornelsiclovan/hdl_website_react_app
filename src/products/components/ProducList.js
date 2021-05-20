@@ -73,21 +73,30 @@ import ProductItem from './ProductItem';
 
 
 const ProductList = (props) => {
+    let qtyArray = [];
+
+    if(props.currentOrder){ 
+    
+        qtyArray = props.currentOrder.orders[0].qtyArray;
+    }
 
     return (
 
         <React.Fragment>
-            <div class="section-products"> 
+            <div className="section-products"> 
                 {
                     props.loadedProducts && props.loadedProducts.map(product => {
 
                         return <ProductItem 
-                                key = {product.id}
-                                id = {product.id}
+                                key = {product._id}
+                                id = {product._id}
                                 name = {product.name}
+                                price = {product.price}
+                                currency = {product.currency}
                                 description = {product.description.split(',')[0]}
                                 unitsInStock = {product.unitsInStock}
                                 image = {product.image[0]}
+                                qtyArray = {qtyArray}
                             />
                     })
                 }

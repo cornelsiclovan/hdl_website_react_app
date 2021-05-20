@@ -23,6 +23,7 @@ const Products = () => {
     const [sideMenuSelected, setSideMenuSelected] = useState();
     const [pageNumber, setPageNumber] = useState();
     const [currentPage, setCurrentPage] = useState(1);
+    const [currentOrder, setCurrentOrder] = useState();
 
     useEffect(() => {
         const fetchSideMenuItems = async () => {
@@ -52,11 +53,27 @@ const Products = () => {
             } catch (err) {}
         }
 
+        const fetchOrder = async () => {
+            try{
+                const responseData = await sendRequest(`http://localhost:3001/api/orders/user/${auth.userId}?inCart=true`);
+                
+                setCurrentOrder(responseData);
+            } catch (err) {}
+        }
+
+            
+        if(auth.isLoggedIn) {
+         
+            fetchOrder();
+        }
+        
         fetchPagination();
         fetchSideMenuItems();
         fetchItems();
+
+
     }, [sendRequest]);
-    
+     
 
     const onMainMenuClickHandler = async (e) => {
         e.preventDefault();
@@ -195,7 +212,7 @@ const Products = () => {
             <MainMenu onMainMenuClickHandler={onMainMenuClickHandler}/>
             <OrderMenu />
             <SideMenu sideMenuName={sideMenuName} loadedSideMenuItems={loadedSideMenuItems} onSideMenuClickHandler={onSideMenuClickHandler}/>
-            <ProductList loadedProducts={loadedProducts} />
+            <ProductList loadedProducts={loadedProducts} currentOrder={currentOrder}/>
             {
                 pageNumber &&
                 <Pagination 

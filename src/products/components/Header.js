@@ -6,9 +6,9 @@ const Header = () => {
 
     return (
         <React.Fragment>
-            <header class="header-store">
-                <div class="header-store__logo-box--store">
-                    <Link to="/"><img src={logo} alt="hdl logo" class="header-store__logo--store"/></Link>
+            <header className="header-store">
+                <div className="header-store__logo-box--store">
+                    <Link to="/"><img src={logo} alt="hdl logo" className="header-store__logo--store"/></Link>
                 </div>
             </header>
         </React.Fragment>
