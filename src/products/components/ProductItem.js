@@ -1,13 +1,63 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../shared/context/auth-context';
+
+// import {useForm} from '../../shared/hooks/form-hook';
 
 const ProductItem = props => {
     const auth = useContext(AuthContext);
+    
+
+    // const [formState, inputHandler, setFormData] = useForm({
+    //      user_id: {
+    //          value: "",
+    //          isValid: true
+    //      },
+    //      inCart: {
+    //          value: "",
+    //          isValid: true
+    //      },
+    //      products: [
+    //          {
+    //              productId: {
+    //                 value: "",
+    //                 isValid: true
+    //              }
+    //          }
+    //      ],
+    //      qtyArray: [
+    //          {
+    //             productId: {
+    //                 value: "",
+    //                 isValid: true
+    //             },
+    //             qty: {
+    //                 value: "",
+    //                 isValid: true
+    //             }
+    //          }
+    //      ]
+    // });
+
+    // useEffect(() => {
+    //     const fetchData = () => {
+    //         let products = [];
+    //         let product = {
+    //             productId: props.id
+    //         }
+    //     }
+
+    //     setFormData(
+    //         {
+
+    //         }
+    //     )
+    // })
 
     let qtyInCart = 0;
+   
 
-    console.log(props.qtyArray);
     if(props.qtyArray) {
+        //console.log(props.qtyArray); 
         props.qtyArray.forEach(element => {
             if(element.productId === props.id){
                 
@@ -16,7 +66,7 @@ const ProductItem = props => {
         });
     }
 
-    console.log(qtyInCart);
+   
 
     return (
         <React.Fragment>
@@ -37,8 +87,8 @@ const ProductItem = props => {
                         <div className="card-item__add">
                             <form  className="card-item__add-form">
                                 <span style={{fontSize: 1.5+'rem'}}><b>Qty</b></span> 
-                                <input className="card-item__input" /> 
-                                <a href="" style={{fontSize: 1.5+'rem', marginLeft: 15+'px'}}>Add</a>
+                                <input className="card-item__input" onChange={props.qtyInputOnChangeHandler}/> 
+                                <a href="" data-product_id={props.id} style={{fontSize: 1.5+'rem', marginLeft: 15+'px'}} onClick={props.onAddToCartClickHandler}>Add</a>
                             </form>
                         </div>
                     }
@@ -53,7 +103,7 @@ const ProductItem = props => {
                                         IN CART: <b>{qtyInCart}</b>
                                         
                                         <div className="card-item__details--cart-action">
-                                            <a href=""> remove </a>
+                                            <a href="" data-product_id={props.id} onClick={props.onRemoveProductFromCartHandler}> remove </a>
                                         </div>
                                 
                                 </li>

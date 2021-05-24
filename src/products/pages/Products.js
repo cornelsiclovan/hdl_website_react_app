@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState }  from "react";
+import React, { useContext, useEffect, useState, useRef }  from "react";
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import Header from '../../products/components/Header';
 import Footer from '../../shared/components/UIElements/Footer';
@@ -24,8 +24,17 @@ const Products = () => {
     const [pageNumber, setPageNumber] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const [currentOrder, setCurrentOrder] = useState();
+    const [qty, setQty] = useState(0);
+    
+    const [orderedProducts, setOrderedProducts] = useState([]);
+
+    const [qtyArray, setQtyArray] = useState([]);
+    const currentOrderLoaded = useRef(false);
+    const orderedProductsSet = useRef(false);
+    const qtyArraySet = useRef(false);
 
     useEffect(() => {
+
         const fetchSideMenuItems = async () => {
         
             try {
@@ -40,10 +49,12 @@ const Products = () => {
             try {
                 const responseData = await sendRequest(`http://localhost:3001/api/products/category/${mainMenuSelected}`)
            
+              
+
                 setLoadedProducts(responseData);
             } catch (err) {}
         };
-
+  
         const fetchPagination = async () => {
 
             try {
@@ -56,24 +67,72 @@ const Products = () => {
         const fetchOrder = async () => {
             try{
                 const responseData = await sendRequest(`http://localhost:3001/api/orders/user/${auth.userId}?inCart=true`);
+               
+
+                if(currentOrderLoaded.current === false) {
+                    setCurrentOrder(responseData);
+                    currentOrderLoaded.current = true;
+                }
+               
+
+                //console.log("fetch order", currentOrder.orders[0].qtyArray);
+
+                let orderedProductsTemp = [];
+               
+                responseData.orders[0].products.forEach(product => {
+      
+                    let orderedProduct = {
+                        productId: product._id
+                    };
+
+                   
+                    orderedProductsTemp.push(orderedProduct);
+                   
+                });
+
+
+                let qtyArrayTemp = [];
+                currentOrder.orders[0].qtyArray.forEach(item => {
+      
+                    let itemQty = {
+                        productId: item.productId,
+                        qty: item.qty
+                    };
+
+
+                    qtyArrayTemp.push(itemQty);
+                   
+                });
+  
+
+                if(!qtyArraySet.current) {
+                    setQtyArray(qtyArrayTemp);
+                    qtyArraySet.current = true;
+                }
+                   
+                if(!orderedProductsSet.current) {
+                    setOrderedProducts(orderedProductsTemp);
+                    orderedProductsSet.current = true;
+                }
                 
-                setCurrentOrder(responseData);
-            } catch (err) {}
+                
+                console.log("fetch qtyArray", qtyArray);
+                console.log("fetch products", orderedProducts);
+
+              
+
+            } catch (err) {} 
         }
 
-            
-        if(auth.isLoggedIn) {
-         
-            fetchOrder();
-        }
-        
+      
+        fetchOrder();
         fetchPagination();
         fetchSideMenuItems();
         fetchItems();
+  
 
-
-    }, [sendRequest]);
-     
+    }, [sendRequest, auth, currentOrder, qtyArray, orderedProducts]);
+      
 
     const onMainMenuClickHandler = async (e) => {
         e.preventDefault();
@@ -204,6 +263,137 @@ const Products = () => {
         
     }
 
+    const onAddToCartClickHandler = async (e) => {
+        e.preventDefault();
+        console.log("Add to cart click handler");
+        
+        if(orderedProducts.length !== 0) {
+          console.log("onADD", orderedProducts);
+        }
+        console.log("poduct id", e.target.dataset.product_id);
+        console.log("quantity", qty);
+
+
+        if(currentOrder === undefined) {
+            console.log("creating order");
+            setCurrentOrder(
+                {
+                    orders:[{
+                        userId: auth.userId,
+                        products: [
+                            {
+                                productId : e.target.dataset.product_id
+                            }
+                        ],
+                        qtyArray: [{
+                             productId : e.target.dataset.product_id,
+                             qty: qty
+                        }],
+                        inCart: true
+                        }
+                    ]
+                }
+            );
+        } else {
+            currentOrder.orders[0].products.push({
+                    productId : e.target.dataset.product_id
+                
+            });
+
+            currentOrder.orders[0].qtyArray.push({
+                productId : e.target.dataset.product_id,
+                qty: qty
+            })
+        }
+
+        console.log(currentOrder);
+
+
+        // const modifyOrder = async () => {
+            
+        //     try {
+        //         const responseData = await sendRequest(`http://localhost:3001/api/orders/${currentOrder.orders[0]._id}`, 
+        //                 'PUT',
+        //                 JSON.stringify({
+        //                     userId: auth.userId
+        //                 }),
+        //                 {
+        //                    'Content-Type': 'application/json',
+        //                    Authorization: 'Bearer '+auth.token
+        //                 }
+        //                 )
+        //     } catch (err) {}
+        // };
+
+        // modifyOrder();
+    }
+
+    const onRemoveProductFromCartHandler = async (e) => {
+        e.preventDefault();
+        if(currentOrder != undefined) {
+            console.log("Remove product from cart handler");
+            console.log("poduct id", e.target.dataset.product_id);
+
+            if(orderedProducts.length !== 0) {
+                console.log("onRemove Products", orderedProducts);
+            }
+
+            if(qtyArray.length !== 0) {
+                console.log("onRemove qtyArr", qtyArray);
+            }
+        
+
+            let qtyArrayTemp = qtyArray.filter(item =>{
+            
+                return item.productId != e.target.dataset.product_id
+                });
+            
+                let  orderedProductsTemp = orderedProducts.filter(product =>  product.productId != e.target.dataset.product_id);
+        
+            
+                
+            setQtyArray(qtyArrayTemp);
+            setOrderedProducts(orderedProductsTemp);
+            console.log("rem item", orderedProductsTemp);  
+            console.log("rem item", qtyArrayTemp);
+
+            currentOrder.orders[0].qtyArray = qtyArrayTemp;
+
+            setCurrentOrder(currentOrder);
+            console.log("removed item", currentOrder);
+
+            console.log(JSON.stringify({
+                userId: auth.userId,
+                products: orderedProductsTemp,
+                qtyArray: qtyArrayTemp,
+                inCart: true
+            }))
+
+        
+            
+            try {
+                const responseData = await sendRequest(`http://localhost:3001/api/orders/${currentOrder.orders[0]._id}`, 
+                        'PUT',
+                        JSON.stringify({
+                            userId: auth.userId,
+                            products: orderedProductsTemp,
+                            qtyArray: qtyArrayTemp,
+                            inCart: true
+                        }),
+                        {
+                        'Content-Type': 'application/json'
+                        }
+                        )
+            } catch (err) {}
+        }
+    }
+    
+    const qtyInputOnChangeHandler = (e) => {
+        
+        setQty(e.target.value)
+    }
+
+
     return (
         <React.Fragment>
             <Header />  
@@ -211,8 +401,18 @@ const Products = () => {
             {auth.isLoggedIn &&<ShoppingCart />}
             <MainMenu onMainMenuClickHandler={onMainMenuClickHandler}/>
             <OrderMenu />
-            <SideMenu sideMenuName={sideMenuName} loadedSideMenuItems={loadedSideMenuItems} onSideMenuClickHandler={onSideMenuClickHandler}/>
-            <ProductList loadedProducts={loadedProducts} currentOrder={currentOrder}/>
+            <SideMenu 
+                sideMenuName={sideMenuName} 
+                loadedSideMenuItems={loadedSideMenuItems} 
+                onSideMenuClickHandler={onSideMenuClickHandler}
+                />
+            <ProductList 
+                loadedProducts={loadedProducts} 
+                currentOrder={currentOrder} 
+                onAddToCartClickHandler={onAddToCartClickHandler}
+                onRemoveProductFromCartHandler={onRemoveProductFromCartHandler}
+                qtyInputOnChangeHandler={qtyInputOnChangeHandler}
+                />
             {
                 pageNumber &&
                 <Pagination 
