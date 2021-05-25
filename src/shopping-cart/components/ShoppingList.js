@@ -1,12 +1,9 @@
 import React from 'react';
 
+import ShoppingListItem from './ShoppingListItem';
 
-import img1 from "../../img/HDL-MD0206_432-05.jpg" ;
-import img2 from "../../img/HDL-MC64-DALI_431-05.jpg";
-import img3 from "../../img/HDL-MDLED0605_432-08.jpg";
-import img4 from "../../img/HDL-MC64-DALI_431-05.jpg";
-
-const ShoppingList = () => {
+const ShoppingList = (props) => {
+    console.log(props.currentOrder);
 
     return(
         <React.Fragment>
@@ -15,91 +12,13 @@ const ShoppingList = () => {
             </div>
             <div class="section-cart">
                 <div class="section-cart__left">
-                    <ul class="section-cart__left--list">
-                        <li class="section-cart__left--item">
-                            <div class="section-cart__left--item-pull-left">
-                            
-                                <img src={img1} /> 
-                                
-                                <div class="section-cart__left--item-col">
-
-                                        <b>HDL-MPLPI.48-A</b>
-                                        <span><b>Out of stock</b></span>
-
-                                        <br/>
-                                        <br/>
-                                        <div> 
-                                            <span style={{fontSize: 1.5+"rem"}}>Qty</span>  
-                                            <input class="section-cart__left--item-col-qty" value="1">
-                                                
-                                            </input>
-                                            <b>
-                                                <a href style={{fontSize: 12+'px', textDecoration: "none"}}>Update</a>&nbsp;&nbsp;  
-                                                <a href style={{fontSize: 12+'px', textDecoration: "none"}}>Remove</a>  
-                                            </b>
-                                        </div>
-                                </div> 
-                            </div>
-                            <div class="section-cart__left--item-col">
-                                <b>10.80&nbsp;Eur</b>
-                            </div>
-                        </li>
-                        <li class="section-cart__left--item">
-                            <div class="section-cart__left--item-pull-left">
-                            
-                                <img src={img3} /> 
-                                
-                                <div class="section-cart__left--item-col">
-
-                                        <b>HDL-MPLPI.48-A</b>
-                                        <span><b>Out of stock</b></span>
-
-                                        <br/>
-                                        <br/>
-                                        <div> 
-                                            <span style={{fontSize: 1.5+"rem"}}>Qty</span>  
-                                            <input class="section-cart__left--item-col-qty" value="1">
-                                                
-                                            </input>
-                                            <b>
-                                                <a href style={{fontSize: 12+'px', textDecoration: "none"}}>Update</a>&nbsp;&nbsp;  
-                                                <a href style={{fontSize: 12+'px', textDecoration: "none"}}>Remove</a>  
-                                            </b>
-                                        </div>
-                                </div> 
-                            </div>
-                            <div class="section-cart__left--item-col">
-                                <b>10.80&nbsp;Eur</b>
-                            </div>
-                        </li>
-                        <li class="section-cart__left--item">
-                            <div class="section-cart__left--item-pull-left">
-                            
-                                <img src={img2} /> 
-                                
-                                <div class="section-cart__left--item-col">
-
-                                        <b>HDL-MPLPI.48-A</b>
-                                        <span><b>Out of stock</b></span>
-
-                                        <br/>
-                                        <br/>
-                                        <div> 
-                                            <span style={{fontSize: 1.5+"rem"}}>Qty</span>  
-                                            <input type="text" class="section-cart__left--item-col-qty" value=""/>
-                                            <b>
-                                                <a href style={{fontSize: 12+'px', textDecoration: "none"}}>Update</a>&nbsp;&nbsp;  
-                                                <a href style={{fontSize: 12+'px', textDecoration: "none"}}>Remove</a>  
-                                            </b>
-                                        </div>
-                                </div> 
-                            </div>
-                            <div class="section-cart__left--item-col">
-                                <b>10.80&nbsp;Eur</b>
-                            </div>
-                        </li>
-                       
-                    </ul>  
+                   {    
+                        props.currentOrder.orders[0].products 
+                        && props.currentOrder.orders[0].products.map( 
+                            product => 
+                        
+                        <ShoppingListItem product={product} currentOrder={props.currentOrder}/>
+                   )}
                 </div>    
                 <div class="section-cart__right">
                     <div class="section-cart__right--card">

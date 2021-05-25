@@ -265,67 +265,104 @@ const Products = () => {
 
     const onAddToCartClickHandler = async (e) => {
         e.preventDefault();
-        console.log("Add to cart click handler");
+        // console.log("Add to cart click handler");
         
-        if(orderedProducts.length !== 0) {
-          console.log("onADD", orderedProducts);
-        }
-        console.log("poduct id", e.target.dataset.product_id);
-        console.log("quantity", qty);
+        // if(orderedProducts.length !== 0) {
+        //   console.log("onADD", orderedProducts);
+        // }
+        // console.log("poduct id", e.target.dataset.product_id);
+        // console.log("quantity", qty);
 
+        if(qty != 0){
+            if(currentOrder === undefined) {
+                // console.log("creating order");
 
-        if(currentOrder === undefined) {
-            console.log("creating order");
-            setCurrentOrder(
-                {
-                    orders:[{
-                        userId: auth.userId,
-                        products: [
-                            {
-                                productId : e.target.dataset.product_id
-                            }
-                        ],
-                        qtyArray: [{
-                             productId : e.target.dataset.product_id,
-                             qty: qty
-                        }],
-                        inCart: true
-                        }
-                    ]
-                }
-            );
-        } else {
-            currentOrder.orders[0].products.push({
-                    productId : e.target.dataset.product_id
+                orderedProducts.push(
+                    {
+                        productId : e.target.dataset.product_id
+                    }
+                );
+
+                qtyArray.push(
+                    {
+                        productId : e.target.dataset.product_id,
+                        qty: qty
+                    }
+                );
                 
-            });
+                setCurrentOrder(
+                    {
+                        orders:[{
+                            userId: auth.userId,
+                            products: orderedProducts,
+                            qtyArray: qtyArray,
+                            inCart: true
+                            }
+                        ]
+                    }
+                );
 
-            currentOrder.orders[0].qtyArray.push({
-                productId : e.target.dataset.product_id,
-                qty: qty
-            })
+                try {
+                    const responseData = await sendRequest(`http://localhost:3001/api/orders/`, 
+                            'POST',
+                            JSON.stringify({
+                                userId: auth.userId,
+                                products: orderedProducts,
+                                qtyArray: qtyArray,
+                                inCart: true
+                            }),
+                            {
+                            'Content-Type': 'application/json'
+                            }
+                        )
+            
+                } catch (err) {}
+
+            } else {
+                let qtyArrayTemp = qtyArray.filter( item =>
+                        item.productId != e.target.dataset.product_id
+                    );
+                
+                let  orderedProductsTemp = orderedProducts.filter( product =>  
+                        product.productId != e.target.dataset.product_id
+                    );
+
+
+                orderedProductsTemp.push({
+                    productId : e.target.dataset.product_id
+                });
+
+                qtyArrayTemp.push({
+                    productId : e.target.dataset.product_id,
+                    qty: qty
+                });
+
+                currentOrder.orders[0].products = orderedProductsTemp;
+
+                currentOrder.orders[0].qtyArray = qtyArrayTemp;
+
+                console.log(currentOrder);
+
+                setQtyArray(qtyArrayTemp);
+                setOrderedProducts(orderedProductsTemp);
+
+                try {
+                    const responseData = await sendRequest(`http://localhost:3001/api/orders/${currentOrder.orders[0]._id}`, 
+                            'PUT',
+                            JSON.stringify({
+                                userId: auth.userId,
+                                products: orderedProductsTemp,
+                                qtyArray: qtyArrayTemp,
+                                inCart: true
+                            }),
+                            {
+                            'Content-Type': 'application/json'
+                            }
+                        );
+                } catch (err) {}
+            }
         }
 
-        console.log(currentOrder);
-
-
-        // const modifyOrder = async () => {
-            
-        //     try {
-        //         const responseData = await sendRequest(`http://localhost:3001/api/orders/${currentOrder.orders[0]._id}`, 
-        //                 'PUT',
-        //                 JSON.stringify({
-        //                     userId: auth.userId
-        //                 }),
-        //                 {
-        //                    'Content-Type': 'application/json',
-        //                    Authorization: 'Bearer '+auth.token
-        //                 }
-        //                 )
-        //     } catch (err) {}
-        // };
-
-        // modifyOrder();
     }
 
     const onRemoveProductFromCartHandler = async (e) => {
@@ -348,7 +385,7 @@ const Products = () => {
                 return item.productId != e.target.dataset.product_id
                 });
             
-                let  orderedProductsTemp = orderedProducts.filter(product =>  product.productId != e.target.dataset.product_id);
+            let  orderedProductsTemp = orderedProducts.filter(product =>  product.productId != e.target.dataset.product_id);
         
             
                 
@@ -362,15 +399,13 @@ const Products = () => {
             setCurrentOrder(currentOrder);
             console.log("removed item", currentOrder);
 
-            console.log(JSON.stringify({
-                userId: auth.userId,
-                products: orderedProductsTemp,
-                qtyArray: qtyArrayTemp,
-                inCart: true
-            }))
+            // console.log(JSON.stringify({
+            //     userId: auth.userId,
+            //     products: orderedProductsTemp,
+            //     qtyArray: qtyArrayTemp,
+            //     inCart: true
+            // }))
 
-        
-            
             try {
                 const responseData = await sendRequest(`http://localhost:3001/api/orders/${currentOrder.orders[0]._id}`, 
                         'PUT',
