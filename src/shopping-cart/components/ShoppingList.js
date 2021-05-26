@@ -3,7 +3,6 @@ import React from 'react';
 import ShoppingListItem from './ShoppingListItem';
 
 const ShoppingList = (props) => {
-    console.log(props.currentOrder);
 
     return(
         <React.Fragment>
@@ -17,7 +16,14 @@ const ShoppingList = (props) => {
                         && props.currentOrder.orders[0].products.map( 
                             product => 
                         
-                        <ShoppingListItem product={product} currentOrder={props.currentOrder}/>
+                        <
+                            ShoppingListItem 
+                            product={product} 
+                            currentOrder={props.currentOrder}
+                            qtyInputOnChangeHandler={props.qtyInputOnChangeHandler}
+                            onRemoveProductFromCartHandler={props.onRemoveProductFromCartHandler}
+                            onAddToCartClickHandler={props.onAddToCartClickHandler}
+                            />
                    )}
                 </div>    
                 <div class="section-cart__right">

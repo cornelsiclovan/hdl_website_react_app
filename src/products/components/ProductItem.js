@@ -5,53 +5,6 @@ import { AuthContext } from '../../shared/context/auth-context';
 
 const ProductItem = props => {
     const auth = useContext(AuthContext);
-    
-
-    // const [formState, inputHandler, setFormData] = useForm({
-    //      user_id: {
-    //          value: "",
-    //          isValid: true
-    //      },
-    //      inCart: {
-    //          value: "",
-    //          isValid: true
-    //      },
-    //      products: [
-    //          {
-    //              productId: {
-    //                 value: "",
-    //                 isValid: true
-    //              }
-    //          }
-    //      ],
-    //      qtyArray: [
-    //          {
-    //             productId: {
-    //                 value: "",
-    //                 isValid: true
-    //             },
-    //             qty: {
-    //                 value: "",
-    //                 isValid: true
-    //             }
-    //          }
-    //      ]
-    // });
-
-    // useEffect(() => {
-    //     const fetchData = () => {
-    //         let products = [];
-    //         let product = {
-    //             productId: props.id
-    //         }
-    //     }
-
-    //     setFormData(
-    //         {
-
-    //         }
-    //     )
-    // })
 
     let qtyInCart = 0;
    
@@ -87,7 +40,7 @@ const ProductItem = props => {
                         <div className="card-item__add">
                             <form  className="card-item__add-form">
                                 <span style={{fontSize: 1.5+'rem'}}><b>Qty</b></span> 
-                                <input className="card-item__input" onChange={props.qtyInputOnChangeHandler}/> 
+                                <input className="card-item__input" onChange={props.qtyInputOnChangeHandler} id={`qtyInCart${props.id}`}/> 
                                 <a href="" data-product_id={props.id} style={{fontSize: 1.5+'rem', marginLeft: 15+'px'}} onClick={props.onAddToCartClickHandler}>Add</a>
                             </form>
                         </div>

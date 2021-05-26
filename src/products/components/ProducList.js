@@ -19,18 +19,18 @@ const ProductList = (props) => {
                     props.loadedProducts && props.loadedProducts.map(product => {
 
                         return <ProductItem 
-                                key = {product._id}
-                                id = {product._id}
-                                name = {product.name}
-                                price = {product.price}
-                                currency = {product.currency}
-                                description = {product.description.split(',')[0]}
-                                unitsInStock = {product.unitsInStock}
-                                image = {product.image[0]}
-                                qtyArray = {qtyArray}
-                                onAddToCartClickHandler = {props.onAddToCartClickHandler}
-                                onRemoveProductFromCartHandler = {props.onRemoveProductFromCartHandler}
-                                qtyInputOnChangeHandler = {props.qtyInputOnChangeHandler}
+                            key = {product._id}
+                            id = {product._id}
+                            name = {product.name}
+                            price = {product.price}
+                            currency = {product.currency}
+                            description = {product.description.split(',')[0]}
+                            unitsInStock = {product.unitsInStock}
+                            image = {product.image[0]}
+                            qtyArray = {qtyArray}
+                            onAddToCartClickHandler = {props.onAddToCartClickHandler}
+                            onRemoveProductFromCartHandler = {props.onRemoveProductFromCartHandler}
+                            qtyInputOnChangeHandler = {props.qtyInputOnChangeHandler}
                             />
                     })
                 }

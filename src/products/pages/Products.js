@@ -27,11 +27,12 @@ const Products = () => {
     const [qty, setQty] = useState(0);
     
     const [orderedProducts, setOrderedProducts] = useState([]);
-
     const [qtyArray, setQtyArray] = useState([]);
+
     const currentOrderLoaded = useRef(false);
     const orderedProductsSet = useRef(false);
     const qtyArraySet = useRef(false);
+    const productsFetched = useRef(false);
 
     useEffect(() => {
 
@@ -49,9 +50,9 @@ const Products = () => {
             try {
                 const responseData = await sendRequest(`http://localhost:3001/api/products/category/${mainMenuSelected}`)
            
-              
-
                 setLoadedProducts(responseData);
+
+                productsFetched.current = true;
             } catch (err) {}
         };
   
@@ -124,12 +125,19 @@ const Products = () => {
             } catch (err) {} 
         }
 
-      
+        if(!productsFetched.current)
+        
+        
         fetchOrder();
+        
         fetchPagination();
+        
+        
         fetchSideMenuItems();
-        fetchItems();
-  
+
+        if(!productsFetched.current) {
+            fetchItems();
+        }
 
     }, [sendRequest, auth, currentOrder, qtyArray, orderedProducts]);
       
@@ -341,8 +349,6 @@ const Products = () => {
 
                 currentOrder.orders[0].qtyArray = qtyArrayTemp;
 
-                console.log(currentOrder);
-
                 setQtyArray(qtyArrayTemp);
                 setOrderedProducts(orderedProductsTemp);
 
@@ -362,6 +368,10 @@ const Products = () => {
                 } catch (err) {}
             }
         }
+        
+       if(document.getElementById("qtyInCart" + e.target.dataset.product_id) !== null)
+        document.getElementById("qtyInCart" + e.target.dataset.product_id).value = '';
+       setQty(0);
 
     }
 

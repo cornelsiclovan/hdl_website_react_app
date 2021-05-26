@@ -11,7 +11,7 @@ const Billing = () => {
         <React.Fragment>
             <Header />
             <Navigation />
-            <ShoppingMain />
+            <ShoppingMain billing={true}/>
             <BillingForm />
             <Footer />
         </React.Fragment>
