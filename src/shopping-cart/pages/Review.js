@@ -67,13 +67,23 @@ const Review = () => {
 
     }, [sendRequest]);
 
+    const onClickSubmitOrderHandler = () => {
+        console.log("submitted order");
+    }
+
     return(
         <React.Fragment>
         <Header />
         <Navigation />
         <ShoppingMain review={true} />
         <ReviewMain />
-        {!isLoading && currentOrder && <ShoppingList currentOrder={currentOrder} />}
+        {!isLoading && currentOrder && 
+            <ShoppingList 
+                modify={false} 
+                currentOrder={currentOrder} 
+                onClickSubmitOrderHandler={onClickSubmitOrderHandler}
+                />
+        }
         <Footer />
     </React.Fragment>
     );

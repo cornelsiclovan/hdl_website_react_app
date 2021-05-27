@@ -26,11 +26,9 @@ const ShoppingMain = (props) => {
                             {
                                 (props.billing || props.review) &&
                                 <li className="shopping-main__item"> 
-                                    <Link to="/shopping-cart" >
-                                        <a href="" className="shopping-main__link" >
-                                            <span className="shopping-main__link-number">1</span> 
-                                            Shopping Cart
-                                        </a>
+                                    <Link to="/shopping-cart" className="shopping-main__link">
+                                        <span className="shopping-main__link-number">1</span> 
+                                        Shopping Cart
                                     </Link>
                                 </li>
                             }
@@ -51,11 +49,11 @@ const ShoppingMain = (props) => {
                             {
                                 (props.shoppingCart || props.review) &&
                                 <li className="shopping-main__item">
-                                <Link to="/billing" >
-                                    <a href="" className="shopping-main__link"> 
+                                <Link to="/billing" className="shopping-main__link">
+                                   
                                         <span className="shopping-main__link-number">2</span>   
                                         Billing & Delivery
-                                    </a>
+                                  
                                 </Link>
                             </li>
                             }
@@ -75,11 +73,11 @@ const ShoppingMain = (props) => {
                             {
                                 (props.shoppingCart || props.billing) &&
                                 <li className="shopping-main__item">
-                                    <Link to="/review_payment" >
-                                        <a href="" className="shopping-main__link">
+                                    <Link to="/review_payment"  className="shopping-main__link">
+                                        
                                             <span className="shopping-main__link-number">3</span> 
                                             Review and Payment
-                                        </a>
+                              
                                     </Link>
                                 </li>
                             }

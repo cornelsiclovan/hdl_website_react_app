@@ -1,79 +1,339 @@
-import React from 'react';
+import React, {useEffect, useContext, useRef, useState} from 'react';
+import { Link } from 'react-router-dom';
 
+import { useForm } from '../../shared/hooks/form-hook';
+import { useHttpClient } from '../../shared/hooks/http-hook';
+import { AuthContext } from '../../shared/context/auth-context';
+import Input from '../../shared/components/FormElements/Input';
 
 const BillingForm = () => {
+    const auth = useContext(AuthContext);
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+    const [loadedUser, setLoadedUser] = useState();
+
+    const updated = useRef();
+
+    updated.current = false;
+
+    useEffect(() => {
+        const fetchBillingData = async () => {
+            const response = await sendRequest(`http://localhost:3001/api/users/me`,
+                                                'GET',
+                                                null,
+                                                {
+                                                    'x-auth-token': auth.token
+                                                });
+      
+            console.log(response);
+            setLoadedUser(response);
+        }
+
+        if(!updated.current){
+            fetchBillingData();
+            updated.current = true;
+        }
+    }, [sendRequest]);
+    
+
+    const [formState, inputHandler, setFormData] = useForm(
+        {
+            name: 
+            {
+                value: '',
+                isValid: false
+            },
+            email: 
+            {
+                value: '',
+                isValid: false
+            },
+            phone: 
+            {   
+                value: '',
+                isValid: false
+            },
+            companyName:
+            {
+                value: '',
+                isValid: false
+            },
+            organizationID:
+            {
+                value: '',
+                isValid: false
+            },
+            taxRegistrationID:
+            {
+                value: '',
+                isValid: false
+            },
+            billingAddress: 
+            {
+                value: '',
+                isValid: false
+            },
+            billingAddressLine1: {
+                value: '',
+                isValid: false
+            },
+            billingAddressLine2: {
+                value: '',
+                isValid: false
+            },
+            postalCode: 
+            {
+                value: '',
+                isValid: false
+            },
+            city: {
+                value: '',
+                isValid: false
+            },
+            country: {
+                value: '',
+                isValid: false
+            }
+        }, false
+    );
+
+
+    const onSubmitHandler = async (e) => {
+        e.preventDefault();
+
+        console.log(formState.inputs);
+
+        try {
+            const responseData = await sendRequest(
+                `http://localhost:3001/api/users/${auth.userId}`,
+                'PUT',
+                JSON.stringify({
+                    name: formState.inputs.name.value,
+                    email: formState.inputs.email.value,
+                    phone: formState.inputs.phone.value,
+                    companyName: formState.inputs.companyName.value,
+                    organizationID: formState.inputs.organizationID.value,
+                    taxRegistrationID: formState.inputs.taxRegistrationID.value,
+                    billingAddress: formState.inputs.billingAddress.value,
+                    billingAddressLine1: formState.inputs.billingAddressLine1.value,
+                    billingAddressLine2: formState.inputs.billingAddressLine2.value,
+                    postalCode: formState.inputs.postalCode.value,
+                    city: formState.inputs.city.value,
+                    country: formState.inputs.country.value,
+                }),
+                {
+                    'Content-Type': 'application/json',
+                    'x-auth-token': auth.token
+                }
+            );
+
+            console.log(responseData)
+        } catch(err) {}
+    }
 
     return(
         <React.Fragment>
-             <div class="section-cart">
-                <div class="section-cart__left">
-                    <form action="#" class="form">
-                        <div class="form__group">
-                            <input type="text" class="form__input" placeholder="Full Name" id="name" required/>
-                            <label for="name" class="form__label">Full Name</label>
-                        </div>
-                        <div class="form_group">
-                            <input type="email" class="form__input" placeholder="Email address" id="email" required/>
-                            <label for="email" class="form__label">Email</label>
-                        </div>   
-                        <div class="form_group">
-                            <input type="text" class="form__input" placeholder="Phone" id="phone" required/>
-                            <label for="text" class="form__label">Phone</label>
-                        </div>   
-                        <div class="continue-shopping" style={{marginLeft: -15+'px'}}>  
+             <div className="section-cart">
+                 { 
+                    !isLoading && loadedUser &&
+                    <div className="section-cart__left">
+                        <form className="form" onSubmit={onSubmitHandler}>
+                            <div className="form__group">
+                                {/* <input type="text" className="form__input" placeholder="Full Name" id="name" required/>
+                                <label for="name" className="form__label">Full Name</label> */}
+                                <Input
+                                        id="name"
+                                        element="input"
+                                        type="text"
+                                        label="Full Name"
+                                        validators={[]}
+                                        initialValue={loadedUser.name}
+                                        errorText="Please enter a name"
+                                        onInput={inputHandler}
+                                    />
+                            </div>
+                            <div className="form_group">
+                                {/* <input type="email" className="form__input" placeholder="Email address" id="email" required/>
+                                <label for="email" className="form__label">Email</label> */}
+                                <Input
+                                        id="email"
+                                        element="input"
+                                        type="text"
+                                        label="Email Address"
+                                        validators={[]}
+                                        initialValue={loadedUser.email}
+                                        errorText="Please enter your email"
+                                        onInput={inputHandler}
+                                    />
+                                
+                            </div>   
+                            <div className="form_group">
+                                {/* <input type="text" className="form__input" placeholder="Phone" id="phone" required/>
+                                <label for="text" className="form__label">Phone</label> */}
+                                 <Input
+                                        id="phone"
+                                        element="input"
+                                        type="text"
+                                        label="Phone"
+                                        validators={[]}
+                                        initialValue={loadedUser.phone}
+                                        errorText="Please enter your phone number"
+                                        onInput={inputHandler}
+                                    />
+                            </div>   
+                            <div className="continue-shopping" style={{marginLeft: -15+'px'}}>  
 
-                            <h1 style={{color:"black"}}>Company details</h1>
-                        </div>
-                        <div class="form_group">
-                            <input type="text" class="form__input" placeholder="Company" id="company" required/>
-                            <label for="company" class="form__label">Company</label>
-                        </div>   
-                        <div class="form_group">
-                            <input type="text" class="form__input" placeholder="Organization ID" id="org_id" required/>
-                            <label for="org_id" class="form__label">Organization ID</label>
-                        </div>   
-                        <div class="form_group">
-                            <input type="text" class="form__input" placeholder="Tax Registration ID" id="tax_reg_id" required/>
-                            <label for="tax_reg_id" class="form__label">Tax Registration ID</label>
-                        </div>
-                        <div class="continue-shopping" style={{marginLeft: -15+'px'}}> 
+                                <h1 style={{color:"black"}}>Company details</h1>
+                            </div>
+                            <div className="form_group">
+                                {/* <input type="text" className="form__input" placeholder="Company" id="company" required/>
+                                <label for="company" className="form__label">Company</label> */}
+                                 <Input
+                                        id="companyName"
+                                        element="input"
+                                        type="text"
+                                        label="Company Name"
+                                        validators={[]}
+                                        initialValue={loadedUser.companyName}
+                                        errorText="Please enter your company name"
+                                        onInput={inputHandler}
+                                    />
+                            </div>   
+                            <div className="form_group">
+                                {/* <input type="text" className="form__input" placeholder="Organization ID" id="org_id" required/>
+                                <label for="org_id" className="form__label">Organization ID</label> */}
+                                    <Input
+                                        id="organizationID"
+                                        element="input"
+                                        type="text"
+                                        label="Organization ID"
+                                        validators={[]}
+                                        initialValue={loadedUser.organizationID}
+                                        errorText="Please enter your organization ID"
+                                        onInput={inputHandler}
+                                    />
+                            </div>   
+                            <div className="form_group">
+                                {/* <input type="text" className="form__input" placeholder="Tax Registration ID" id="tax_reg_id" required/>
+                                <label for="tax_reg_id" className="form__label">Tax Registration ID</label> */}
+                                <Input
+                                        id="taxRegistrationID"
+                                        element="input"
+                                        type="text"
+                                        label="Tax Registration ID"
+                                        validators={[]}
+                                        initialValue={loadedUser.taxRegistrationID}
+                                        errorText="Please enter your Tax Registration ID"
+                                        onInput={inputHandler}
+                                    />
+                           
+                            </div>
+                            <div className="continue-shopping" style={{marginLeft: -15+'px'}}> 
 
-                            <h1 style={{color:"black"}}>Billing address</h1>
-                        </div>
-                        <div class="form_group">
-                            <input type="text" class="form__input" placeholder="Address" id="billing_address" required/>
-                            <label for="billing_address" class="form__label">Address</label>
-                        </div>   
-                        <div class="form_group">
-                            <input type="text" class="form__input" placeholder="Address line" id="billing_address_line" required/>
-                            <label for="billing_address_line" class="form__label">Address line</label>
-                        </div>   
-                        <div class="form_group">
-                            <input type="text" class="form__input" placeholder="Address line 2" id="billing_address_line2" required/>
-                            <label for="billing_address_line2" class="form__label">Address line 2</label>
-                        </div>    
-                        <div class="form_group">
-                            <input type="text" class="form__input" placeholder="City" id="city" required/>
-                            <label for="city" class="form__label">City</label>
-                        </div>   
-                        <div class="form_group">
-                            <input type="text" class="form__input" placeholder="Postal code" id="postal_code" required/>
-                            <label for="postal_code" class="form__label">Postal code</label>
-                        </div> 
-                        <div class="form_group">
-                            <input type="text" class="form__input" placeholder="Country" id="country" required/>
-                            <label for="country" class="form__label">Country</label>
-                        </div>                   
-                    </form>
-                </div>
-                <div class="section-cart__right">
-                    <div class="section-cart__right--card">
+                                <h1 style={{color:"black"}}>Billing address</h1>
+                            </div>
+                            <div className="form_group">
+                                {/* <input type="text" className="form__input" placeholder="Address" id="billing_address" required/>
+                                <label for="billing_address" className="form__label">Address</label> */}
+                                <Input
+                                        id="address"
+                                        element="input"
+                                        type="text"
+                                        label="Address"
+                                        validators={[]}
+                                        initialValue={loadedUser.billingAddress}
+                                        errorText="Please enter your address"
+                                        onInput={inputHandler}
+                                    />
+                            </div>   
+                            <div className="form_group">
+                                {/* <input type="text" className="form__input" placeholder="Address line" id="billing_address_line" required/>
+                                <label for="billing_address_line" className="form__label">Address line</label> */}
+                            
+                                <Input
+                                        id="addressLine1"
+                                        element="input"
+                                        type="text"
+                                        label="Address line 1"
+                                        validators={[]}
+                                        initialValue={loadedUser.billingAddressLine1}
+                                        errorText="Please enter your address"
+                                        onInput={inputHandler}
+                                    />
+                            </div>   
+                            <div className="form_group">
+                                {/* <input type="text" className="form__input" placeholder="Address line 2" id="billing_address_line2" required/>
+                                <label for="billing_address_line2" className="form__label">Address line 2</label> */}
+                            
+                                <Input
+                                        id="addressLine2"
+                                        element="input"
+                                        type="text"
+                                        label="Address line 2"
+                                        validators={[]}
+                                        initialValue={loadedUser.billingAddressLine2}
+                                        errorText="Please enter your address"
+                                        onInput={inputHandler}
+                                    />
+                            </div>    
+                            <div className="form_group">
+                                {/* <input type="text" className="form__input" placeholder="City" id="city" required/>
+                                <label for="city" className="form__label">City</label> */}
+                            
+                                <Input
+                                        id="city"
+                                        element="input"
+                                        type="text"
+                                        label="City"
+                                        validators={[]}
+                                        initialValue={loadedUser.city}
+                                        errorText="Please enter your city"
+                                        onInput={inputHandler}
+                                    />
+                            </div>   
+                            <div className="form_group">
+                                {/* <input type="text" className="form__input" placeholder="Postal code" id="postal_code" required/>
+                                <label for="postal_code" className="form__label">Postal code</label> */}
+                            
+                                <Input
+                                        id="postalCode"
+                                        element="input"
+                                        type="text"
+                                        label="Postal Code"
+                                        validators={[]}
+                                        initialValue={loadedUser.postalCode}
+                                        errorText="Please enter your postal code"
+                                        onInput={inputHandler}
+                                    />
+                            </div> 
+                            <div className="form_group">
+                                {/* <input type="text" className="form__input" placeholder="Country" id="country" required/>
+                                <label for="country" className="form__label">Country</label> */}
+                            
+                                <Input
+                                            id="country"
+                                            element="input"
+                                            type="text"
+                                            label="Country"
+                                            validators={[]}
+                                            initialValue={loadedUser.country}
+                                            errorText="Please enter your country"
+                                            onInput={inputHandler}
+                                        />
+                            </div>   
+                            <button style={{marginTop: 1+"rem"}} className="btn btn--mov">
+                               Update your data
+                            </button>                
+                        </form>
+                    </div> 
+                }
+                <div className="section-cart__right">
+                    <div className="section-cart__right--card">
                        Fill in your billing details and delivery preferences and proceed to review your order.
                     </div>
                     <center>
-                        <button style={{marginTop: 1+"rem"}} class="btn btn--mov">
+                        <Link to="/review_payment" style={{marginTop: 1+"rem"}} className="btn btn--mov">
                             Review Order 
-                        </button>
+                        </Link>
                     </center>
                 </div>
             </div>

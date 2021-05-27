@@ -126,9 +126,7 @@ const Products = () => {
         }
 
         if(!productsFetched.current)
-        
-        
-        fetchOrder();
+            fetchOrder();
         
         fetchPagination();
         
@@ -138,6 +136,7 @@ const Products = () => {
         if(!productsFetched.current) {
             fetchItems();
         }
+          
 
     }, [sendRequest, auth, currentOrder, qtyArray, orderedProducts]);
       
@@ -147,6 +146,8 @@ const Products = () => {
        
         setSideMenuName(e.target.innerHTML);
         setMainMenuSelected(e.target.dataset.letter); 
+
+        setCurrentPage(1);
 
         const fetchSideMenuItems = async () => {
         
@@ -185,6 +186,8 @@ const Products = () => {
     const onSideMenuClickHandler = async (e) => {
         e.preventDefault();
         
+        setCurrentPage(1);
+
         const fetchItems = async () => {
 
             try {

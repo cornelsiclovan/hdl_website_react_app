@@ -96,7 +96,7 @@ const Auth = () => {
                     }
                 );
 
-                console.log(responseData)
+                //console.log(responseData)
 
 
                 auth.login(responseData.userId, responseData.token);

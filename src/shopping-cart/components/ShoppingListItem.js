@@ -13,7 +13,7 @@ const ShoppingListItem = (props) => {
    props.currentOrder && props.currentOrder.orders[0].qtyArray.forEach(item => {
         if(item.productId === props.product._id){
            qty = item.qty;
-           console.log(qty);
+           
            if(props.product.image !== null) {
                image = props.product.image[0];
     

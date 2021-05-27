@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+
 
 import ShoppingListItem from './ShoppingListItem';
 
@@ -49,9 +51,18 @@ const ShoppingList = (props) => {
                         <span class="section-cart__right--comment">Review your shopping cart and checkout</span>
                     </div>
                     <center>
-                        <button style={{marginTop: 1+"rem"}} class="btn btn--mov">
-                            Checkout   
-                        </button>
+                        {
+                            props.modify &&
+                            <Link to="/billing" style={{marginTop: 1+"rem"}} className="btn btn--mov">
+                                Checkout   
+                            </Link>
+                        }
+                        {
+                            !props.modify && 
+                            <a  style={{marginTop: 1+"rem"}} className="btn btn--mov" onClick={props.onClickSubmitOrderHandler}>
+                                Checkout   
+                            </a>
+                        }
                     </center>
                 </div>
             </div>

@@ -175,7 +175,11 @@ const ShoppingCart = () => {
                             'Content-Type': 'application/json'
                             }
                         );
+                        currentOrderLoaded.current = false;
+                   
                 } catch (err) {}
+               
+                
             }
         }
         
@@ -218,13 +222,14 @@ const ShoppingCart = () => {
                         'Content-Type': 'application/json'
                         }
                         )
+                        currentOrderLoaded.current = false;
             } catch (err) {}
         }
     }
     
 
     const qtyInputOnChangeHandler = (e) => {
-        console.log(e.target.value);
+      
         setQty(e.target.value);
     }
 
@@ -238,6 +243,7 @@ const ShoppingCart = () => {
                 !isLoading && 
                 currentOrder && 
                 <ShoppingList 
+                    modify={true}
                     currentOrder={currentOrder} 
                     qtyInputOnChangeHandler={qtyInputOnChangeHandler}
                     onRemoveProductFromCartHandler={onRemoveProductFromCartHandler}

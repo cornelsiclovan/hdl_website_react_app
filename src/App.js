@@ -59,6 +59,24 @@ const App = () => {
             <Route path="/auth" exact>
                 <AuthPage />
             </Route>
+            <Route path="/shopping-cart" exact>
+                <AuthPage />
+            </Route>
+            <Route path="/billing" exact>
+                <AuthPage />
+            </Route>
+            <Route path="/review_payment" exact>
+                <AuthPage />
+            </Route>
+            <Route path="/account" exact>
+                <AuthPage />
+            </Route>
+            <Route path="/order-history" exact>
+                <AuthPage />
+            </Route>
+            <Route path="/change-password" exact>
+                <AuthPage />
+            </Route>
         </Switch>
         );
     }

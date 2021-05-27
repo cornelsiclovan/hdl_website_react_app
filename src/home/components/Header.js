@@ -6,18 +6,18 @@ const Header = () => {
 
     return (
         <React.Fragment>
-            <header class="header">
-                <div class="header__logo-box">
-                    <img src={logo} alt="hdl logo" class="header__logo"/>
+            <header className="header">
+                <div className="header__logo-box">
+                    <img src={logo} alt="hdl logo" className="header__logo"/>
                 </div>   
 
-                <div class="header__text-box">
-                    <h1 class="heading-primary">
-                        <span class="heading-primary--main">hdl partner portal</span>
-                        <span class="heading-primary--sub">the fascinating world of automation</span>
+                <div className="header__text-box">
+                    <h1 className="heading-primary">
+                        <span className="heading-primary--main">hdl partner portal</span>
+                        <span className="heading-primary--sub">the fascinating world of automation</span>
                     </h1>
 
-                    <Link to="/products"><a href="#" class="btn btn--white btn--animated">Discover our products</a> </Link>
+                    <Link to="/products" className="btn btn--white btn--animated">Discover our products</Link>
                 </div>
             </header>
         </React.Fragment>
