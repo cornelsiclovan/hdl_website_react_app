@@ -6,17 +6,80 @@ import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
 import Input from '../../shared/components/FormElements/Input';
 
+import Modal from '../../shared/components/UIElements/Modal';
+import Button from '../../shared/components/UIElements/Button';
+
 const BillingForm = () => {
     const auth = useContext(AuthContext);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
     const [loadedUser, setLoadedUser] = useState();
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-    const updated = useRef();
+    const [formState, inputHandler, setFormData] = useForm(
+        {
+            name: 
+            {
+                value: '',
+                isValid: 'true'
+            },
+            email: 
+            {
+                value: '',
+                isValid: 'true'
+            },
+            phone: 
+            {   
+                value: '',
+                isValid: 'true'
+            },
+            companyName:
+            {
+                value: '',
+                isValid: 'true'
+            },
+            organizationID:
+            {
+                value: '',
+                isValid: 'true'
+            },
+            taxRegistrationID:
+            {
+                value: '',
+                isValid: 'true'
+            },
+            billingAddress: 
+            {
+                value: '',
+                isValid: 'true'
+            },
+            billingAddressLine1: {
+                value: '',
+                isValid: 'true'
+            },
+            billingAddressLine2: {
+                value: '',
+                isValid: 'true'
+            },
+            postalCode: 
+            {
+                value: '',
+                isValid: 'true'
+            },
+            city: {
+                value: '',
+                isValid: 'true'
+            },
+            country: {
+                value: '',
+                isValid: 'true'
+            }
+        }, false
+    );
 
-    updated.current = false;
 
-    useEffect(() => {
+    useEffect(() => { 
         const fetchBillingData = async () => {
+          
             const response = await sendRequest(`http://localhost:3001/api/users/me`,
                                                 'GET',
                                                 null,
@@ -24,86 +87,83 @@ const BillingForm = () => {
                                                     'x-auth-token': auth.token
                                                 });
       
-            console.log(response);
+           
             setLoadedUser(response);
+            setFormData({
+                name: 
+                {
+                    value: response.name,
+                    isValid: 'true'
+                },
+                email: 
+                {
+                    value: response.email,
+                    isValid: 'true'
+                },
+                phone: 
+                {   
+                    value: response.phone,
+                    isValid: 'true'
+                },
+                companyName:
+                {
+                    value: response.companyName,
+                    isValid: 'true'
+                },
+                organizationID:
+                {
+                    value: response.organizationID,
+                    isValid: 'true'
+                },
+                taxRegistrationID:
+                {
+                    value: response.taxRegistrationID,
+                    isValid: 'true'
+                },
+                billingAddress: 
+                {
+                    value: response.billingAddress,
+                    isValid: 'true'
+                },
+                billingAddressLine1: {
+                    value: response.billingAddressLine1,
+                    isValid: 'true'
+                },
+                billingAddressLine2: {
+                    value: response.billingAddressLine2,
+                    isValid: 'true'
+                },
+                postalCode: 
+                {
+                    value: response.postalCode,
+                    isValid: 'true'
+                },
+                city: {
+                    value: response.city,
+                    isValid: 'true'
+                },
+                country: {
+                    value: response.country,
+                    isValid: 'true'
+                }
+            });
         }
 
-        if(!updated.current){
-            fetchBillingData();
-            updated.current = true;
-        }
+      
+        fetchBillingData();
+        
     }, [sendRequest]);
     
 
-    const [formState, inputHandler, setFormData] = useForm(
-        {
-            name: 
-            {
-                value: '',
-                isValid: false
-            },
-            email: 
-            {
-                value: '',
-                isValid: false
-            },
-            phone: 
-            {   
-                value: '',
-                isValid: false
-            },
-            companyName:
-            {
-                value: '',
-                isValid: false
-            },
-            organizationID:
-            {
-                value: '',
-                isValid: false
-            },
-            taxRegistrationID:
-            {
-                value: '',
-                isValid: false
-            },
-            billingAddress: 
-            {
-                value: '',
-                isValid: false
-            },
-            billingAddressLine1: {
-                value: '',
-                isValid: false
-            },
-            billingAddressLine2: {
-                value: '',
-                isValid: false
-            },
-            postalCode: 
-            {
-                value: '',
-                isValid: false
-            },
-            city: {
-                value: '',
-                isValid: false
-            },
-            country: {
-                value: '',
-                isValid: false
-            }
-        }, false
-    );
+    
 
-
-    const onSubmitHandler = async (e) => {
-        e.preventDefault();
-
-        console.log(formState.inputs);
-
+    const onSubmitHandler = async (event) => {
+        event.preventDefault();
+       
+      
+        setLoadedUser(null);
         try {
-            const responseData = await sendRequest(
+            const response = await sendRequest(
                 `http://localhost:3001/api/users/${auth.userId}`,
                 'PUT',
                 JSON.stringify({
@@ -125,13 +185,93 @@ const BillingForm = () => {
                     'x-auth-token': auth.token
                 }
             );
-
-            console.log(responseData)
+          
+           
+            setFormData({
+                name: 
+                {
+                    value: response.user.name,
+                    isValid: 'true'
+                },
+                email: 
+                {
+                    value: response.user.email,
+                    isValid: 'true'
+                },
+                phone: 
+                {   
+                    value: response.user.phone,
+                    isValid: 'true'
+                },
+                companyName:
+                {
+                    value: response.user.companyName,
+                    isValid: 'true'
+                },
+                organizationID:
+                {
+                    value: response.user.organizationID,
+                    isValid: 'true'
+                },
+                taxRegistrationID:
+                {
+                    value: response.user.taxRegistrationID,
+                    isValid: 'true'
+                },
+                billingAddress: 
+                {
+                    value: response.user.billingAddress,
+                    isValid: 'true'
+                },
+                billingAddressLine1: {
+                    value: response.user.billingAddressLine1,
+                    isValid: 'true'
+                },
+                billingAddressLine2: {
+                    value: response.user.billingAddressLine2,
+                    isValid: 'true'
+                },
+                postalCode: 
+                {
+                    value: response.user.postalCode,
+                    isValid: 'true'
+                },
+                city: {
+                    value: response.user.city,
+                    isValid: 'true'
+                },
+                country: {
+                    value: response.user.country,
+                    isValid: 'true'
+                }
+            }, true);
+              
+            setLoadedUser(response.user);
+            setShowSuccessModal(true);
         } catch(err) {}
+    }
+
+    const hideSuccessModal = async (event) => {
+        event.preventDefault();
+
+        setShowSuccessModal(false);
     }
 
     return(
         <React.Fragment>
+              <Modal
+                show={showSuccessModal}
+                onCancel={hideSuccessModal}
+                header="Your data has been sucessfully updated."
+                footerClass="place-item__modal-actions"
+                footer={
+                    <React.Fragment>
+                        <Button inverse onClick={hideSuccessModal}>OK</Button>
+                    </React.Fragment>
+                }
+                >
+
+            </Modal>
              <div className="section-cart">
                  { 
                     !isLoading && loadedUser &&
@@ -235,7 +375,7 @@ const BillingForm = () => {
                                 {/* <input type="text" className="form__input" placeholder="Address" id="billing_address" required/>
                                 <label for="billing_address" className="form__label">Address</label> */}
                                 <Input
-                                        id="address"
+                                        id="billingAddress"
                                         element="input"
                                         type="text"
                                         label="Address"
@@ -250,7 +390,7 @@ const BillingForm = () => {
                                 <label for="billing_address_line" className="form__label">Address line</label> */}
                             
                                 <Input
-                                        id="addressLine1"
+                                        id="billingAddressLine1"
                                         element="input"
                                         type="text"
                                         label="Address line 1"
@@ -265,7 +405,7 @@ const BillingForm = () => {
                                 <label for="billing_address_line2" className="form__label">Address line 2</label> */}
                             
                                 <Input
-                                        id="addressLine2"
+                                        id="billingAddressLine2"
                                         element="input"
                                         type="text"
                                         label="Address line 2"
@@ -320,7 +460,7 @@ const BillingForm = () => {
                                             onInput={inputHandler}
                                         />
                             </div>   
-                            <button style={{marginTop: 1+"rem"}} className="btn btn--mov">
+                            <button type="submit" style={{marginTop: 1+"rem"}} className="btn btn--mov">
                                Update your data
                             </button>                
                         </form>

@@ -126,13 +126,13 @@ const Auth = () => {
     return (
        <React.Fragment>
            <ErrorModal error={error} onClear={clearError}/>
-           <section class="section-book">
-                <div class="row">
-                    <div class="book">
-                        <div class="book__form">
-                            <form class="form" onSubmit={authSubmitHandler}>
-                                <div class="u-margin-bottom-medium">
-                                    <h2 class="heading-secondary">
+           <section className="section-book">
+                <div className="row">
+                    <div className="book">
+                        <div className="book__form">
+                            <form className="form" onSubmit={authSubmitHandler}>
+                                <div className="u-margin-bottom-medium">
+                                    <h2 className="heading-secondary">
                                         Partener account 
                                     </h2>   
                                 </div>  
@@ -177,24 +177,24 @@ const Auth = () => {
                                 />
 
                     
-                                <div class="form__group u-margin-bottom-medium">
-                                    <div class="form__radio-group">
-                                        <input type="radio" onClick={switchLoginHandler} class="form__radio-input" id="login" name="account"/>
-                                        <label for="login" class="form__radio-label">
-                                            <span class="form__radio-button"></span>
+                                <div className="form__group u-margin-bottom-medium">
+                                    <div className="form__radio-group">
+                                        <input type="radio" onClick={switchLoginHandler} className="form__radio-input" id="login" name="account"/>
+                                        <label htmlFor="login" className="form__radio-label">
+                                            <span className="form__radio-button"></span>
                                             Login
                                         </label>
                                     </div>
-                                    <div class="form__radio-group">
-                                        <input type="radio" onClick={switchSignupHandler} class="form__radio-input" id="new" name="account"/>
-                                        <label for="new" class="form__radio-label">
-                                            <span class="form__radio-button"></span>
+                                    <div className="form__radio-group">
+                                        <input type="radio" onClick={switchSignupHandler} className="form__radio-input" id="new" name="account"/>
+                                        <label htmlFor="new" className="form__radio-label">
+                                            <span className="form__radio-button"></span>
                                             Signup
                                         </label>
                                     </div>
                                 </div>
-                                <div class="form__group">
-                                    <button class="btn btn--mov">
+                                <div className="form__group">
+                                    <button className="btn btn--mov">
                                         {isLoginMode ? 'Login' : 'Signup'} 
                                     </button>
                                 </div>

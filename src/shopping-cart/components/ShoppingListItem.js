@@ -1,10 +1,5 @@
 import React, {useState} from 'react';
 
-import img1 from "../../img/HDL-MD0206_432-05.jpg" ;
-import img2 from "../../img/HDL-MC64-DALI_431-05.jpg";
-import img3 from "../../img/HDL-MDLED0605_432-08.jpg";
-import img4 from "../../img/HDL-MC64-DALI_431-05.jpg";
-
 
 const ShoppingListItem = (props) => {
     let qty = 0;
@@ -41,7 +36,13 @@ const ShoppingListItem = (props) => {
                                         <br/>
                                         <br/>
                                         <div> 
-                                        <form  className="card-item__add-form">
+                                        {
+                                            props.review && <div>Quantity: {qty}</div>
+                                        
+                                        }
+                                        {  
+                                            !props.review &&
+                                            <form  className="card-item__add-form">
                                             <span style={{fontSize: 1.5+"rem"}}>Qty</span>  
                                            
                                             <input 
@@ -73,6 +74,8 @@ const ShoppingListItem = (props) => {
                                              
                                             </b>
                                         </form>
+                                        }
+                                      
                                      
                                         </div>
                                 </div> 

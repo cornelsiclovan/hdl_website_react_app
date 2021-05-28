@@ -7,17 +7,22 @@ import ShoppingList from '../components/ShoppingList';
 import ShoppingMain from '../components/ShoppingMain';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from "../../shared/context/auth-context";
+import Modal from '../../shared/components/UIElements/Modal';
+import Button from '../../shared/components/UIElements/Button';
+import { useParams, useHistory } from 'react-router-dom';
+
 
 const Review = () => {
     const auth = useContext(AuthContext);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
-    
+    const history = useHistory();
     const [currentOrder, setCurrentOrder] = useState();
     
     const [qty, setQty] = useState(0);
 
     const [orderedProducts, setOrderedProducts] = useState([]);
     const [qtyArray, setQtyArray] = useState([]);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
 
     useEffect(async () => {
 
@@ -67,21 +72,67 @@ const Review = () => {
 
     }, [sendRequest]);
 
-    const onClickSubmitOrderHandler = () => {
-        console.log("submitted order");
+    const onClickSubmitOrderHandler = async () => {
+       
+        try {
+            const responseData = await sendRequest(`http://localhost:3001/api/orders/${currentOrder.orders[0]._id}`, 
+                    'PUT',
+                    JSON.stringify({
+                        userId: auth.userId,
+                        products: orderedProducts,
+                        qtyArray: qtyArray,
+                        inCart: false
+                    }),
+                    {
+                    'Content-Type': 'application/json'
+                    }
+                );
+                setShowSuccessModal(true);
+        } catch (err) {}
+
+    }
+
+    const hideSuccessModal = async (event) => {
+        event.preventDefault();
+
+        setShowSuccessModal(false);
+        history.push('/proucts');
+    }
+
+    
+    const hideSuccessModal2 = async (event) => {
+        event.preventDefault();
+
+        setShowSuccessModal(false);
+        history.push('/order-history');
     }
 
     return(
         <React.Fragment>
+         <Modal
+                show={showSuccessModal}
+                onCancel={hideSuccessModal}
+                header="Your command was sent"
+                footerClass="place-item__modal-actions"
+                footer={
+                    <React.Fragment>
+                        <Button inverse onClick={hideSuccessModal}>SHOPPING</Button>
+                        <Button inverse onClick={hideSuccessModal2}>ORDERS</Button>
+                    </React.Fragment>
+                }
+                >
+
+            </Modal>
         <Header />
         <Navigation />
-        <ShoppingMain review={true} />
+        <ShoppingMain review={true}/>
         <ReviewMain />
         {!isLoading && currentOrder && 
             <ShoppingList 
                 modify={false} 
                 currentOrder={currentOrder} 
                 onClickSubmitOrderHandler={onClickSubmitOrderHandler}
+                review={true} 
                 />
         }
         <Footer />

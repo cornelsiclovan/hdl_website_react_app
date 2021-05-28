@@ -301,17 +301,7 @@ const Products = () => {
                     }
                 );
                 
-                setCurrentOrder(
-                    {
-                        orders:[{
-                            userId: auth.userId,
-                            products: orderedProducts,
-                            qtyArray: qtyArray,
-                            inCart: true
-                            }
-                        ]
-                    }
-                );
+               
 
                 try {
                     const responseData = await sendRequest(`http://localhost:3001/api/orders/`, 
@@ -326,7 +316,21 @@ const Products = () => {
                             'Content-Type': 'application/json'
                             }
                         )
-            
+
+                    console.log(responseData);
+                    setCurrentOrder(
+                        {
+                            orders:[{
+                                _id: responseData._id,
+                                userId: auth.userId,
+                                products: orderedProducts,
+                                qtyArray: qtyArray,
+                                inCart: true
+                                }
+                            ]
+                        }
+                    );
+
                 } catch (err) {}
 
             } else {

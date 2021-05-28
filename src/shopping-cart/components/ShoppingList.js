@@ -25,6 +25,7 @@ const ShoppingList = (props) => {
                             qtyInputOnChangeHandler={props.qtyInputOnChangeHandler}
                             onRemoveProductFromCartHandler={props.onRemoveProductFromCartHandler}
                             onAddToCartClickHandler={props.onAddToCartClickHandler}
+                            review={props.review}
                             />
                    )}
                 </div>    

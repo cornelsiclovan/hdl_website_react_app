@@ -1,44 +1,67 @@
-import React from 'react';
-
+import React, {useEffect, useState, useContext} from 'react';
+import { useHttpClient } from '../../shared/hooks/http-hook';
+import { AuthContext } from '../../shared/context/auth-context';
 
 const ReviewMain = (props) => {
+    const [user, setUser] = useState();
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+    const auth = useContext(AuthContext);
+
+    useEffect(() => {
+       
+        const fetchUser = async () => {
+            try {
+                const response = await sendRequest(`http://localhost:3001/api/users/me`,
+                'GET',
+                null,
+                {
+                    'x-auth-token': auth.token
+                });
+
+                setUser(response);
+            } catch (error) {}
+            
+          
+        }
+
+        fetchUser();
+
+    }, [sendRequest]);
 
     return (
         <React.Fragment>
              <div class="continue-shopping"> 
 
                 <h1 style={{color: "black"}}>Billing details</h1>
-                </div>
-
-                <div class="section-cart">
+            </div>
+            { !isLoading && user &&
+            <div class="section-cart">
                 <div class="section-cart__left">
-                Bogdan Dragoi
+                {user.name}
                 <br/>
-                bogdandr@gmail.com
+                {user.email}
                 <br/>
-                0721312535
-                <br/>
-                <br/>
-                Home Automation Systems
-                <br/>
-                Org. ID: RO32273009
-                <br/>
-                DIC: J35/2393/2013
+                {user.phone}
                 <br/>
                 <br/>
-                Str. Frasinului Nr.33
+                {user.companyName}
                 <br/>
-                307287 Mosnita Veche
+                Org. ID: {user.organizationID}
                 <br/>
-                Romania
+                DIC: {user.taxRegistrationID}
+                <br/>
+                <br/>
+                {user.billingAddress}
+                <br/>
+                {user.postalCode} {user.city}
+                <br/>
+                {user.country}
                 <div class="continue-shopping" style={{marginLeft: -15+"px"}}>  
 
                     <h1 style={{color: "black"}}>Orderd items</h1>
                 </div>
-                
                 </div>
-               
-            </div>
+            </div>}
         </React.Fragment>
     );
 }
