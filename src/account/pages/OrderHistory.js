@@ -14,6 +14,8 @@ const OrderHistory = () => {
     const {isLoading, error, sendRequest, clearError} = useHttpClient();
 
     useEffect(async () => {
+       try { 
+           
         const responseData = await sendRequest(
             `http://localhost:3001/api/orders/user/${auth.userId}/completed?inCart=false`,
             'GET',
@@ -22,11 +24,13 @@ const OrderHistory = () => {
                 'x-auth-token': auth.token
             }
             );
-        setOrders(responseData);
+            setOrders(responseData);
+        } catch(err) {}
+      
     }, [sendRequest]);
 
     if(orders)
-        console.log(orders);
+        console.log(orders.length);
 
     return (
         <React.Fragment>
@@ -34,7 +38,7 @@ const OrderHistory = () => {
             <Navigation />
             <AccountMenu orderHistory={true}/>
             <ShoppingCart />
-            {!isLoading && orders && <OrderHistoryMain orders={orders}/>}
+            {!isLoading && orders && orders.length != 0 && <OrderHistoryMain orders={orders}/>}
             <Footer />
         </React.Fragment>
     );

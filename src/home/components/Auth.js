@@ -96,10 +96,10 @@ const Auth = () => {
                     }
                 );
 
-                //console.log(responseData)
+                console.log(responseData)
 
 
-                auth.login(responseData.userId, responseData.token);
+                auth.login(responseData.userId, responseData.token, responseData.discount, responseData.isAdmin);
             } catch(err) {}
 
         } else {

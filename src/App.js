@@ -6,6 +6,7 @@ import OrderHistory from './account/pages/OrderHistory.js';
 import AuthPage from './auth/pages/AuthPage.js';
 import Home from './home/pages/Home';
 import Products from './products/pages/Products';
+import Admin from './admin/pages/Admin';
 import { AuthContext } from './shared/context/auth-context';
 import { useAuth } from './shared/hooks/auth-hook';
 
@@ -14,7 +15,7 @@ import Review from './shopping-cart/pages/Review';
 import ShoppingCart from './shopping-cart/pages/ShoppingCart';
 
 const App = () => {
-    const { token, login, logout, userId } = useAuth();
+    const { token, login, logout, userId, isAdmin, discount } = useAuth();
     let routes;
 
     if(token) {
@@ -43,6 +44,9 @@ const App = () => {
                 </Route>
                 <Route path="/change-password" exact>
                     <ChangePassword />
+                </Route>
+                <Route path="/admin" exact>
+                    <Admin />
                 </Route>
                 <Redirect to="/products" />
             </Switch>
@@ -87,6 +91,8 @@ const App = () => {
                 isLoggedIn: !!token, 
                 token: token,
                 userId: userId,
+                isAdmin: isAdmin,
+                discount: discount,
                 login: login,
                 logout: logout 
             }}

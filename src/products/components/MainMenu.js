@@ -24,13 +24,13 @@ const MainMenu = (props) => {
  
     return (
         <React.Fragment>
-             <div class="main-menu">
-                <nav class="main-menu__nav">
-                    <ul class="main-menu__list">
+             <div className="main-menu">
+                <nav className="main-menu__nav">
+                    <ul className="main-menu__list">
                     { !isLoading && loadedMainMenuItems && loadedMainMenuItems.map(
                                 mainMenuItem => {
                                     return (
-                                        <li class="main-menu__item">
+                                        <li className="main-menu__item">
                                             <a href="" data-letter={mainMenuItem._id} onClick={props.onMainMenuClickHandler} class="main-menu__link">
                                                 {mainMenuItem.name}
                                             </a> 
@@ -38,34 +38,11 @@ const MainMenu = (props) => {
                                     );     
                                 }
                             ) }
-
-
-                        {/* <li class="main-menu__item">
-                            <a href="#" class="main-menu__link">Bus pro</a>
-                        </li>
-                        <li class="main-menu__item">
-                            <a href="#" class="main-menu__link">knx</a>
-                        </li>
-                        <li class="main-menu__item">
-                            <a href="#" class="main-menu__link">Buspro wireless</a>
-                        </li>
-                        <li class="main-menu__item">
-                            <a href="#" class="main-menu__link">Others</a>
-                        </li>
-                        <li class="main-menu__item">
-                            <a href="#" class="main-menu__link">Sockets</a>
-                        </li>
-                        <li class="main-menu__item">
-                            <a href="#" class="main-menu__link">Wall brackets</a>
-                        </li>
-                        <li class="main-menu__item">
-                            <a href="#" class="main-menu__link">IQRC</a>
-                        </li> */}
                     </ul>
                 </nav>
                 
-                <div class="select-menus">
-                    <div class="main-menu__select">
+                <div className="select-menus">
+                    <div className="main-menu__select">
                         <select>
                             <option value="0">Select option</option>
                             <option value="1">Bus pro</option>
@@ -78,12 +55,12 @@ const MainMenu = (props) => {
                             
                         </select> 
 
-                        <div class="main-menu__selected">
+                        <div className="main-menu__selected">
                             Buspro wireless 
                         </div>
                     </div>
 
-                    <div class="side-menu__select">
+                    <div className="side-menu__select">
                   
 
                         <select>
@@ -109,7 +86,7 @@ const MainMenu = (props) => {
                             
                         </select> 
 
-                        <div class="side-menu__selected">
+                        <div className="side-menu__selected">
                             Communication Gateways 
                         </div>
                     </div>  

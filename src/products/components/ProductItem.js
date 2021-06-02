@@ -23,7 +23,7 @@ const ProductItem = props => {
 
     return (
         <React.Fragment>
-            <div class="card-item">
+            <div className="card-item">
                     <h4 className="card-item__heading"> 
                         <span className="card-item__heading-span">{props.name}</span>
                         

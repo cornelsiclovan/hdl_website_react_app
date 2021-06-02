@@ -66,19 +66,24 @@ const Review = () => {
                         qtyArrayTemp.push(itemQty);
                     
                     });
-                    isCaledRef.current = true;
+                    
+                    
                     console.log(qtyArrayTemp);
                     console.log(orderedProductsTemp);
                     setQtyArray(qtyArrayTemp);
                     
                     setOrderedProducts(orderedProductsTemp);
-                   
+                  
                 } catch (err) {} 
             }
 
-            if(!isCaledRef.current)
-                fetchOrder();
+          
 
+            if(!isCaledRef.current) {
+                fetchOrder();
+                isCaledRef.current = true;
+            }
+              
         }, [cb, condition]);
     }
 

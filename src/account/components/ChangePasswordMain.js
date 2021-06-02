@@ -8,6 +8,7 @@ import Input from '../../shared/components/FormElements/Input';
 
 import Modal from '../../shared/components/UIElements/Modal';
 import Button from '../../shared/components/UIElements/Button';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 
 const ChangePasswordMain = () => {
     const auth = useContext(AuthContext);
@@ -26,7 +27,7 @@ const ChangePasswordMain = () => {
                 value: '',
                 isValid: 'true'
             },
-            repeat_new_password: 
+            retype_new_password: 
             {   
                 value: '',
                 isValid: 'true'
@@ -76,12 +77,12 @@ const ChangePasswordMain = () => {
     
         try {
             const response = await sendRequest(
-                `http://localhost:3001/api/users/${auth.userId}`,
+                `http://localhost:3001/api/users/change_password/${auth.userId}`,
                 'PUT',
                 JSON.stringify({
                     old_password: formState.inputs.old_password.value,
                     new_password: formState.inputs.new_password.value,
-                    repeat_new_password: formState.inputs.repeat_new_password.value
+                    retype_new_password: formState.inputs.retype_new_password.value
                 }),
                 {
                     'Content-Type': 'application/json',
@@ -96,11 +97,14 @@ const ChangePasswordMain = () => {
     const hideSuccessModal = async (event) => {
         event.preventDefault();
 
+        auth.logout();
         setShowSuccessModal(false);
+
     }
     
     return (
         <React.Fragment>
+             <ErrorModal error={error} onClear={clearError}/>
              <Modal
                 show={showSuccessModal}
                 onCancel={hideSuccessModal}

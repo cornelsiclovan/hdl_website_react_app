@@ -7,9 +7,9 @@ const ShoppingCart = () => {
  
     return (
        <Link to='shopping-cart'> 
-            <div class="shopping-cart"> 
-                <label class="shopping-cart__button">
-                    <i class="shopping-cart__icon icon-ecommerce-cart"></i>
+            <div className="shopping-cart"> 
+                <label className="shopping-cart__button">
+                    <i className="shopping-cart__icon icon-ecommerce-cart"></i>
                 </label>   
 
             </div>

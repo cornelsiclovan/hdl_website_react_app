@@ -4,23 +4,23 @@ const OrderMenu = () => {
 
     return (
         <React.Fragment>
-            <div class="order-menu">
-                <nav class="order-menu__nav">
-                    <ul class="order-menu__list">
-                        <li class="order-menu__item">
-                            <a href="#" class="order-menu__link" ><b>Order by:</b></a>
+            <div className="order-menu">
+                <nav className="order-menu__nav">
+                    <ul className="order-menu__list">
+                        <li className="order-menu__item">
+                            <a href="#" className="order-menu__link" ><b>Order by:</b></a>
                         </li>
-                        <li class="order-menu__item">
-                            <a href="#" class="order-menu__link">TOP</a>
+                        <li className="order-menu__item">
+                            <a href="#" className="order-menu__link">TOP</a>
                         </li>
-                        <li class="order-menu__item">
-                            <a href="#" class="order-menu__link">Price Asc.</a>
+                        <li className="order-menu__item">
+                            <a href="#" className="order-menu__link">Price Asc.</a>
                         </li>
-                        <li class="order-menu__item">
-                            <a href="#" class="order-menu__link">Price Desc.</a>
+                        <li className="order-menu__item">
+                            <a href="#" className="order-menu__link">Price Desc.</a>
                         </li>
-                        <li class="order-menu__item">
-                            <a href="#" class="order-menu__link">Name</a>
+                        <li className="order-menu__item">
+                            <a href="#" className="order-menu__link">Name</a>
                         </li>
                     </ul>
                 </nav>

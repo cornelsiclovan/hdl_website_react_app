@@ -19,44 +19,51 @@ const Navigation = () => {
                 <nav className="navigation__nav">
                     <ul className="navigation__list">
                         <li className="navigation__item navigation__item--store">
-                            <Link to="/"><a href="" className="navigation__link">Home</a></Link>
+                            <Link className="navigation__link" to="/">Home</Link>
                         </li>
                         <li className="navigation__item navigation__item--store">
-                            <Link to="/products"><a href="" className="navigation__link">Products</a></Link>
+                            <Link className="navigation__link" to="/products">Products</Link>
                         </li>
 
                         {
                             !auth.isLoggedIn &&
                             <li className="navigation__item navigation__item--store">
-                                <Link to="/auth"><a href="" className="navigation__link">Login</a></Link>
+                                <Link className="navigation__link" to="/auth">Login</Link>
                             </li>
                         }
 
                         {
                             !auth.isLoggedIn &&
                             <li className="navigation__item navigation__item--store">
-                                <Link to="/auth"><a href="" className="navigation__link">Signup</a></Link>
+                                <Link className="navigation__link" to="/auth">Signup</Link>
                             </li>
                         }
 
                         {
                             auth.isLoggedIn && 
                             <li className="navigation__item navigation__item--store">
-                                <Link to="/shopping-cart"><a href="#" className="navigation__link">Shopping cart</a></Link>
+                                <Link className="navigation__link" to="/shopping-cart">Shopping cart</Link>
                             </li>
                         }
 
                         {
                             auth.isLoggedIn &&
                                 <li className="navigation__item navigation__item--store">
-                                <Link to="/account"><a href="#" className="navigation__link">Account data</a></Link>
+                                <Link className="navigation__link" to="/account">Account data</Link>
                             </li>
                         }
 
                         {
                             auth.isLoggedIn &&
                                 <li className="navigation__item navigation__item--store">
-                                <Link to="/"><a href="" className="navigation__link" onClick={auth.logout}>Logout</a></Link>
+                                <Link className="navigation__link" to="/" onClick={auth.logout}>Logout</Link>
+                            </li>
+                        }
+
+                        {
+                            auth.isLoggedIn && auth.isAdmin &&
+                                <li className="navigation__item navigation__item--store">
+                                <Link className="navigation__link" to="/admin">Admin</Link>
                             </li>
                         }
                     </ul>
