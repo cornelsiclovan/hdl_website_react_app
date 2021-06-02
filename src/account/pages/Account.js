@@ -5,6 +5,7 @@ import Navigation from '../../shared/components/UIElements/Navigation';
 import ShoppingCart from '../../shared/components/UIElements/Shopping-cart';
 import AccountMain from '../components/AccountMain';
 import AccountMenu from '../components/AccountMenu';
+import BillingForm from '../../shopping-cart/components/BillingForm';
 
 const Account = () => {
 
@@ -12,8 +13,9 @@ const Account = () => {
         <React.Fragment>
             <Header />
             <Navigation />
-            <AccountMenu />
-            <AccountMain />
+            <AccountMenu personalSettings={true}/>
+            {/* <AccountMain /> */}
+            <BillingForm />
             <ShoppingCart />
             <Footer />
 

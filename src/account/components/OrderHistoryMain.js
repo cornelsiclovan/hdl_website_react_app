@@ -1,7 +1,10 @@
 import React from 'react';
+import OrderHistoryItem from './OrderHistoryItem';
 
 
-const OrderHistoryMain = () => {
+const OrderHistoryMain = (props) => {
+
+    console.log(props.orders);
 
     return(
         <React.Fragment>
@@ -11,7 +14,8 @@ const OrderHistoryMain = () => {
              </div>
  
              
-             <ul class="section-cart__left--list">
+          
+                <ul class="section-cart__left--list">
                  <li class="section-cart__left--item">
                      
                         
@@ -28,66 +32,15 @@ const OrderHistoryMain = () => {
                          <a href>Total price &#8595;</a>  
                     </div>
                  </li>
-                 <li class="section-cart__left--item">
-                     
-                        
-                     <div class="section-cart__left--item-col">
-                             test    
-                     </div>
-                     
-                     <div class="section-cart__left--item-col">
- 
-                             test
-                     </div> 
+                 { 
+                    props.orders && props.orders.orders.map(order => {
+                        return <OrderHistoryItem order={order}/>
+                    })
                     
-                     <div class="section-cart__left--item-col">
-                         <b>10.80&nbsp;Eur</b>
-                    </div>
-                 </li>
-                 <li class="section-cart__left--item">
-                     
-                     <div class="section-cart__left--item-col">
-                         test    
-                     </div>
-                     
-                     <div class="section-cart__left--item-col">
- 
-                             test
-                     </div> 
-                 
-                     <div class="section-cart__left--item-col">
-                         <b>10.80&nbsp;Eur</b>
-                     </div>
-                 </li>
-                 <li class="section-cart__left--item">
-                     <div class="section-cart__left--item-col">
-                         test    
-                     </div>
-                     
-                     <div class="section-cart__left--item-col">
- 
-                             test
-                     </div> 
-                 
-                     <div class="section-cart__left--item-col">
-                         <b>10.80&nbsp;Eur</b>
-                     </div>
-                 </li>
-                 <li class="section-cart__left--item">
-                     <div class="section-cart__left--item-col">
-                         test    
-                     </div>
-                     
-                     <div class="section-cart__left--item-col">
- 
-                             test
-                     </div> 
-                 
-                     <div class="section-cart__left--item-col">
-                         <b>10.80&nbsp;Eur</b>
-                     </div>
-                 </li>
+                    
+                    }
              </ul>
+             
             <br/>
             <br/>
         </React.Fragment>

@@ -12,7 +12,7 @@ const ChangePassword = () => {
         <React.Fragment>
             <Header />
             <Navigation />
-            <AccountMenu />
+            <AccountMenu changePassword={true}/>
             <ChangePasswordMain />
             <ShoppingCart />
             <Footer />

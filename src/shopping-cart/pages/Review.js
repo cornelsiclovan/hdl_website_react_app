@@ -1,4 +1,4 @@
-import React, {useEffect, useContext, useState} from 'react';
+import React, {useEffect, useContext, useState, useRef} from 'react';
 import Header from '../../products/components/Header';
 import Footer from '../../shared/components/UIElements/Footer';
 import Navigation from '../../shared/components/UIElements/Navigation';
@@ -23,57 +23,75 @@ const Review = () => {
     const [orderedProducts, setOrderedProducts] = useState([]);
     const [qtyArray, setQtyArray] = useState([]);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
+    
+   
+    const useOnceCall = (cb, condition = true) => {
+        const isCaledRef = useRef(false);
 
-    useEffect(async () => {
 
-        const fetchOrder = async () => {
-            try{
-                const responseData = await sendRequest(`http://localhost:3001/api/orders/user/${auth.userId}?inCart=true`);
+
+        useEffect(async () => { 
+
+            const fetchOrder = async () => {
+                try{
+                    const responseData = await sendRequest(`http://localhost:3001/api/orders/user/${auth.userId}?inCart=true`);
+                    
+                    setCurrentOrder(responseData);
+                    
+
+                    let orderedProductsTemp = [];
                 
-                setCurrentOrder(responseData);
+                    responseData.orders[0].products.forEach(product => {
+                        
+
+                        let orderedProduct = {
+                            productId: product._id
+                        };
+
+                    
+                        orderedProductsTemp.push(orderedProduct);
+                    
+                    });
+
+
+                    let qtyArrayTemp = [];
+                    currentOrder.orders[0].qtyArray.forEach(item => {
         
+                        let itemQty = {
+                            productId: item.productId,
+                            qty: item.qty
+                        };
 
-                let orderedProductsTemp = [];
-               
-                responseData.orders[0].products.forEach(product => {
-      
-                    let orderedProduct = {
-                        productId: product._id
-                    };
 
+                        qtyArrayTemp.push(itemQty);
+                    
+                    });
+                    isCaledRef.current = true;
+                    console.log(qtyArrayTemp);
+                    console.log(orderedProductsTemp);
+                    setQtyArray(qtyArrayTemp);
+                    
+                    setOrderedProducts(orderedProductsTemp);
                    
-                    orderedProductsTemp.push(orderedProduct);
-                   
-                });
+                } catch (err) {} 
+            }
 
+            if(!isCaledRef.current)
+                fetchOrder();
 
-                let qtyArrayTemp = [];
-                currentOrder.orders[0].qtyArray.forEach(item => {
-      
-                    let itemQty = {
-                        productId: item.productId,
-                        qty: item.qty
-                    };
+        }, [cb, condition]);
+    }
 
-
-                    qtyArrayTemp.push(itemQty);
-                   
-                });
-                
-                setQtyArray(qtyArrayTemp);
-                
-                setOrderedProducts(orderedProductsTemp);
-
-            } catch (err) {} 
-        }
-
-      
-        fetchOrder();
-
-    }, [sendRequest]);
+    useOnceCall(() => {
+        console.log('called');
+    });
 
     const onClickSubmitOrderHandler = async () => {
        
+
+        console.log(orderedProducts);
+        console.log(qtyArray);
+
         try {
             const responseData = await sendRequest(`http://localhost:3001/api/orders/${currentOrder.orders[0]._id}`, 
                     'PUT',
