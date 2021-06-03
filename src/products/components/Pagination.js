@@ -91,7 +91,7 @@ const Pagination = (props) => {
                                 href="" 
                                 onClick={props.incrementCurrentPageClickHandler}
                             >
-                                {`|>`}
+                                {`>|`}
                             </a>    
                         </li> 
                     </ul>

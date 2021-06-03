@@ -28,16 +28,18 @@ const Review = () => {
     const useOnceCall = (cb, condition = true) => {
         const isCaledRef = useRef(false);
 
+       
 
 
         useEffect(async () => { 
 
+            console.log("fetch order");
+
             const fetchOrder = async () => {
                 try{
                     const responseData = await sendRequest(`http://localhost:3001/api/orders/user/${auth.userId}?inCart=true`);
-                    
+                   
                     setCurrentOrder(responseData);
-                    
 
                     let orderedProductsTemp = [];
                 
@@ -55,7 +57,7 @@ const Review = () => {
 
 
                     let qtyArrayTemp = [];
-                    currentOrder.orders[0].qtyArray.forEach(item => {
+                    responseData.orders[0].qtyArray.forEach(item => {
         
                         let itemQty = {
                             productId: item.productId,
@@ -71,12 +73,14 @@ const Review = () => {
                     console.log(qtyArrayTemp);
                     console.log(orderedProductsTemp);
                     setQtyArray(qtyArrayTemp);
-                    
                     setOrderedProducts(orderedProductsTemp);
                   
+                     
+                   
                 } catch (err) {} 
             }
 
+            console.log(isCaledRef.current);
           
 
             if(!isCaledRef.current) {

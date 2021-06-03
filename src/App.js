@@ -13,6 +13,8 @@ import { useAuth } from './shared/hooks/auth-hook';
 import Billing from './shopping-cart/pages/Billing';
 import Review from './shopping-cart/pages/Review';
 import ShoppingCart from './shopping-cart/pages/ShoppingCart';
+import Customers from './admin/pages/Customers.js';
+import AdminProducts from './admin/pages/AdminProducts.js';
 
 const App = () => {
     const { token, login, logout, userId, isAdmin, discount } = useAuth();
@@ -48,6 +50,12 @@ const App = () => {
                 <Route path="/admin" exact>
                     <Admin />
                 </Route>
+                <Route path="/admin-products" exact>
+                    <AdminProducts />
+                </Route>
+                <Route path="/customers" exact>
+                    <Customers />
+                </Route>
                 <Redirect to="/products" />
             </Switch>
         );
@@ -79,6 +87,15 @@ const App = () => {
                 <AuthPage />
             </Route>
             <Route path="/change-password" exact>
+                <AuthPage />
+            </Route>
+            <Route path="/admin" exact>
+                    <AuthPage />
+            </Route>
+            <Route path="/admin-products" exact>
+                <AuthPage />
+            </Route>
+            <Route path="/customers" exact>
                 <AuthPage />
             </Route>
         </Switch>
