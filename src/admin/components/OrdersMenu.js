@@ -15,17 +15,17 @@ const OrderMenu = (props) => {
                                     <Link to="/admin" >
                                         <a href="" className="shopping-main__link--selected" >
                                              
-                                           All Orders
+                                           Pending Orders
                                         </a>
                                     </Link>
                                 </li>
                             }
                             {
-                                (props.customers || props.products) &&
+                                (props.rejected || props.processed) &&
                                 <li className="shopping-main__item"> 
                                     <Link to="/admin" className="shopping-main__link">
                                        
-                                        All Orders
+                                       Pending Orders
                                     </Link>
                                 </li>
                             }
@@ -33,9 +33,9 @@ const OrderMenu = (props) => {
                             
                             
                             { 
-                                props.customers &&
+                                props.processed &&
                                 <li className="shopping-main__item">
-                                    <Link to="/customers" >
+                                    <Link to="/processed" >
                                         <a href="" className="shopping-main__link--selected"> 
                                             
                                             Processed Orders
@@ -44,9 +44,9 @@ const OrderMenu = (props) => {
                                 </li>
                             }
                             {
-                                (props.products || props.admin) &&
+                                (props.admin || props.rejected) &&
                                 <li className="shopping-main__item">
-                                <Link to="/customers" className="shopping-main__link">
+                                <Link to="/processed" className="shopping-main__link">
                                    
                                          
                                         Processed Orders
@@ -56,24 +56,24 @@ const OrderMenu = (props) => {
                             }
 
                             {
-                                props.products && 
+                                props.rejected && 
                                 <li className="shopping-main__item">
-                                    <Link to="/admin-products" >
+                                    <Link to="/rejected" >
                                         <a href="" className="shopping-main__link--selected">
                                            
-                                            Pending Orders
+                                            Rejected orders
                                         </a>
                                     </Link>
                                 </li>
                             }
 
                             {
-                                (props.customers || props.admin) &&
+                                (props.processed || props.admin) &&
                                 <li className="shopping-main__item">
-                                    <Link to="/admin-products"  className="shopping-main__link">
+                                    <Link to="/rejected"  className="shopping-main__link">
                                         
                                             
-                                            Pending Orders
+                                            Rejected orders
                               
                                     </Link>
                                 </li>

@@ -15,12 +15,14 @@ import Review from './shopping-cart/pages/Review';
 import ShoppingCart from './shopping-cart/pages/ShoppingCart';
 import Customers from './admin/pages/Customers.js';
 import AdminProducts from './admin/pages/AdminProducts.js';
+import Processed from './admin/pages/Processed.js';
+import Rejected from './admin/pages/Rejected.js';
 
 const App = () => {
     const { token, login, logout, userId, isAdmin, discount } = useAuth();
     let routes;
 
-    if(token) {
+    if(token && isAdmin) {
         routes = (
             <Switch>
                 <Route path="/" exact>
@@ -56,6 +58,12 @@ const App = () => {
                 <Route path="/customers" exact>
                     <Customers />
                 </Route>
+                <Route path="/processed" exact>
+                    <Processed />
+                </Route>
+                <Route path="/rejected" exact>
+                    <Rejected />
+                </Route>
                 <Redirect to="/products" />
             </Switch>
         );
@@ -90,9 +98,15 @@ const App = () => {
                 <AuthPage />
             </Route>
             <Route path="/admin" exact>
-                    <AuthPage />
+                <AuthPage />
             </Route>
             <Route path="/admin-products" exact>
+                <AuthPage />
+            </Route>
+            <Route path="/processed" exact>
+                <AuthPage />
+            </Route>
+            <Route path="/rejected" exact>
                 <AuthPage />
             </Route>
             <Route path="/customers" exact>

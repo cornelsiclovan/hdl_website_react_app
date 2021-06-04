@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 
 const Item = (props) => {
-    
+    console.log(props.modifyEnabled);
+
     let qty = props.qtyObject.qty;
     let image = props.item.image[0];
+    console.log(props.qtyObject);
 
     return (
         <React.Fragment>
@@ -24,7 +26,44 @@ const Item = (props) => {
                                 <div> 
                                    <div>Quantity: {qty}</div>
  
-                                   
+                                    {/* -------------------------------------- */}
+
+                                  {  
+                                    props.modifyEnabled &&
+                                    <form  className="card-item__add-form">
+                                        <span style={{fontSize: 1.5+"rem"}}>Qty</span>  
+                                        
+                                        <input 
+                                            class="section-cart__left--item-col-qty" 
+                                            type="text"
+                                            onChange={props.qtyInputOnChangeHandler}
+                                            />
+                                        <b>
+                                            <a href='' 
+                                                style={{fontSize: 12+'px', textDecoration: "none"}}
+                                                data-product_id={props.item._id}
+                                                onClick={props.onAddToCartClickHandler}
+                                                >
+                                                    Update
+                                            </a>
+                                            &nbsp;&nbsp;  
+                                            
+                                            <b style={{fontSize:14+'px', color:'#81398a'}}>
+                                                in order: {qty}
+                                            </b> 
+                                            &nbsp;&nbsp;
+
+                                            <a href='' 
+                                                style={{fontSize: 12+'px', textDecoration: "none"}} 
+                                                data-product_id={props.item._id} 
+                                                onClick={props.onRemoveProductFromCartHandler}>
+                                                    Remove
+                                            </a>  
+                                            </b>
+                                        </form>
+                                    }
+
+                                    {/* -------------------------------------- */}
                                 </div>
                         </div> 
                     </div>

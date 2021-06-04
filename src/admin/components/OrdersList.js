@@ -6,7 +6,11 @@ const OrderList = (props) => {
     return (
         <React.Fragment>
            {props.orders.map(order => {
-               return < OrderListItem order={order}/>;
+               return < OrderListItem order={order} 
+                                onProcessedClickHandler={props.onProcessedClickHandler}
+                                onRejectClickHandler={props.onRejectClickHandler}
+                                onUnrejectClickHandler={props.onUnrejectClickHandler}/>;
+                                
            })}
             
         </React.Fragment>
