@@ -22,7 +22,7 @@ const Rejected = () => {
             try { 
                 
             const responseData = await sendRequest(
-                `http://localhost:3001/api/orders?status=3`,
+                `http://localhost:3001/api/orders?status=3&inCart=false`,
                 'GET',
                 null,
                 {

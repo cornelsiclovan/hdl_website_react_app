@@ -15,6 +15,16 @@ const Admin = () => {
     const [orders, setOrders] = useState();
     const {isLoading, error, sendRequest, clearError} = useHttpClient();
     const [loadedOrders, setLoadedOrders] = useState(false);
+    const [qtyForUpdate, setQtyForUpdate] = useState();
+
+    // for updating orders as admin
+    const [modifyEnabled, setModifyEnabled] = useState(false);
+    const [orderedProducts, setOrderedProducts] = useState([]);
+    const [qtyArray, setQtyArray] = useState([]);
+    const currentOrderLoaded = useRef(false);
+    const orderedProductsSet = useRef(false);
+    const qtyArraySet = useRef(false);
+    
 
     useEffect(() => {
 
@@ -22,15 +32,16 @@ const Admin = () => {
             try { 
                 
             const responseData = await sendRequest(
-                `http://localhost:3001/api/orders?status=0`,
+                `http://localhost:3001/api/orders?status=0&inCart=false`,
                 'GET',
                 null,
                 {
                     'x-auth-token': auth.token
                 }
                 );
-
+             
                 setOrders(responseData);
+
 
                 console.log(responseData);
             } catch(err) {}
@@ -86,6 +97,28 @@ const Admin = () => {
         } catch(error) {}
     }
      
+    // modify order as admi
+
+    const qtyInputOnChangeHandler = (event) => {
+        event.preventDefault();
+
+        console.log(event.target.value);
+        setQtyForUpdate(event.target.value);
+    }
+
+    const onAddToCartClickHandler = (event) => {
+        event.preventDefault();
+
+        console.log("add to cart click handler");
+    }
+
+    const onRemoveProductFromCartHandler = (event) => {
+        event.preventDefault();
+
+        console.log("on remove from cart click handler");
+    }
+
+
     return (
         <React.Fragment>
            <Header />
@@ -93,9 +126,13 @@ const Admin = () => {
            <Menu admin={true}/>
            <OrderMenu admin={true} />
            {!isLoading && orders && 
-                <OrderList orders={orders} 
-                           onProcessedClickHandler={onProcessedClickHandler}
-                           onRejectClickHandler={onRejectClickHandler}/>
+            <OrderList orders={orders} 
+                        onProcessedClickHandler={onProcessedClickHandler}
+                        onRejectClickHandler={onRejectClickHandler}
+                        qtyInputOnChangeHandler={qtyInputOnChangeHandler}
+                        onAddToCartClickHandler={onAddToCartClickHandler}
+                        onRemoveProductFromCartHandler={onRemoveProductFromCartHandler}
+                        />
             }
            <Pagination />
            <Footer />

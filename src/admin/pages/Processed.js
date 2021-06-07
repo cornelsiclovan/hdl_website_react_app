@@ -23,7 +23,7 @@ const Processed = () => {
             try { 
                 
             const responseData = await sendRequest(
-                `http://localhost:3001/api/orders?status=1`,
+                `http://localhost:3001/api/orders?status=1&inCart=false`,
                 'GET',
                 null,
                 {

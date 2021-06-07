@@ -2,11 +2,25 @@ import React, {useState} from 'react';
 
 
 const Item = (props) => {
-    console.log(props.modifyEnabled);
+    // console.log(props.modifyEnabled);
 
-    let qty = props.qtyObject.qty;
     let image = props.item.image[0];
-    console.log(props.qtyObject);
+    // console.log(props.qtyObject);
+
+    let qty = 0;
+
+    props.order && props.order.qtyArray.forEach(item => {
+        if(item.productId === props.item._id){
+           qty = item.qty;
+           
+        //    if(props.product.image !== null) {
+        //        image = props.product.image[0];
+    
+        //    }
+        }
+        
+    })
+
 
     return (
         <React.Fragment>
@@ -28,8 +42,8 @@ const Item = (props) => {
  
                                     {/* -------------------------------------- */}
 
-                                  {  
-                                    props.modifyEnabled &&
+                                  {/* {  
+                                    
                                     <form  className="card-item__add-form">
                                         <span style={{fontSize: 1.5+"rem"}}>Qty</span>  
                                         
@@ -61,7 +75,7 @@ const Item = (props) => {
                                             </a>  
                                             </b>
                                         </form>
-                                    }
+                                    } */}
 
                                     {/* -------------------------------------- */}
                                 </div>

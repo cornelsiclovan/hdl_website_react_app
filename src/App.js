@@ -17,6 +17,7 @@ import Customers from './admin/pages/Customers.js';
 import AdminProducts from './admin/pages/AdminProducts.js';
 import Processed from './admin/pages/Processed.js';
 import Rejected from './admin/pages/Rejected.js';
+import ModifyOrder from './admin/pages/ModifyOrder'
 
 const App = () => {
     const { token, login, logout, userId, isAdmin, discount } = useAuth();
@@ -63,6 +64,9 @@ const App = () => {
                 </Route>
                 <Route path="/rejected" exact>
                     <Rejected />
+                </Route>
+                <Route path="/modify-order/:orderId" exact>
+                    <ModifyOrder />
                 </Route>
                 <Redirect to="/products" />
             </Switch>

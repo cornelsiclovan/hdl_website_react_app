@@ -5,7 +5,6 @@ import {useHttpClient} from '../../shared/hooks/http-hook';
 const OrderListItem = (props) => {
     const {isLoading, error, sendRequest, clearError} = useHttpClient();
     const [customer, setCustomer] = useState(); 
-    const [modifyEnabled, setModifyEnabled] = useState(false);
 
     useEffect(() => {
         
@@ -23,13 +22,8 @@ const OrderListItem = (props) => {
         getOrderCustomer();
     }, [sendRequest]);
    
-    let i = 0;
+   
 
-
-    const onModifyOrderClickHandler = (event) => {
-        event.preventDefault();
-        setModifyEnabled(!modifyEnabled);
-    }
 
     return (
         <React.Fragment>
@@ -41,11 +35,13 @@ const OrderListItem = (props) => {
             {
                 props.order.products.map(product => {
 
-                    i = i + 1;
+                    
                     return <Item 
-                            item={product} 
-                            qtyObject={props.order.qtyArray[i-1]}
-                            modifyEnabled={modifyEnabled}/>
+                            item={product}
+                            order={props.order}
+                            qtyInputOnChangeHandler={props.qtyInputOnChangeHandler}
+                            onAddToCartClickHandler={props.onAddToCartClickHandler}
+                            onRemoveProductFromCartHandler={props.onRemoveProductFromCartHandler}/>
                     
                 })
             }
@@ -80,7 +76,7 @@ const OrderListItem = (props) => {
                     borderRadius: '5%',
                     marginRight: 10+'px'
                     }}> Reject order </a>
-                 <a href="" data-order_id={props.order._id} onClick={onModifyOrderClickHandler} style={{
+                 <a href={`/modify-order/${props.order._id}`} data-order_id={props.order._id} data-order_id={props.order._id} style={{
                     padding: 9+'px', 
                     backgroundColor: 'white',
                     color: '#b93200',
@@ -90,7 +86,7 @@ const OrderListItem = (props) => {
                     float: 'right',
                     borderRadius: '5%',
                     marginRight: 10+'px'
-                    }}>  {!modifyEnabled ? 'Enable Modify' : 'Disable Modify'} </a>
+                    }}>  Modify order </a>
                 </div>
             } 
 

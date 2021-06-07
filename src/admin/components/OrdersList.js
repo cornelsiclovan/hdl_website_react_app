@@ -9,8 +9,10 @@ const OrderList = (props) => {
                return < OrderListItem order={order} 
                                 onProcessedClickHandler={props.onProcessedClickHandler}
                                 onRejectClickHandler={props.onRejectClickHandler}
-                                onUnrejectClickHandler={props.onUnrejectClickHandler}/>;
-                                
+                                onUnrejectClickHandler={props.onUnrejectClickHandler}
+                                qtyInputOnChangeHandler={props.qtyInputOnChangeHandler}
+                                onAddToCartClickHandler={props.onAddToCartClickHandler}
+                                onRemoveProductFromCartHandler={props.onRemoveProductFromCartHandler}/>;
            })}
             
         </React.Fragment>
