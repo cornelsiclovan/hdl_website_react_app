@@ -18,14 +18,62 @@ import AdminProducts from './admin/pages/AdminProducts.js';
 import Processed from './admin/pages/Processed.js';
 import Rejected from './admin/pages/Rejected.js';
 import ModifyOrder from './admin/pages/ModifyOrder'
+import Discount from './admin/pages/Discount.js';
 
 const App = () => {
     const { token, login, logout, userId, isAdmin, discount } = useAuth();
     let routes;
 
-    if(token && isAdmin) {
+    if(token && !isAdmin) {
         routes = (
             <Switch>
+                <Route path="/" exact>
+                    <Home />
+                </Route>
+                <Route path="/products" exact>
+                    <Products />
+                </Route>
+                <Route path="/shopping-cart" exact>
+                    <ShoppingCart />
+                </Route>
+                <Route path="/billing" exact>
+                    <Billing />
+                </Route>
+                <Route path="/review_payment" exact>
+                    <Review />
+                </Route>
+                <Route path="/account" exact>
+                    <Account />
+                </Route>
+                <Route path="/order-history" exact>
+                    <OrderHistory />
+                </Route>
+                <Route path="/change-password" exact>
+                    <ChangePassword />
+                </Route>
+                {/* <Route path="/admin" exact>
+                    <Admin />
+                </Route> */}
+                {/* <Route path="/admin-products" exact>
+                    <AdminProducts />
+                </Route>
+                <Route path="/customers" exact>
+                    <Customers />
+                </Route>
+                <Route path="/processed" exact>
+                    <Processed />
+                </Route>
+                <Route path="/rejected" exact>
+                    <Rejected />
+                </Route>
+                <Route path="/modify-order/:orderId" exact>
+                    <ModifyOrder />
+                </Route> */}
+                <Redirect to="/products" />
+            </Switch>
+        );
+    } else if (token && isAdmin){
+         routes = (<Switch>
                 <Route path="/" exact>
                     <Home />
                 </Route>
@@ -68,10 +116,12 @@ const App = () => {
                 <Route path="/modify-order/:orderId" exact>
                     <ModifyOrder />
                 </Route>
+                <Route path="/discount/:customerId" exact>
+                    <Discount />
+                </Route>
                 <Redirect to="/products" />
-            </Switch>
-        );
-    } else {
+            </Switch>)
+    }else {
         routes = (
             <Switch>
             <Route path="/" exact>
