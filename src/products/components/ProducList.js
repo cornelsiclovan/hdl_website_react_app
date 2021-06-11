@@ -30,7 +30,10 @@ const ProductList = (props) => {
                             qtyArray = {qtyArray}
                             onAddToCartClickHandler = {props.onAddToCartClickHandler}
                             onRemoveProductFromCartHandler = {props.onRemoveProductFromCartHandler}
+                            onRemoveProductFromStockHandler = {props.onRemoveProductFromStockHandler}
                             qtyInputOnChangeHandler = {props.qtyInputOnChangeHandler}
+                            onAddToStockClickHandler = {props.onAddToStockClickHandler}
+                            admin = {props.admin}
                             />
                     })
                 }

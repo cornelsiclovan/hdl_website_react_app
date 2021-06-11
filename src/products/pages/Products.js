@@ -385,8 +385,6 @@ const Products = () => {
     const onRemoveProductFromCartHandler = async (e) => {
         e.preventDefault();
         if(currentOrder != undefined) {
-            console.log("Remove product from cart handler");
-            console.log("poduct id", e.target.dataset.product_id);
 
             if(orderedProducts.length !== 0) {
                 console.log("onRemove Products", orderedProducts);

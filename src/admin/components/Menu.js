@@ -65,6 +65,23 @@ const Menu = (props) => {
                                         </a>
                                     </Link>
                                 </li>
+                                
+                            }
+
+                            {
+                                props.products && 
+                                <li className="shopping-main__item">
+                                    <Link className="shopping-main__link--selected" to="/new-product"  style={{
+                                        backgroundColor: 'orangered', 
+                                        color: 'white',
+                                        height: '100%'
+                                        }}>
+                                      
+                                            add new product
+                                      
+                                    </Link>
+                                </li>
+                                
                             }
 
                             {

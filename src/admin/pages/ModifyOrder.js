@@ -33,14 +33,14 @@ const ModifyOrder = () => {
                 const responseData = await sendRequest(`http://localhost:3001/api/orders/${orderId}`);
                
 
-                console.log(responseData);
+                //console.log(responseData);
 
                 if(currentOrderLoaded.current === false) {
                     setCurrentOrder(responseData);
                     currentOrderLoaded.current = true;
                 }
                
-                console.log(responseData);
+                //console.log(responseData);
 
                 let orderedProductsTemp = [];
                
