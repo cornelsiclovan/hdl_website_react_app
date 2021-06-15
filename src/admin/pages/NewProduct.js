@@ -28,7 +28,7 @@ const NewProduct = () => {
             <Header />  
             <Navigation />
             <Menu products={true} />
-            {!isLoading && <NewProductForm categories={categories} />}
+            {!isLoading && categories && <NewProductForm categories={categories} />}
             <Footer />
         </React.Fragment>
     );

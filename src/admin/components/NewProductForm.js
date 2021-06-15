@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { useForm } from '../../shared/hooks/form-hook';
@@ -15,7 +15,7 @@ import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 
 const NewProductForm  = (props) => {
     const [showSuccessModal, setShowSuccessModal] = useState(false);
-    const [ selectedCategory, setSelectedCategory ] = useState();
+    const [ selectedCategory, setSelectedCategory ] = useState(props.categories[0]);
     const [ selectedType, setSelectedType ] = useState();
     const [ types, setTypes] = useState(null);
     const [ initialLoad, setInitialLoad ] = useState(true);
@@ -23,29 +23,76 @@ const NewProductForm  = (props) => {
     const history = useHistory();
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
+    // handle picture upload
+    const [previewUrls, setPreviewUrls] = useState();
+    const [images, setImages] = useState([]);
+    const [image, setImage] = useState();
+
+    // handle documents upload
+    const [previewDocs, setPreviewDocs] = useState();
+    const [docs, setDocs] = useState([]);
+
+    const filePickerRef = useRef();
+    const docsPickerRef = useRef();
+
+
     useEffect(() => {
       
         const fetchTypesBySelectedCategory = async () => {
+            setSelectedType(null);
             
+            if(initialLoad) { 
 
-            if(initialLoad) {
-                setSelectedType(null);
+                
                 setInitialLoad(false);
             } else {
 
                 const responseData = await sendRequest(`http://localhost:3001/api/types/category/${selectedCategory._id}`);
 
-                console.log(responseData);
+                //console.log(responseData);
                 setTypes(responseData);
                 console.log(selectedCategory._id);
                 setInitialLoad(false);
             }
         }
 
-        
         fetchTypesBySelectedCategory();
+
+        if(!images && !docs) {
+            return;
+        }
+
+        const tempDocs = [];
+        const tempDocNames = [];
+        const tempFiles = [];
+
+        for(let i = 0; i <images.length; i++) {
+            const fileReader = new FileReader();
+            fileReader.onload =  () => {
+                 tempFiles.push(fileReader.result);
+            };
+            fileReader.readAsDataURL(images[i]);
+            
+            console.log(tempFiles);
+        }
+
+        for(let i = 0; i <docs.length; i++) {
+
+            const fileReader = new FileReader();
+            fileReader.onload =  () => {
+                 tempDocs.push(fileReader.result);
+            };
+            fileReader.readAsDataURL(docs[i]);
+            
+            //console.log(docs[i].name);
+            tempDocNames.push(docs[i].name);
+        }
+
+        setPreviewUrls(tempFiles);
+        setPreviewDocs(tempDocNames);
+        //console.log(previewUrls);         
        
-    }, [selectedCategory]);
+    }, [selectedCategory, images, docs]);
 
     const [formState, inputHandler, setFormData] = useForm(
         {
@@ -129,36 +176,136 @@ const NewProductForm  = (props) => {
     const onSubmitHandler = async (event) => {
         event.preventDefault();
         
-        console.log();
+        console.log(formState.inputs);
+        console.log(image);
+        // try {
+        //     const response = await sendRequest(
+        //         `http://localhost:3001/api/products`,
+        //         'POST',
+        //         JSON.stringify({
+        //             name: formState.inputs.name.value,
+        //             description: formState.inputs.description.value,
+        //             unitsInStock: formState.inputs.unitsInStock.value,
+        //             sku: formState.inputs.sku.value,
+        //             bus_power: formState.inputs.bus_power.value,
+        //             width: formState.inputs.width.value,
+        //             height: formState.inputs.height.value,
+        //             depth: formState.inputs.depth.value,
+        //             weight: formState.inputs.weight.value,
+        //             discountCategory: formState.inputs.discountCategory.value,
+        //             price: formState.inputs.price.value,
+        //             currency: formState.inputs.currency.value,
+        //             categoryId: selectedCategory._id,
+        //             typeId: selectedType._id,
+        //             image: formState.inputs.image
+        //         }),
+        //         {
+        //             'Content-Type': 'application/json',
+        //             'x-auth-token': auth.token
+        //         }
+        //     );
+        // } catch (err) {}
 
-        try {
-            const response = await sendRequest(
-                `http://localhost:3001/api/products`,
-                'POST',
-                JSON.stringify({
-                    name: formState.inputs.name.value,
-                    description: formState.inputs.description.value,
-                    unitsInStock: formState.inputs.unitsInStock.value,
-                    sku: formState.inputs.sku.value,
-                    bus_power: formState.inputs.bus_power.value,
-                    width: formState.inputs.width.value,
-                    height: formState.inputs.height.value,
-                    depth: formState.inputs.depth.value,
-                    weight: formState.inputs.weight.value,
-                    discountCategory: formState.inputs.discountCategory.value,
-                    price: formState.inputs.price.value,
-                    currency: formState.inputs.currency.value,
-                    categoryId: selectedCategory._id,
-                    typeId: selectedType._id
-                }),
-                {
-                    'Content-Type': 'application/json',
-                    'x-auth-token': auth.token
-                }
-            );
-        } catch (err) {}
+        const formData = new FormData();
+        formData.append('name', formState.inputs.name.value);
+        formData.append('description', formState.inputs.description.value);
+        formData.append('unitsInStock', formState.inputs.unitsInStock.value);
+        formData.append('sku', formState.inputs.sku.value);
+        formData.append('bus_power', formState.inputs.bus_power.value);
+        formData.append('width', formState.inputs.width.value);
+        formData.append('height', formState.inputs.height.value);
+        formData.append('depth', formState.inputs.depth.value);
+        formData.append('weight', formState.inputs.weight.value);
+        formData.append('discountCategory', formState.inputs.discountCategory.value);
+        formData.append('price', formState.inputs.price.value);
+        formData.append('currency', formState.inputs.currency.value);
+        formData.append('categoryId', selectedCategory._id);
+        formData.append('typeId', selectedType._id);
+
+
+       for(let i=0; i < images.length; i++) {
+            formData.append(`image`, images[i]);
+        }
+
+        for(let i=0; i < docs.length; i++) {
+            formData.append('docs', docs[i]);
+        }        
+
+        //console.log(formData);
+
+        await sendRequest(
+            `http://localhost:3001/api/products`,
+            'POST',
+            formData,
+            {
+                'x-auth-token': auth.token
+            }
+        )
 
         setShowSuccessModal(true);
+    }
+
+    const picPickedHandler = (event) => {
+       
+        setImages(event.target.files);
+    }
+
+    const pickImageHandler = () => {
+        filePickerRef.current.click();
+    }
+
+
+    const docPickedHandler = (event) => {
+
+       setDocs(event.target.files);
+    }
+
+    const pickDocsHandler = () => {
+        
+        docsPickerRef.current.click();
+    }
+
+    const onClickCancelPhoto = (event) => {
+        event.preventDefault();
+
+        const imagesTemp = [];
+        const previewUrlsTemp = [];
+
+        console.log(images[0]);
+
+        for(let i=0; i < images.length; i++) {
+            if(previewUrls[i] !== event.target.dataset.previewurl) {
+                imagesTemp.push(images[i]);
+                previewUrlsTemp.push(previewUrls[i]);
+            }
+
+            setPreviewUrls(previewUrlsTemp);
+            setImages(imagesTemp);
+        }
+
+        console.log(event.target.dataset.previewurl);
+       
+         
+    }
+
+    const onClickCancelDoc = (event) => {
+        event.preventDefault();
+
+        console.log("cancel doc");
+
+        const docsTemp = [];
+        const previewDocsTemp = [];
+
+
+        for(let i=0; i < docs.length; i++) {
+            if(previewDocs[i] !== event.target.dataset.previewdoc) {
+                docsTemp.push(docs[i]);
+                previewDocsTemp.push(previewDocs[i]);
+            }
+
+            setPreviewDocs(previewDocsTemp);
+            setDocs(docsTemp); 
+        }
     }
 
     return (
@@ -243,7 +390,7 @@ const NewProductForm  = (props) => {
                                 {/* <input type="text" className="form__input" placeholder="Organization ID" id="org_id" required/>
                                 <label for="org_id" className="form__label">Organization ID</label> */}
                                     <Input
-                                        id="busPower"
+                                        id="bus_power"
                                         element="input"
                                         type="text"
                                         label="Bus Power"
@@ -375,6 +522,7 @@ const NewProductForm  = (props) => {
                                     onChange={setSelectedCategory}
                                     options={props.categories}
                                     value={selectedCategory}
+                                    required
                                />
                             </div> 
                             
@@ -390,18 +538,82 @@ const NewProductForm  = (props) => {
                                     onChange={setSelectedType}
                                     options={types}
                                     value={selectedType}
+                                    required
                                 />
 
-                            </div> 
+                            </div>  
                             <hr />
                             
-                            <ImageUpload id="image" onInput={inputHandler} errorText="Please provide an image"/>
+                            <input 
+                                type="file" 
+                                id="file" 
+                                multiple name="file"  
+                                ref={filePickerRef}
+                                style={{display: 'none'}}
+                                onChange={picPickedHandler}
+                                />
+                            <div className={`image-upload ${props.center && 'center'}`}>
+                                {previewUrls && previewUrls.length > 0 &&
+                                    previewUrls.map(previewUrl => 
+                                        <div style={{marginBottom: '50px', height: '115px', padding: '10px', float:'left'}}> 
+                                            <a href="" onClick={onClickCancelPhoto} data-previewurl={previewUrl}>cancel</a>
+    
+                                            <div style={{}}  className="image-upload__preview">
+                                                {previewUrl && <img src={previewUrl} alt="Preview" />}
+                                                {!previewUrl && <p>Please pick an image.</p>}
+                                            </div>
+                                        </div>
+                                    )
+                                }   
+                            </div>
+                            <br/> 
+
+                            <div style={{width: '1000px'}}>
+                            <Button type="button" onClick={pickImageHandler} >Pick Images</Button>
                             
                             <br />
+                            <hr style={{width: '100%'}}/>
+
+                            </div>
+
+                            <hr />
+                            
+                            <input 
+                                type="file" 
+                                id="file" 
+                                multiple name="file"  
+                                ref={docsPickerRef}
+                                style={{display: 'none'}}
+                                onChange={docPickedHandler}
+                                />
+                            <div className={`image-upload ${props.center && 'center'}`}>
+                                {previewDocs && previewDocs.length > 0 &&
+                                    previewDocs.map(previewDoc => 
+                                        <div style={{marginBottom: '50px', height: '115px', padding: '10px', float:'left'}}> 
+                                            <a href="" onClick={onClickCancelDoc} data-previewdoc={previewDoc}>cancel</a>
+    
+                                            <div style={{}}  className="image-upload__preview">
+                                                {previewDoc && <div>{previewDoc}</div>}
+                                                {!previewDoc && <p>Please pick an image.</p>}
+                                            </div>
+                                        </div>
+                                    )
+                                }   
+                            </div>
+                            <br/> 
+
+                            <div style={{width: '1000px'}}>
+                            <Button type="button" onClick={pickDocsHandler} >Pick Documents</Button>
+                            
+                            <br />
+                            <hr style={{width: '100%'}}/>
+
+                            </div>
                             
                             <button type="submit" style={{marginTop: 1+"rem"}} className="btn btn--mov">
                                Save data
-                            </button>                
+                            </button>         
+                           
                         </form>
                         <br />
                     </div> 
