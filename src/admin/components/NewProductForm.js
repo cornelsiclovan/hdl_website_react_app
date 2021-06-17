@@ -72,7 +72,7 @@ const NewProductForm  = (props) => {
                  tempFiles.push(fileReader.result);
             };
             fileReader.readAsDataURL(images[i]);
-            
+            console.log(images[i]);
             console.log(tempFiles);
         }
 

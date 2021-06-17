@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { useForm } from '../../shared/hooks/form-hook';
@@ -22,8 +22,76 @@ const EditProductForm = (props) => {
     const history = useHistory();
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
+     // handle picture upload
+    const [previewUrls, setPreviewUrls] = useState();
+    const [images, setImages] = useState([]);
+    const [image, setImage] = useState();
+
+    // handle documents upload
+    const [previewDocs, setPreviewDocs] = useState();
+    const [docs, setDocs] = useState([]);
+
+    const imagesFromBlob = [];
+    const imageFilesFromBlob = [];
+  
+    const filePickerRef = useRef();
+    const docsPickerRef = useRef();
+
+    const [fetchedBlob, setFetchedBlob] = useState(false);
+    const [finalBlobArray, setFinalBlobArray] = useState();
+
     useEffect(() => {
       
+        setPreviewUrls(props.product.image);
+
+        const urlToFile = async() => {
+            const tempFiles = [];
+    
+            //console.log(previewUrls);
+    
+            for(let i = 0; i < previewUrls.length; i++) {
+                const fileReader = new FileReader();
+                fileReader.onload =  () => {
+                    tempFiles.push(fileReader.result);
+                };
+    
+                //console.log(previewUrls[i].split('\\')[2]);
+                try {
+                    let response = await fetch(`http://localhost:3001/api/products/${props.product._id}/images/${previewUrls[i].split('\\')[2]}`);
+                
+                    
+                    response.blob().then(
+                        file => { 
+                    
+                           
+                            var newfile = new File([file], `image${i}.jpg`, {type: "image/jpeg"});
+
+                            console.log(newfile);
+
+                            imageFilesFromBlob.push(newfile);
+
+                            let outside = URL.createObjectURL(file)
+                            imagesFromBlob.push(outside);
+                            
+                        }).then(res => {
+                            if(previewUrls.length === imagesFromBlob.length) {
+                                console.log('finish');
+                                setFetchedBlob(true);
+                                console.log('imagesfromblob inside', imagesFromBlob.length)
+                                setFinalBlobArray(imagesFromBlob);
+                                setImages(imageFilesFromBlob);
+                            }   
+                        });
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+            
+        if(previewUrls && !fetchedBlob)
+            urlToFile();
+
+
         const fetchTypesBySelectedCategory = async () => {
             
 
@@ -109,7 +177,7 @@ const EditProductForm = (props) => {
 
         fetchTypesBySelectedCategory();
        
-    }, [selectedCategory]);
+    }, [selectedCategory, previewUrls]);
 
     const [formState, inputHandler, setFormData] = useForm(
         {
@@ -195,35 +263,111 @@ const EditProductForm = (props) => {
         
         console.log(props.product._id);
 
-        try {
-            const response = await sendRequest(
-                `http://localhost:3001/api/products/${props.product._id}`,
-                'PUT',
-                JSON.stringify({
-                    name: formState.inputs.name.value,
-                    description: formState.inputs.description.value,
-                    unitsInStock: formState.inputs.unitsInStock.value,
-                    sku: formState.inputs.sku.value,
-                    bus_power: formState.inputs.bus_power.value,
-                    width: formState.inputs.width.value,
-                    height: formState.inputs.height.value,
-                    depth: formState.inputs.depth.value,
-                    weight: formState.inputs.weight.value,
-                    discountCategory: formState.inputs.discountCategory.value,
-                    price: formState.inputs.price.value,
-                    currency: formState.inputs.currency.value,
-                    categoryId: selectedCategory._id,
-                    typeId: selectedType._id
-                }),
-                {
-                    'Content-Type': 'application/json',
-                    'x-auth-token': auth.token
-                }
-            );
-        } catch (err) {}
+        // try {
+        //     const response = await sendRequest(
+        //         `http://localhost:3001/api/products/${props.product._id}`,
+        //         'PUT',
+        //         JSON.stringify({
+        //             name: formState.inputs.name.value,
+        //             description: formState.inputs.description.value,
+        //             unitsInStock: formState.inputs.unitsInStock.value,
+        //             sku: formState.inputs.sku.value,
+        //             bus_power: formState.inputs.bus_power.value,
+        //             width: formState.inputs.width.value,
+        //             height: formState.inputs.height.value,
+        //             depth: formState.inputs.depth.value,
+        //             weight: formState.inputs.weight.value,
+        //             discountCategory: formState.inputs.discountCategory.value,
+        //             price: formState.inputs.price.value,
+        //             currency: formState.inputs.currency.value,
+        //             categoryId: selectedCategory._id,
+        //             typeId: selectedType._id
+        //         }),
+        //         {
+        //             'Content-Type': 'application/json',
+        //             'x-auth-token': auth.token
+        //         }
+        //     );
+        // } catch (err) {}
+
+        
+        const formData = new FormData();
+        formData.append('name', formState.inputs.name.value);
+        formData.append('description', formState.inputs.description.value);
+        formData.append('unitsInStock', formState.inputs.unitsInStock.value);
+        formData.append('sku', formState.inputs.sku.value);
+        formData.append('bus_power', formState.inputs.bus_power.value);
+        formData.append('width', formState.inputs.width.value);
+        formData.append('height', formState.inputs.height.value);
+        formData.append('depth', formState.inputs.depth.value);
+        formData.append('weight', formState.inputs.weight.value);
+        formData.append('discountCategory', formState.inputs.discountCategory.value);
+        formData.append('price', formState.inputs.price.value);
+        formData.append('currency', formState.inputs.currency.value);
+        formData.append('categoryId', selectedCategory._id);
+        formData.append('typeId', selectedType._id);
+
+        console.log(images);
+
+
+       for(let i=0; i < images.length; i++) {
+            formData.append(`image`, images[i]);
+        }
+
+        // for(let i=0; i < docs.length; i++) {
+        //     formData.append('docs', docs[i]);
+        // }        
+
+
+        await sendRequest(
+            `http://localhost:3001/api/products/${props.product._id}`,
+            'PUT',
+            formData,
+            {
+                'x-auth-token': auth.token
+            }
+        )
 
         setShowSuccessModal(true);
     }
+
+    console.log(props.product.image);
+
+    const picPickedHandler = (event) => {
+       
+        setImages(event.target.files);
+    }
+
+    const pickImageHandler = () => {
+        filePickerRef.current.click();
+    }
+
+    const onClickCancelPhoto = (event) => {
+        event.preventDefault();
+
+        const imagesTemp = [];
+        const previewUrlsTemp = [];
+
+        console.log(images[0]);
+
+        for(let i=0; i < images.length; i++) {
+            if(previewUrls[i] !== event.target.dataset.previewurl) {
+                imagesTemp.push(images[i]);
+                previewUrlsTemp.push(previewUrls[i]);
+            }
+
+            setPreviewUrls(previewUrlsTemp);
+            setImages(imagesTemp);
+        }
+
+        console.log(event.target.dataset.previewurl);
+    }
+
+    console.log(fetchedBlob);
+    console.log(previewUrls);
+    console.log(finalBlobArray);
+
+    console.log('images from blob', imagesFromBlob.length);
 
     return (
         <React.Fragment>
@@ -473,6 +617,55 @@ const EditProductForm = (props) => {
                             <hr />
                             <br />
                             
+                            <hr />
+                            
+                            <input 
+                                type="file" 
+                                id="file" 
+                                multiple name="file"  
+                                ref={filePickerRef}
+                                style={{display: 'none'}}
+                                onChange={picPickedHandler}
+                                />
+                            <div className={`image-upload ${props.center && 'center'}`}>
+                                {previewUrls && previewUrls.length > 0 &&
+                                    previewUrls.map(previewUrl => 
+                                        <div style={{marginBottom: '50px', height: '115px', padding: '10px', float:'left'}}> 
+                                            <a href="" onClick={onClickCancelPhoto} data-previewurl={previewUrl}>cancel</a>
+    
+                                            <div style={{}}  className="image-upload__preview">
+                                                {previewUrl && <img src={"http:\\\\localhost:3001\\" +previewUrl} alt="Preview" />}
+                                                {!previewUrl && <p>Please pick an image.</p>}
+                                            </div>
+                                        </div>
+                                    )
+                                }   
+                            </div>
+
+                            <div className={`image-upload ${props.center && 'center'}`}>
+                                {finalBlobArray && finalBlobArray.length > 0 &&
+                                    finalBlobArray.map(previewUrl => 
+                                        <div style={{marginBottom: '50px', height: '115px', padding: '10px', float:'left'}}> 
+                                            <a href="" onClick={onClickCancelPhoto} data-previewurl={previewUrl}>cancel</a>
+    
+                                            <div style={{}}  className="image-upload__preview">
+                                                {previewUrl && <img src={previewUrl} alt="Preview" />}
+                                                {!previewUrl && <p>Please pick an image.</p>}
+                                            </div>
+                                        </div>
+                                    )
+                                }   
+                            </div>
+                            <br/> 
+
+                            <div style={{width: '1000px'}}>
+                            <Button type="button" onClick={pickImageHandler} >Pick Images</Button>
+                            
+                            <br />
+                            <hr style={{width: '100%'}}/>
+
+                            </div>
+
                             <button type="submit" style={{marginTop: 1+"rem"}} className="btn btn--mov">
                                Update your data
                             </button>                
