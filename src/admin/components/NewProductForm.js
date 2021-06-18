@@ -99,66 +99,66 @@ const NewProductForm  = (props) => {
             name: 
             {
                 value: '',
-                isValid: 'true'
+                isValid: false
             },
             description: 
             {
                 value: '',
-                isValid: 'true'
+                isValid: false
             },
             unitsInStock: 
             {   
                 value: '',
-                isValid: 'true'
+                isValid: false
             },
             sku:
             {
                 value: '',
-                isValid: 'true'
+                isValid: false
             },
             bus_power:
             {
                 value: '',
-                isValid: 'true'
+                isValid: false
             },
             width:
             {
                 value: '',
-                isValid: 'true'
+                isValid: false
             },
             height: 
             {
                 value: '',
-                isValid: 'true'
+                isValid: false
             },
             depth: {
                 value: '',
-                isValid: 'true'
+                isValid: false
             },
             weight: {
                 value: '',
-                isValid: 'true'
+                isValid: false
             },
             discountCategory: 
             {
                 value: '',
-                isValid: 'true'
+                isValid: false
             },
             price: {
                 value: '',
-                isValid: 'true'
+                isValid: false
             },
             currency: {
                 value: '',
-                isValid: true
+                isValid: false
             },
             categoryId: {
                 value: '',
-                isValid: 'true',
+                isValid: false,
             },
             typeId: {
                 value: '',
-                isValid: 'true'
+                isValid: false
             }
         }, false
     );

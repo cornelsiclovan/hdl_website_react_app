@@ -29,6 +29,9 @@ const EditProductForm = (props) => {
 
     // handle documents upload
     const [previewDocs, setPreviewDocs] = useState();
+    
+    const [loadedDocs, setLoadedDocs] = useState();
+
     const [docs, setDocs] = useState([]);
 
     const imagesFromBlob = [];
@@ -40,9 +43,22 @@ const EditProductForm = (props) => {
     const [fetchedBlob, setFetchedBlob] = useState(false);
     const [finalBlobArray, setFinalBlobArray] = useState();
 
+    const [fetchedDocBlob, setFetchedDocBlob] = useState(false);
+    const [finalDocBlobArray, setFinalDocBlobArray] = useState();
+
     useEffect(() => {
       
         setPreviewUrls(props.product.image);
+        setLoadedDocs(props.product.docs);
+        const docNames = []
+
+        console.log(props.product.docNames);
+
+        props.product.docNames.map(doc => docNames.push(doc));
+
+        console.log("docNames", docNames);
+        setPreviewDocs(docNames);
+
 
         const urlToFile = async() => {
             const tempFiles = [];
@@ -62,8 +78,6 @@ const EditProductForm = (props) => {
                     
                     response.blob().then(
                         file => { 
-                    
-                           
                             var newfile = new File([file], `image${i}.jpg`, {type: "image/jpeg"});
 
                             console.log(newfile);
@@ -88,8 +102,31 @@ const EditProductForm = (props) => {
             }
         }
             
+        const docUrlToFile = async () => {
+
+            for(let i = 0; i < loadedDocs.length; i++) {
+                
+                console.log(loadedDocs);
+
+                try {
+                    let response = await fetch(`http://localhost:3001/api/products/${props.product._id}/docs/${loadedDocs[i].split('\\')[2]}`);
+                
+                    response.blob().then(
+                        file => {
+                            var newFile = new File([file], previewDocs[i], {type: "application/pdf"});
+                        }
+                    )
+                }catch (error) {
+
+                }
+            }
+        }
+
         if(previewUrls && !fetchedBlob)
             urlToFile();
+
+        if(previewDocs && !fetchedDocBlob) 
+            docUrlToFile();
 
 
         const fetchTypesBySelectedCategory = async () => {
@@ -102,9 +139,9 @@ const EditProductForm = (props) => {
 
             const responseData = await sendRequest(`http://localhost:3001/api/types/category/${selectedCategory._id}`);
 
-            console.log(responseData);
+            //console.log(responseData);
             setTypes(responseData);
-            console.log(selectedCategory._id);
+            //console.log(selectedCategory._id);
             setInitialLoad(false);
         }
 
@@ -331,16 +368,36 @@ const EditProductForm = (props) => {
         setShowSuccessModal(true);
     }
 
-    console.log(props.product.image);
 
     const picPickedHandler = (event) => {
-       
-        setImages(event.target.files);
+       const tempImages = [...images];
+       const tempFiles = [...finalBlobArray];
+
+       for(let i=0; i < event.target.files.length; i++) {
+            tempImages.push(event.target.files[i]);
+
+            tempFiles.push(URL.createObjectURL(event.target.files[i]));
+
+        }   
+
+       setFinalBlobArray(tempFiles); 
+       setImages(tempImages);
     }
 
     const pickImageHandler = () => {
         filePickerRef.current.click();
     }
+
+    
+    const docPickedHandler = (event) => {
+
+        console.log("pick docs");
+     }
+ 
+     const pickDocsHandler = () => {
+         
+         docsPickerRef.current.click();
+     }
 
     const onClickCancelPhoto = (event) => {
         event.preventDefault();
@@ -348,26 +405,25 @@ const EditProductForm = (props) => {
         const imagesTemp = [];
         const previewUrlsTemp = [];
 
-        console.log(images[0]);
 
         for(let i=0; i < images.length; i++) {
-            if(previewUrls[i] !== event.target.dataset.previewurl) {
+            if(finalBlobArray[i] !== event.target.dataset.previewurl) {
                 imagesTemp.push(images[i]);
-                previewUrlsTemp.push(previewUrls[i]);
+                previewUrlsTemp.push(finalBlobArray[i]);
             }
 
-            setPreviewUrls(previewUrlsTemp);
+            setFinalBlobArray(previewUrlsTemp);
             setImages(imagesTemp);
         }
 
-        console.log(event.target.dataset.previewurl);
     }
 
-    console.log(fetchedBlob);
-    console.log(previewUrls);
-    console.log(finalBlobArray);
+    const onClickCancelDoc = (event) => {
+        event.preventDefault();
 
-    console.log('images from blob', imagesFromBlob.length);
+        console.log("cancel doc");
+
+    }
 
     return (
         <React.Fragment>
@@ -627,20 +683,7 @@ const EditProductForm = (props) => {
                                 style={{display: 'none'}}
                                 onChange={picPickedHandler}
                                 />
-                            <div className={`image-upload ${props.center && 'center'}`}>
-                                {previewUrls && previewUrls.length > 0 &&
-                                    previewUrls.map(previewUrl => 
-                                        <div style={{marginBottom: '50px', height: '115px', padding: '10px', float:'left'}}> 
-                                            <a href="" onClick={onClickCancelPhoto} data-previewurl={previewUrl}>cancel</a>
-    
-                                            <div style={{}}  className="image-upload__preview">
-                                                {previewUrl && <img src={"http:\\\\localhost:3001\\" +previewUrl} alt="Preview" />}
-                                                {!previewUrl && <p>Please pick an image.</p>}
-                                            </div>
-                                        </div>
-                                    )
-                                }   
-                            </div>
+                          
 
                             <div className={`image-upload ${props.center && 'center'}`}>
                                 {finalBlobArray && finalBlobArray.length > 0 &&
@@ -660,6 +703,38 @@ const EditProductForm = (props) => {
 
                             <div style={{width: '1000px'}}>
                             <Button type="button" onClick={pickImageHandler} >Pick Images</Button>
+                            
+                            <br />
+                            <hr style={{width: '100%'}}/>
+
+                            </div>
+
+                            <input 
+                                type="file" 
+                                id="file" 
+                                multiple name="file"  
+                                ref={docsPickerRef}
+                                style={{display: 'none'}}
+                                onChange={docPickedHandler}
+                                />
+                            <div className={`image-upload ${props.center && 'center'}`}>
+                                {previewDocs && previewDocs.length > 0 &&
+                                    previewDocs.map(previewDoc => 
+                                        <div style={{marginBottom: '50px', height: '115px', padding: '10px', float:'left'}}> 
+                                            <a href="" onClick={onClickCancelDoc} data-previewdoc={previewDoc}>cancel</a>
+    
+                                            <div style={{}}  className="image-upload__preview">
+                                                {previewDoc && <div>{previewDoc}</div>}
+                                                {!previewDoc && <p>Please pick an image.</p>}
+                                            </div>
+                                        </div>
+                                    )
+                                }   
+                            </div>
+                            <br/> 
+
+                            <div style={{width: '1000px'}}>
+                            <Button type="button" onClick={pickDocsHandler} >Pick Documents</Button>
                             
                             <br />
                             <hr style={{width: '100%'}}/>
