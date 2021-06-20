@@ -21,6 +21,8 @@ import ModifyOrder from './admin/pages/ModifyOrder'
 import Discount from './admin/pages/Discount.js';
 import EditProduct from './admin/pages/EditProduct'
 import NewProduct from './admin/pages/NewProduct.js';
+import NewCategory from './admin/pages/NewCategory';
+import NewType from './admin/pages/NewType';
 
 const App = () => {
     const { token, login, logout, userId, isAdmin, discount } = useAuth();
@@ -127,6 +129,12 @@ const App = () => {
                 <Route path="/new-product" exact>
                     <NewProduct />
                 </Route>
+                <Route path="/new-category" exact>
+                    <NewCategory />
+                </Route>
+                <Route path="/new-type" exact>
+                    <NewType />
+                </Route>
                 <Redirect to="/products" />
             </Switch>)
     }else {
@@ -178,6 +186,12 @@ const App = () => {
                 <AuthPage />
             </Route>
             <Route path="/new-product" exact>
+                <AuthPage />
+            </Route>
+            <Route path="/new-category" exact>
+                <AuthPage />
+            </Route>
+            <Route path="/new-type" exact>
                 <AuthPage />
             </Route>
         </Switch>
