@@ -70,20 +70,47 @@ const Menu = (props) => {
 
                             {
                                 props.products && 
-                                <li className="shopping-main__item">
-                                    <Link className="shopping-main__link--selected" to="/new-product"  style={{
-                                        backgroundColor: 'orangered', 
-                                        color: 'white',
-                                        height: '100%'
-                                        }}>
-                                      
-                                            add new product
-                                      
-                                    </Link>
-                                </li>
-                                
+                                    <li className="shopping-main__item">
+                                        <Link className="shopping-main__link--selected" to="/new-product"  style={{
+                                            backgroundColor: 'orangered', 
+                                            color: 'white',
+                                            height: '100%'
+                                            }}>
+                                        
+                                                add new product
+                                        
+                                        </Link>
+                                    </li>
                             }
-
+                            { 
+                                props.products &&
+                                    <li className="shopping-main__item">
+                                        <Link className="shopping-main__link--selected" to="/new-category"  style={{
+                                            backgroundColor: '#ffc500', 
+                                            color: 'white',
+                                            height: '100%'
+                                            }}>
+                                        
+                                                new category
+                                        
+                                        </Link>
+                                    </li>
+                            }
+                            {
+                                props.products &&
+                                    <li className="shopping-main__item">
+                                        <Link className="shopping-main__link--selected" to="/new-type"  style={{
+                                            backgroundColor: '#00baff', 
+                                            color: 'white',
+                                            height: '100%'
+                                            }}>
+                                        
+                                                new type
+                                        
+                                        </Link>
+                                    </li>
+                            }
+                            
                             {
                                 (props.customers || props.admin) &&
                                 <li className="shopping-main__item">
