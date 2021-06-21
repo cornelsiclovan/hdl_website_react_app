@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Menu = (props) => {
-
+    
     return (
         <React.Fragment>
              <div className="shopping-main">

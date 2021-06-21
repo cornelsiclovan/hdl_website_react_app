@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useEffect, useState} from 'react';
 import Footer from '../../shared/components/UIElements/Footer';
 import Navigation from '../../shared/components/UIElements/Navigation';
 import Header from '../components/Header';
