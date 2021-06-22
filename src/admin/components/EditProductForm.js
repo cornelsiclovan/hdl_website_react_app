@@ -36,7 +36,10 @@ const EditProductForm = (props) => {
 
     const imagesFromBlob = [];
     const imageFilesFromBlob = [];
-  
+    
+    const docsFromBlob = [];
+    const docFilesFromBlob = [];
+
     const filePickerRef = useRef();
     const docsPickerRef = useRef();
 
@@ -89,7 +92,7 @@ const EditProductForm = (props) => {
                             
                         }).then(res => {
                             if(previewUrls.length === imagesFromBlob.length) {
-                                console.log('finish');
+                                console.log('finish images');
                                 setFetchedBlob(true);
                                 console.log('imagesfromblob inside', imagesFromBlob.length)
                                 setFinalBlobArray(imagesFromBlob);
@@ -114,8 +117,20 @@ const EditProductForm = (props) => {
                     response.blob().then(
                         file => {
                             var newFile = new File([file], previewDocs[i], {type: "application/pdf"});
-                        }
-                    )
+                        
+                            console.log(newFile);
+
+                            docFilesFromBlob.push(newFile);
+                            let outside = URL.createObjectURL(file);
+                            docsFromBlob.push(outside);
+
+                        }).then(res => {
+                            console.log('finish docs');
+                            setFetchedDocBlob(true);
+                            console.log('docs from blob inside', docsFromBlob.length)
+                            setFinalDocBlobArray(docsFromBlob);
+                            setDocs(docFilesFromBlob)
+                        })
                 }catch (error) {
 
                 }
@@ -351,9 +366,9 @@ const EditProductForm = (props) => {
             formData.append(`image`, images[i]);
         }
 
-        // for(let i=0; i < docs.length; i++) {
-        //     formData.append('docs', docs[i]);
-        // }        
+        for(let i=0; i < docs.length; i++) {
+            formData.append('docs', docs[i]);
+        }        
 
 
         await sendRequest(
@@ -370,9 +385,14 @@ const EditProductForm = (props) => {
 
 
     const picPickedHandler = (event) => {
+       
+       
        const tempImages = [...images];
-       const tempFiles = [...finalBlobArray];
+       let tempFiles = [];
 
+       if(finalBlobArray)
+         tempFiles = [...finalBlobArray];
+        
        for(let i=0; i < event.target.files.length; i++) {
             tempImages.push(event.target.files[i]);
 
@@ -390,6 +410,30 @@ const EditProductForm = (props) => {
 
     
     const docPickedHandler = (event) => {
+        
+        const tempDocs = [...docs];
+        let tempFiles = [];
+        let previewDocNamesTemp = [];
+
+        if(previewDocs) {
+            previewDocNamesTemp = [...previewDocs]
+        }
+
+        if(finalDocBlobArray) {
+            tempFiles = [...finalDocBlobArray];
+        }
+
+        for(let i = 0; i < event.target.files.length; i++) {
+
+            tempDocs.push(event.target.files[i]);
+            previewDocNamesTemp.push(event.target.files[i].name);
+            tempFiles.push(URL.createObjectURL(event.target.files[i]));
+        }
+
+        setFinalDocBlobArray(tempFiles);
+        console.log(tempDocs);
+        setDocs(tempDocs);
+        setPreviewDocs(previewDocNamesTemp);
 
         console.log("pick docs");
      }

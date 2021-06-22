@@ -1,10 +1,19 @@
 import React from 'react';
 
-const CategoryList = () => {
+import CategoryItem from './CategoryItem';
+
+const CategoryList = (props) => {
     
+
     return (
         <React.Fragment>
-            <div>cate list</div>
+            <br />
+            <h1>Categories  <a href="">add new</a></h1>
+            {
+                props.categories.map(category => {
+                    return <CategoryItem category={category} />
+                })
+            }
         </React.Fragment>
     );
 

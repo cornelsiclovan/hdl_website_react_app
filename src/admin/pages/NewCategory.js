@@ -28,8 +28,7 @@ const NewCategory = () => {
             <Header />  
             <Navigation />
             <Menu products={true} />
-            <CategoryList />
-            {/* {!isLoading && categories && <NewProductForm categories={categories} />} */}
+            {!isLoading && categories && <CategoryList categories={categories}/>}
             <Footer />
         </React.Fragment>
     );
