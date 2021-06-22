@@ -56,6 +56,7 @@ const CategoryForm = (props) => {
                             onInput={inputHandler}
                         />
                     </div>
+                
                     <button 
                             style={{
                             borderRadius: '5px',
