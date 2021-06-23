@@ -12,23 +12,16 @@ const CategoryList = (props) => {
         setAddCategoryFormShow(true);
     }
 
-
-    const onSubmitHandler = (event) => {
-        event.preventDefault();
-
-        setAddCategoryFormShow(false);
-    }
-
     return (
         <React.Fragment>
             <br />
             <h1>Categories  <a href="" onClick={onClickShowFormHandler}>add new</a></h1>
 
-            {addCategoryFormShow && <CategoryForm setAddCategoryFormShow={setAddCategoryFormShow}/>}
+            {addCategoryFormShow && <CategoryForm  setAddCategoryFormShow={setAddCategoryFormShow} categories={props.categories} setCategories={props.setCategories}/>}
 
             {
                 props.categories.map(category => {
-                    return <CategoryItem category={category} />
+                    return <CategoryItem category={category} setCategories={props.setCategories} categories={props.categories} />
                 })
             }
         </React.Fragment>

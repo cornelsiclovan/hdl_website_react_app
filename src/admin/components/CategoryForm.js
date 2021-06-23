@@ -1,9 +1,12 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import Input from '../../shared/components/FormElements/Input';
 import { useForm } from '../../shared/hooks/form-hook';
+import { useHttpClient } from '../../shared/hooks/http-hook';
+import { AuthContext } from '../../shared/context/auth-context';
 
 const CategoryForm = (props) => {
-    
+    const auth = useContext(AuthContext);
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
     const [formState, inputHandler, setFormData] = useForm(
         {
             name: 
@@ -19,10 +22,30 @@ const CategoryForm = (props) => {
         }, false
     );
 
-    const onSubmitHandler = (event) => {
+    const onSubmitHandler = async (event) => {
         event.preventDefault();
+    
+        const tempCategories = [...props.categories];
 
-        props.setAddCategoryFormShow(false);
+        try {
+            const response = await sendRequest(
+                `http://localhost:3001/api/categories`,
+                'POST',
+                JSON.stringify({
+                    name: formState.inputs.name.value,
+                    description: formState.inputs.description.value
+                }),
+                {
+                    'Content-Type': 'application/json',
+                    'x-auth-token': auth.token
+                }
+            );
+              
+            tempCategories.push(response);
+            props.setAddCategoryFormShow(false);
+            props.setCategories(tempCategories);
+        } catch(err) {}
+   
     }
 
 

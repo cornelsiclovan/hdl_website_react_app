@@ -132,6 +132,9 @@ const App = () => {
                 <Route path="/new-category" exact>
                     <NewCategory />
                 </Route>
+                <Route path="/edit-category" exact>
+                    <NewCategory />
+                </Route>
                 <Route path="/new-type" exact>
                     <NewType />
                 </Route>
@@ -189,6 +192,9 @@ const App = () => {
                 <AuthPage />
             </Route>
             <Route path="/new-category" exact>
+                <AuthPage />
+            </Route>
+            <Route path="/edit-category" exact>
                 <AuthPage />
             </Route>
             <Route path="/new-type" exact>
