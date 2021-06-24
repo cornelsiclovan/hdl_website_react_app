@@ -1,12 +1,16 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import Input from '../../shared/components/FormElements/Input';
 import { useForm } from '../../shared/hooks/form-hook';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
+import Modal from '../../shared/components/UIElements/Modal';
+import Button from '../../shared/components/UIElements/Button';
 
-const CategoryForm = (props) => {
+const EditCategoryForm = (props) => {
     const auth = useContext(AuthContext);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+
     const [formState, inputHandler, setFormData] = useForm(
         {
             name: 
@@ -25,12 +29,11 @@ const CategoryForm = (props) => {
     const onSubmitHandler = async (event) => {
         event.preventDefault();
     
-        const tempCategories = [...props.categories];
 
         try {
             const response = await sendRequest(
-                `http://localhost:3001/api/categories`,
-                'POST',
+                `http://localhost:3001/api/categories/${props.category._id}`,
+                'PUT',
                 JSON.stringify({
                     name: formState.inputs.name.value,
                     description: formState.inputs.description.value
@@ -41,17 +44,36 @@ const CategoryForm = (props) => {
                 }
             );
               
-            tempCategories.push(response);
-            props.setAddCategoryFormShow(false);
-            props.setCategories(tempCategories);
+           
+            setShowSuccessModal(true);
         } catch(err) {}
    
+    }
+
+    const hideSuccessModal = async (event) => {
+        event.preventDefault();
+        setShowSuccessModal(false);
+
     }
 
 
     return (
         <React.Fragment>
             <div>
+            <Modal
+                show={showSuccessModal}
+                onCancel={hideSuccessModal}
+                header="Your data has been sucessfully updated."
+                footerClass="place-item__modal-actions"
+                footer={
+                    <React.Fragment>
+                        <Button inverse onClick={hideSuccessModal}>OK</Button>
+                    </React.Fragment>
+                }
+                >
+
+            </Modal>
+
                 <form className="form" onSubmit={onSubmitHandler}>
 
                     <div class="form_group">
@@ -61,7 +83,7 @@ const CategoryForm = (props) => {
                             type="text"
                             label="category name"
                             validators={[]}
-                            initialValue={''}
+                            initialValue={props.category.name}
                             errorText="please enter the category name"
                             onInput={inputHandler}
                         />
@@ -70,18 +92,18 @@ const CategoryForm = (props) => {
                     <div class="form_group">
                         <Input
                             id="description"
-                            element="input"
+                            element="textarea"
                             type="text"
                             label="category description"
                             validators={[]}
-                            initialValue={''}
+                            initialValue={props.category.description}
                             errorText="Please enter category description"
                             onInput={inputHandler}
                         />
                     </div>
                 
                     <button  className="btn btn--mov">
-                        Add
+                        modify
                     </button>
                 </form>
             </div>
@@ -89,4 +111,4 @@ const CategoryForm = (props) => {
     );
 }
 
-export default CategoryForm;
+export default EditCategoryForm;

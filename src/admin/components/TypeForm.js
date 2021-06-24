@@ -4,7 +4,7 @@ import { useForm } from '../../shared/hooks/form-hook';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
 
-const CategoryForm = (props) => {
+const TypeForm = (props) => {
     const auth = useContext(AuthContext);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
     const [formState, inputHandler, setFormData] = useForm(
@@ -25,15 +25,19 @@ const CategoryForm = (props) => {
     const onSubmitHandler = async (event) => {
         event.preventDefault();
     
-        const tempCategories = [...props.categories];
+        let tempTypes = [];
+
+        if(props.types && props.types.length > 0)
+            tempTypes = [...props.types];
 
         try {
             const response = await sendRequest(
-                `http://localhost:3001/api/categories`,
+                `http://localhost:3001/api/types`,
                 'POST',
                 JSON.stringify({
                     name: formState.inputs.name.value,
-                    description: formState.inputs.description.value
+                    description: formState.inputs.description.value,
+                    categoryId: props.categoryId
                 }),
                 {
                     'Content-Type': 'application/json',
@@ -41,16 +45,16 @@ const CategoryForm = (props) => {
                 }
             );
               
-            tempCategories.push(response);
-            props.setAddCategoryFormShow(false);
-            props.setCategories(tempCategories);
+            tempTypes.push(response);
+            props.setAddTypeFormShow(false);
+            props.setTypes(tempTypes);
         } catch(err) {}
    
     }
 
-
     return (
         <React.Fragment>
+            <React.Fragment>
             <div>
                 <form className="form" onSubmit={onSubmitHandler}>
 
@@ -59,7 +63,7 @@ const CategoryForm = (props) => {
                             id="name"
                             element="input"
                             type="text"
-                            label="category name"
+                            label="type name"
                             validators={[]}
                             initialValue={''}
                             errorText="please enter the category name"
@@ -72,7 +76,7 @@ const CategoryForm = (props) => {
                             id="description"
                             element="input"
                             type="text"
-                            label="category description"
+                            label="type description"
                             validators={[]}
                             initialValue={''}
                             errorText="Please enter category description"
@@ -80,13 +84,14 @@ const CategoryForm = (props) => {
                         />
                     </div>
                 
-                    <button  className="btn btn--mov">
+                    <button className="btn btn--mov">
                         Add
                     </button>
                 </form>
             </div>
         </React.Fragment>
+        </React.Fragment>
     );
 }
 
-export default CategoryForm;
+export default TypeForm;

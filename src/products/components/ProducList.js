@@ -35,6 +35,8 @@ const ProductList = (props) => {
                             onAddToStockClickHandler = {props.onAddToStockClickHandler}
                             admin = {props.admin}
                             />
+                    
+                    
                     })
                 }
             </div>

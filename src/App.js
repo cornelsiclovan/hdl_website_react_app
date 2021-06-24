@@ -6,6 +6,7 @@ import OrderHistory from './account/pages/OrderHistory.js';
 import AuthPage from './auth/pages/AuthPage.js';
 import Home from './home/pages/Home';
 import Products from './products/pages/Products';
+import Product from './products/pages/Product';
 import Admin from './admin/pages/Admin';
 import { AuthContext } from './shared/context/auth-context';
 import { useAuth } from './shared/hooks/auth-hook';
@@ -23,6 +24,7 @@ import EditProduct from './admin/pages/EditProduct'
 import NewProduct from './admin/pages/NewProduct.js';
 import NewCategory from './admin/pages/NewCategory';
 import NewType from './admin/pages/NewType';
+import EditCategory from './admin/pages/EditCategory.js';
 
 const App = () => {
     const { token, login, logout, userId, isAdmin, discount } = useAuth();
@@ -36,6 +38,9 @@ const App = () => {
                 </Route>
                 <Route path="/products" exact>
                     <Products />
+                </Route>
+                <Route path="/product/:productId" exact>
+                    <Product />
                 </Route>
                 <Route path="/shopping-cart" exact>
                     <ShoppingCart />
@@ -83,6 +88,9 @@ const App = () => {
                 </Route>
                 <Route path="/products" exact>
                     <Products />
+                </Route>
+                <Route path="/product/:productId" exact>
+                    <Product />
                 </Route>
                 <Route path="/shopping-cart" exact>
                     <ShoppingCart />
@@ -132,8 +140,8 @@ const App = () => {
                 <Route path="/new-category" exact>
                     <NewCategory />
                 </Route>
-                <Route path="/edit-category" exact>
-                    <NewCategory />
+                <Route path="/edit-category/:categoryId" exact>
+                    <EditCategory />
                 </Route>
                 <Route path="/new-type" exact>
                     <NewType />
@@ -148,6 +156,9 @@ const App = () => {
             </Route>
             <Route path="/products" exact>
                 <Products />
+            </Route>
+            <Route path="/product/:productId" exact>
+                <Product />
             </Route>
             <Route path="/auth" exact>
                 <AuthPage />
@@ -194,7 +205,7 @@ const App = () => {
             <Route path="/new-category" exact>
                 <AuthPage />
             </Route>
-            <Route path="/edit-category" exact>
+            <Route path="/edit-category/:categoryId" exact>
                 <AuthPage />
             </Route>
             <Route path="/new-type" exact>
