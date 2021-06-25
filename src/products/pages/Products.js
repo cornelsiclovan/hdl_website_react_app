@@ -33,6 +33,8 @@ const Products = () => {
     const orderedProductsSet = useRef(false);
     const qtyArraySet = useRef(false);
     const productsFetched = useRef(false);
+    
+   
 
     useEffect(() => {
 
@@ -146,6 +148,8 @@ const Products = () => {
        
         setSideMenuName(e.target.innerHTML);
         setMainMenuSelected(e.target.dataset.letter); 
+
+        console.log(mainMenuSelected);
 
         setCurrentPage(1);
 
@@ -449,7 +453,12 @@ const Products = () => {
             <Header />  
             <Navigation />
             {auth.isLoggedIn &&<ShoppingCart />}
-            <MainMenu onMainMenuClickHandler={onMainMenuClickHandler}/>
+            { loadedSideMenuItems &&
+                <MainMenu 
+                    onMainMenuClickHandler={onMainMenuClickHandler} 
+                    loadedSideMenuItems={loadedSideMenuItems}
+                    />
+                }
             <OrderMenu />
             <SideMenu 
                 sideMenuName={sideMenuName} 
