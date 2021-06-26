@@ -388,6 +388,7 @@ const EditProductForm = (props) => {
        
        
        const tempImages = [...images];
+       console.log(tempImages)
        let tempFiles = [];
 
        if(finalBlobArray)
@@ -405,6 +406,8 @@ const EditProductForm = (props) => {
     }
 
     const pickImageHandler = () => {
+
+        console.log('pick image');
         filePickerRef.current.click();
     }
 
@@ -414,6 +417,7 @@ const EditProductForm = (props) => {
         const tempDocs = [...docs];
         let tempFiles = [];
         let previewDocNamesTemp = [];
+        console.log(tempDocs);
 
         if(previewDocs) {
             previewDocNamesTemp = [...previewDocs]
@@ -514,7 +518,7 @@ const EditProductForm = (props) => {
                                         type="text"
                                         label="Description"
                                         validators={[]}
-                                        initialValue={props.product.descritption}
+                                        initialValue={props.product.description}
                                         errorText="Please enter your description"
                                         onInput={inputHandler}
                                     />

@@ -21,7 +21,7 @@ const MainMenu = (props) => {
                 const responseData = await sendRequest(`http://localhost:3001/api/categories`);
 
                 setLoadedMainMenuItems(responseData);
-                
+                props.setMainMenuSelected(responseData[0]);
                 setSelectedMainMenuItem(responseData[0]);
                 
             } catch (err) {}

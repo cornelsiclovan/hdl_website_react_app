@@ -19,7 +19,7 @@ const Products = () => {
     const [sideMenuName, setSideMenuName] = useState('Buspro')
     const [loadedProducts, setLoadedProducts] = useState();
     // Sets the state for intial page of products
-    const [mainMenuSelected, setMainMenuSelected] = useState('607420aa6eba041518483e67');
+    const [mainMenuSelected, setMainMenuSelected] = useState();
     const [sideMenuSelected, setSideMenuSelected] = useState();
     const [pageNumber, setPageNumber] = useState();
     const [currentPage, setCurrentPage] = useState(1);
@@ -46,6 +46,19 @@ const Products = () => {
                 setLoadedSideMenuItems(responseData);
             } catch (err) {}
         };
+
+        const fetchAllProducts = async () => {
+            try {
+
+                const responseData = await sendRequest(`http://localhost:3001/api/products`)
+                setLoadedProducts(responseData);
+                productsFetched.current = true;
+            } catch(err) {
+
+            }
+        }
+
+
 
         const fetchItems = async () => {
 
@@ -125,6 +138,10 @@ const Products = () => {
               
 
             } catch (err) {} 
+        }
+
+        if(!mainMenuSelected && !productsFetched.current) {
+            fetchAllProducts();
         }
 
         if(!productsFetched.current)
@@ -453,10 +470,11 @@ const Products = () => {
             <Header />  
             <Navigation />
             {auth.isLoggedIn &&<ShoppingCart />}
-            { loadedSideMenuItems &&
+            { 
                 <MainMenu 
                     onMainMenuClickHandler={onMainMenuClickHandler} 
                     loadedSideMenuItems={loadedSideMenuItems}
+                    setMainMenuSelected={setMainMenuSelected}
                     />
                 }
             <OrderMenu />

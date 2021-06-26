@@ -14,7 +14,7 @@ const EditCategory = () => {
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
     
     const [category, setCategory] = useState();
-    const [types, setTypes] = useState();
+    const [types, setTypes] = useState([]);
 
     const categoryId = useParams().categoryId;
 
