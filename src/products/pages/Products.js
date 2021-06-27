@@ -464,6 +464,8 @@ const Products = () => {
         setQty(e.target.value)
     }
 
+    
+
 
     return (
         <React.Fragment>

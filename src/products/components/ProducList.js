@@ -34,6 +34,7 @@ const ProductList = (props) => {
                             qtyInputOnChangeHandler = {props.qtyInputOnChangeHandler}
                             onAddToStockClickHandler = {props.onAddToStockClickHandler}
                             admin = {props.admin}
+                            onClickDeleteHandler = {props.onClickDeleteHandler}
                             />
                     
                     

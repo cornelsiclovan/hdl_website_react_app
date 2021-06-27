@@ -56,11 +56,12 @@ const ProductMain = (props) => {
                 props.product.docs.map((doc, i=0)=> {
                     //console.log(doc);
                     if(props.product.docNames[i++]) {
+                        
                         return    <div data-doc_name={doc} style={{float: 'left', margin: '10px'}} onClick={downloadDocumentClickHandler} className="image-upload__preview">
                                     <div>
                                     {
-
-                                        props.product.docNames[i++]
+                                        
+                                        props.product.docNames[i-1]
                                     }
                                     </div>
                                 </div>

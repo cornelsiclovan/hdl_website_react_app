@@ -91,7 +91,7 @@ const ProductItem = props => {
                                     <li>{props.unitsInStock} units in stock</li>
                                 { props.admin &&
                                     <li>
-                                        <a  href=""
+                                        <a  href="" data-product_id={props.id} onClick={props.onClickDeleteHandler}
                                             style={{
                                                 width:'50px',
                                                 padding: 5+'px', 

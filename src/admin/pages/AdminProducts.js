@@ -271,6 +271,28 @@ const AdminProducts = (props) => {
         setQty(e.target.value);
     }
 
+    const onClickDeleteHandler = async (event) => {
+        event.preventDefault();
+
+        const productsTemp = [...loadedProducts];
+
+        try { 
+            const responseData = sendRequest(
+                `http://localhost:3001/api/products/${event.target.dataset.product_id}`,
+                'DELETE',
+                null,
+                {
+                    'x-auth-token': auth.token
+                }
+            )
+
+            const temp = productsTemp.filter(product => product._id !== event.target.dataset.product_id);
+            setLoadedProducts(temp);
+        } catch (err){}
+
+
+        console.log(event.target.dataset.product_id);
+    }
 
     return (
         <React.Fragment>
@@ -291,6 +313,7 @@ const AdminProducts = (props) => {
                 onRemoveProductFromStockHandler={onRemoveProductFromStockHandler}
                 qtyInputOnChangeHandler={qtyInputOnChangeHandler}
                 admin={true}
+                onClickDeleteHandler={onClickDeleteHandler}
                 />
             {
                 pageNumber &&
