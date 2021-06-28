@@ -101,6 +101,7 @@ const Products = () => {
             try{
                 const responseData = await sendRequest(`${BASE_URL}/api/orders/user/${auth.userId}?inCart=true`);
                
+                console.log("fetchORder:", responseData);
 
                 if(currentOrderLoaded.current === false) {
                     setCurrentOrder(responseData);
@@ -315,15 +316,18 @@ const Products = () => {
         e.preventDefault();
         // console.log("Add to cart click handler");
         
-        // if(orderedProducts.length !== 0) {
-        //   console.log("onADD", orderedProducts);
-        // }
+        console.log("onadd orderd products before", orderedProducts);
+
+        if(orderedProducts.length !== 0) {
+          console.log("onADD", orderedProducts);
+        }
         // console.log("poduct id", e.target.dataset.product_id);
         // console.log("quantity", qty);
 
+        
         if(qty != 0){
             if(currentOrder === undefined) {
-                // console.log("creating order");
+                 console.log("creating order");
 
                 orderedProducts.push(
                     {
@@ -371,6 +375,7 @@ const Products = () => {
                 } catch (err) {}
 
             } else {
+                console.log("order exists");
                 let qtyArrayTemp = qtyArray.filter( item =>
                         item.productId != e.target.dataset.product_id
                     );
@@ -396,7 +401,10 @@ const Products = () => {
                 setQtyArray(qtyArrayTemp);
                 setOrderedProducts(orderedProductsTemp);
 
+                console.log("onadd orderd products after", orderedProductsTemp);
+
                 try {
+                    //console.log("PUT");
                     const responseData = await sendRequest(`${BASE_URL}/api/orders/${currentOrder.orders[0]._id}`, 
                             'PUT',
                             JSON.stringify({
@@ -480,7 +488,8 @@ const Products = () => {
         setQty(e.target.value)
     }
 
-    
+    console.log("currentOrder: ", currentOrder);
+
   
 
     return (
