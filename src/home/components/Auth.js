@@ -9,6 +9,8 @@ import { AuthContext } from '../../shared/context/auth-context';
 
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const Auth = () => {
     const auth = useContext(AuthContext);
     const [isLoginMode, setIsLoginMode] = useState(true);
@@ -85,7 +87,7 @@ const Auth = () => {
         if(isLoginMode) {
             try {
                 const responseData = await sendRequest(
-                    'http://localhost:3001/api/auth',
+                    `${BASE_URL}/api/auth`,
                     'POST',
                     JSON.stringify({
                         email: formState.inputs.email.value,
@@ -105,7 +107,7 @@ const Auth = () => {
         } else {
             try {
                 const responseData = await sendRequest(
-                    'http://localhost:3001/api/users',
+                    `${BASE_URL}/api/users`,
                     'POST',
                     JSON.stringify({
                         name: formState.inputs.name.value,

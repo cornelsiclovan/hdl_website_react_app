@@ -3,6 +3,8 @@ import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const CategoryItem = (props) => {
     const auth = useContext(AuthContext);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -15,7 +17,7 @@ const CategoryItem = (props) => {
 
         try {
             const response = await sendRequest(
-                `http://localhost:3001/api/categories/${props.category._id}`,
+                `${BASE_URL}/api/categories/${props.category._id}`,
                 'DELETE',
                 null,
                 {

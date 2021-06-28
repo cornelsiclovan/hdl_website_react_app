@@ -1,19 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const ProductMain = (props) => {
 
     const downloadDocumentClickHandler = async (event) => {
         event.preventDefault();
 
         try {
-            let response = await fetch(`http://localhost:3001/api/products/${props.product._id}/docs/${event.target.dataset.doc_name.split('\\')[2]}`);
+            let response = await fetch(`${BASE_URL}/api/products/${props.product._id}/docs/${event.target.dataset.doc_name.split('\\')[2]}`);
         
             response.blob().then(
                 file => {
                     var newFile = new File([file], event.target.dataset.doc_name, {type: "application/pdf"});
 
-                    window.open(`http://localhost:3001/${event.target.dataset.doc_name}`);
+                    window.open(`${BASE_URL}/${event.target.dataset.doc_name}`);
 
                     console.log(newFile);
 

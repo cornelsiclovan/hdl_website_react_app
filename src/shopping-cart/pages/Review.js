@@ -11,6 +11,7 @@ import Modal from '../../shared/components/UIElements/Modal';
 import Button from '../../shared/components/UIElements/Button';
 import { useParams, useHistory } from 'react-router-dom';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const Review = () => {
     const auth = useContext(AuthContext);
@@ -37,7 +38,7 @@ const Review = () => {
 
             const fetchOrder = async () => {
                 try{
-                    const responseData = await sendRequest(`http://localhost:3001/api/orders/user/${auth.userId}?inCart=true`);
+                    const responseData = await sendRequest(`${BASE_URL}/api/orders/user/${auth.userId}?inCart=true`);
                    
                     setCurrentOrder(responseData);
 
@@ -102,7 +103,7 @@ const Review = () => {
         console.log(qtyArray);
 
         try {
-            const responseData = await sendRequest(`http://localhost:3001/api/orders/${currentOrder.orders[0]._id}`, 
+            const responseData = await sendRequest(`${BASE_URL}/api/orders/${currentOrder.orders[0]._id}`, 
                     'PUT',
                     JSON.stringify({
                         userId: auth.userId,

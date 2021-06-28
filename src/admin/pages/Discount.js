@@ -8,6 +8,8 @@ import { useParams, useHistory } from 'react-router-dom';
 import {AuthContext} from '../../shared/context/auth-context';
 import {useHttpClient} from '../../shared/hooks/http-hook';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const Discount = (props) => {
     const auth = useContext(AuthContext);
     const [customer, setCustomer] = useState();
@@ -23,7 +25,7 @@ const Discount = (props) => {
         const fetchUser = async () => {
             try {
                 const response = await sendRequest(
-                    `http://localhost:3001/api/users/${customerId}`
+                    `${BASE_URL}/api/users/${customerId}`
                 );
 
             setCustomer(response);
@@ -43,7 +45,7 @@ const Discount = (props) => {
         event.preventDefault();
         if(discount > 0) {
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/users/${customerId}`, 
+                const responseData = await sendRequest(`${BASE_URL}/api/users/${customerId}`, 
                         'PUT',
                         JSON.stringify({
                             discount: discount

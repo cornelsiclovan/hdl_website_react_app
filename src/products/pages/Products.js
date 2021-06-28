@@ -11,6 +11,7 @@ import SideMenu from '../components/SideMenu';
 import ShoppingCart from "../../shared/components/UIElements/Shopping-cart";
 import { AuthContext } from "../../shared/context/auth-context";
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const Products = () => {
     const auth = useContext(AuthContext);
@@ -38,10 +39,26 @@ const Products = () => {
 
     useEffect(() => {
 
+        const fetchMainMenuItems = async () => {
+        
+            try {
+                const responseData = await sendRequest(`${BASE_URL}/api/categories`);
+
+               setMainMenuSelected(responseData[0]);
+               const resp = await sendRequest(`${BASE_URL}/api/types/category/${responseData[0]._id}`);
+
+               setLoadedSideMenuItems(resp);
+                
+            } catch (err) {}
+        };
+
+        if(!mainMenuSelected)
+            fetchMainMenuItems();
+
         const fetchSideMenuItems = async () => {
         
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/types/category/${mainMenuSelected}`);
+                const responseData = await sendRequest(`${BASE_URL}/api/types/category/${mainMenuSelected._id}`);
 
                 setLoadedSideMenuItems(responseData);
             } catch (err) {}
@@ -50,7 +67,7 @@ const Products = () => {
         const fetchAllProducts = async () => {
             try {
 
-                const responseData = await sendRequest(`http://localhost:3001/api/products`)
+                const responseData = await sendRequest(`${BASE_URL}/api/products`)
                 setLoadedProducts(responseData);
                 productsFetched.current = true;
             } catch(err) {
@@ -63,7 +80,7 @@ const Products = () => {
         const fetchItems = async () => {
 
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/products/category/${mainMenuSelected}`)
+                const responseData = await sendRequest(`${BASE_URL}/api/products/category/${mainMenuSelected._id}`)
            
                 setLoadedProducts(responseData);
 
@@ -74,7 +91,7 @@ const Products = () => {
         const fetchPagination = async () => {
 
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/pagination/category/${mainMenuSelected}`)
+                const responseData = await sendRequest(`${BASE_URL}/api/pagination/category/${mainMenuSelected._id}`)
 
                 setPageNumber(Math.ceil(responseData.count/4));
             } catch (err) {}
@@ -82,7 +99,7 @@ const Products = () => {
 
         const fetchOrder = async () => {
             try{
-                const responseData = await sendRequest(`http://localhost:3001/api/orders/user/${auth.userId}?inCart=true`);
+                const responseData = await sendRequest(`${BASE_URL}/api/orders/user/${auth.userId}?inCart=true`);
                
 
                 if(currentOrderLoaded.current === false) {
@@ -148,8 +165,7 @@ const Products = () => {
             fetchOrder();
         
         fetchPagination();
-        
-        
+       
         fetchSideMenuItems();
 
         if(!productsFetched.current) {
@@ -173,7 +189,7 @@ const Products = () => {
         const fetchSideMenuItems = async () => {
         
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/types/category/${e.target.dataset.letter}`);
+                const responseData = await sendRequest(`${BASE_URL}/api/types/category/${e.target.dataset.letter}`);
                 setLoadedSideMenuItems(responseData);
                 
                 
@@ -183,7 +199,7 @@ const Products = () => {
         const fetchItems = async () => {
 
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/products/category/${e.target.dataset.letter}`)
+                const responseData = await sendRequest(`${BASE_URL}/api/products/category/${e.target.dataset.letter}`)
            
                 setLoadedProducts(responseData);
             } catch (err) {}
@@ -192,7 +208,7 @@ const Products = () => {
         const fetchPagination = async () => {
 
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/pagination/category/${e.target.dataset.letter}`)
+                const responseData = await sendRequest(`${BASE_URL}/api/pagination/category/${e.target.dataset.letter}`)
 
                 setPageNumber(Math.ceil(responseData.count/4));
             } catch (err) {}
@@ -212,7 +228,7 @@ const Products = () => {
         const fetchItems = async () => {
 
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/products/type/${e.target.dataset.letter}`)
+                const responseData = await sendRequest(`${BASE_URL}/api/products/type/${e.target.dataset.letter}`)
            
                 setLoadedProducts(responseData);
             } catch (err) {}
@@ -221,7 +237,7 @@ const Products = () => {
         const fetchPagination = async () => {
 
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/pagination/type/${e.target.dataset.letter}`)
+                const responseData = await sendRequest(`${BASE_URL}/api/pagination/type/${e.target.dataset.letter}`)
 
                 setPageNumber(Math.ceil(responseData.count/4));
             } catch (err) {}
@@ -247,7 +263,7 @@ const Products = () => {
         const fetchItems = async () => {
           
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/products/category/${mainMenuSelected}?page=${myPage}`)
+                const responseData = await sendRequest(`${BASE_URL}/api/products/category/${mainMenuSelected}?page=${myPage}`)
            
                 setLoadedProducts(responseData);
             } catch (err) {}
@@ -268,7 +284,7 @@ const Products = () => {
         const fetchItems = async () => {
           
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/products/category/${mainMenuSelected}?page=${myPage}`)
+                const responseData = await sendRequest(`${BASE_URL}/api/products/category/${mainMenuSelected}?page=${myPage}`)
            
                 setLoadedProducts(responseData);
             } catch (err) {}
@@ -285,7 +301,7 @@ const Products = () => {
         const fetchItems = async () => {
           
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/products/category/${mainMenuSelected}?page=${e.target.dataset.letter}`)
+                const responseData = await sendRequest(`${BASE_URL}/api/products/category/${mainMenuSelected}?page=${e.target.dataset.letter}`)
            
                 setLoadedProducts(responseData);
             } catch (err) {}
@@ -325,7 +341,7 @@ const Products = () => {
                
 
                 try {
-                    const responseData = await sendRequest(`http://localhost:3001/api/orders/`, 
+                    const responseData = await sendRequest(`${BASE_URL}/api/orders/`, 
                             'POST',
                             JSON.stringify({
                                 userId: auth.userId,
@@ -381,7 +397,7 @@ const Products = () => {
                 setOrderedProducts(orderedProductsTemp);
 
                 try {
-                    const responseData = await sendRequest(`http://localhost:3001/api/orders/${currentOrder.orders[0]._id}`, 
+                    const responseData = await sendRequest(`${BASE_URL}/api/orders/${currentOrder.orders[0]._id}`, 
                             'PUT',
                             JSON.stringify({
                                 userId: auth.userId,
@@ -443,7 +459,7 @@ const Products = () => {
             // }))
 
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/orders/${currentOrder.orders[0]._id}`, 
+                const responseData = await sendRequest(`${BASE_URL}/api/orders/${currentOrder.orders[0]._id}`, 
                         'PUT',
                         JSON.stringify({
                             userId: auth.userId,
@@ -465,7 +481,7 @@ const Products = () => {
     }
 
     
-
+  
 
     return (
         <React.Fragment>

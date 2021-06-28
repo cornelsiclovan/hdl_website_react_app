@@ -9,6 +9,8 @@ import Input from '../../shared/components/FormElements/Input';
 import Modal from '../../shared/components/UIElements/Modal';
 import Button from '../../shared/components/UIElements/Button';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const BillingForm = () => {
     const auth = useContext(AuthContext);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -80,7 +82,7 @@ const BillingForm = () => {
     useEffect(() => { 
         const fetchBillingData = async () => {
           
-            const response = await sendRequest(`http://localhost:3001/api/users/me`,
+            const response = await sendRequest(`${BASE_URL}/api/users/me`,
                                                 'GET',
                                                 null,
                                                 {
@@ -164,7 +166,7 @@ const BillingForm = () => {
         setLoadedUser(null);
         try {
             const response = await sendRequest(
-                `http://localhost:3001/api/users/${auth.userId}`,
+                `${BASE_URL}/api/users/${auth.userId}`,
                 'PUT',
                 JSON.stringify({
                     name: formState.inputs.name.value,

@@ -4,6 +4,8 @@ import { useForm } from '../../shared/hooks/form-hook';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const CategoryForm = (props) => {
     const auth = useContext(AuthContext);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -29,7 +31,7 @@ const CategoryForm = (props) => {
 
         try {
             const response = await sendRequest(
-                `http://localhost:3001/api/categories`,
+                `${BASE_URL}/api/categories`,
                 'POST',
                 JSON.stringify({
                     name: formState.inputs.name.value,

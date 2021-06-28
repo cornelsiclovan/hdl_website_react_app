@@ -12,6 +12,8 @@ import Select from 'react-select';
 import { AuthContext } from '../../shared/context/auth-context';
 import { useParams, useHistory } from 'react-router-dom';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const EditProductForm = (props) => {
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [ selectedCategory, setSelectedCategory ] = useState(props.product.category);
@@ -76,7 +78,7 @@ const EditProductForm = (props) => {
     
                 //console.log(previewUrls[i].split('\\')[2]);
                 try {
-                    let response = await fetch(`http://localhost:3001/api/products/${props.product._id}/images/${previewUrls[i].split('\\')[2]}`);
+                    let response = await fetch(`${BASE_URL}/api/products/${props.product._id}/images/${previewUrls[i].split('\\')[2]}`);
                 
                     
                     response.blob().then(
@@ -112,7 +114,7 @@ const EditProductForm = (props) => {
                 console.log(loadedDocs);
 
                 try {
-                    let response = await fetch(`http://localhost:3001/api/products/${props.product._id}/docs/${loadedDocs[i].split('\\')[2]}`);
+                    let response = await fetch(`${BASE_URL}/api/products/${props.product._id}/docs/${loadedDocs[i].split('\\')[2]}`);
                 
                     response.blob().then(
                         file => {
@@ -152,7 +154,7 @@ const EditProductForm = (props) => {
                
             }
 
-            const responseData = await sendRequest(`http://localhost:3001/api/types/category/${selectedCategory._id}`);
+            const responseData = await sendRequest(`${BASE_URL}/api/types/category/${selectedCategory._id}`);
 
             //console.log(responseData);
             setTypes(responseData);
@@ -372,7 +374,7 @@ const EditProductForm = (props) => {
 
 
         await sendRequest(
-            `http://localhost:3001/api/products/${props.product._id}`,
+            `${BASE_URL}/api/products/${props.product._id}`,
             'PUT',
             formData,
             {

@@ -2,6 +2,8 @@ import React, {useEffect, useState, useContext} from 'react';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const ReviewMain = (props) => {
     const [user, setUser] = useState();
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -11,7 +13,7 @@ const ReviewMain = (props) => {
        
         const fetchUser = async () => {
             try {
-                const response = await sendRequest(`http://localhost:3001/api/users/me`,
+                const response = await sendRequest(`${BASE_URL}/api/users/me`,
                 'GET',
                 null,
                 {

@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const Item = (props) => {
     // console.log(props.modifyEnabled);
@@ -28,8 +29,10 @@ const Item = (props) => {
             <ul class="section-cart__left--list">
                 <li class="section-cart__left--item">
                     <div class="section-cart__left--item-pull-left">
-                        <img src={"http:\\\\localhost:3001\\"+image} /> 
-                                
+                        {/* <img src={"http:\\\\localhost:3001\\"+image} />  */}
+
+                        <img src={`${BASE_URL}/${image}`} />         
+
                         <div class="section-cart__left--item-col">
 
                                 <b>{props.item.name}</b>

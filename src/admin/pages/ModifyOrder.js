@@ -10,6 +10,8 @@ import ShoppingList from "../../shopping-cart/components/ShoppingList";
 import { useParams } from 'react-router-dom';
 import ModifyOrderList from '../components/ModifyOrderList';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const ModifyOrder = () => {
     const auth = useContext(AuthContext);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -30,7 +32,7 @@ const ModifyOrder = () => {
 
         const fetchOrder = async () => {
             try{
-                const responseData = await sendRequest(`http://localhost:3001/api/orders/${orderId}`);
+                const responseData = await sendRequest(`${BASE_URL}/api/orders/${orderId}`);
                
 
                 //console.log(responseData);
@@ -122,7 +124,7 @@ const ModifyOrder = () => {
                 );
 
                 try {
-                    const responseData = await sendRequest(`http://localhost:3001/api/orders/`, 
+                    const responseData = await sendRequest(`${BASE_URL}/api/orders/`, 
                             'POST',
                             JSON.stringify({
                                 userId: auth.userId,
@@ -171,7 +173,7 @@ const ModifyOrder = () => {
                 
 
                 try {
-                    const responseData = await sendRequest(`http://localhost:3001/api/orders/${currentOrder._id}`, 
+                    const responseData = await sendRequest(`${BASE_URL}/api/orders/${currentOrder._id}`, 
                             'PUT',
                             JSON.stringify({
                                 userId: auth.userId,
@@ -227,7 +229,7 @@ const ModifyOrder = () => {
             
             if(qtyArrayTemp.length === 0) {
                 try {
-                    const responseData = await sendRequest(`http://localhost:3001/api/orders/${currentOrder._id}`, 
+                    const responseData = await sendRequest(`${BASE_URL}/api/orders/${currentOrder._id}`, 
                         'DELETE'
                         )
                         currentOrderLoaded.current = false;
@@ -237,7 +239,7 @@ const ModifyOrder = () => {
             } else {
     
                 try {
-                    const responseData = await sendRequest(`http://localhost:3001/api/orders/${currentOrder._id}`, 
+                    const responseData = await sendRequest(`${BASE_URL}/api/orders/${currentOrder._id}`, 
                             'PUT',
                             JSON.stringify({
                                 userId: auth.userId,

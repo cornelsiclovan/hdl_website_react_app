@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import Item from './Item';
 import {useHttpClient} from '../../shared/hooks/http-hook';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const OrderListItem = (props) => {
     const {isLoading, error, sendRequest, clearError} = useHttpClient();
     const [customer, setCustomer] = useState(); 
@@ -10,7 +12,7 @@ const OrderListItem = (props) => {
         
         const getOrderCustomer = async () => {
             try{
-                const responseData = await sendRequest(`http://localhost:3001/api/users/${props.order.creator}`);
+                const responseData = await sendRequest(`${BASE_URL}/api/users/${props.order.creator}`);
 
                 setCustomer(responseData);
 

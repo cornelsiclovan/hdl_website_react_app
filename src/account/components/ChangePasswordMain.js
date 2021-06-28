@@ -10,6 +10,8 @@ import Modal from '../../shared/components/UIElements/Modal';
 import Button from '../../shared/components/UIElements/Button';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const ChangePasswordMain = () => {
     const auth = useContext(AuthContext);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -77,7 +79,7 @@ const ChangePasswordMain = () => {
     
         try {
             const response = await sendRequest(
-                `http://localhost:3001/api/users/change_password/${auth.userId}`,
+                `${BASE_URL}/api/users/change_password/${auth.userId}`,
                 'PUT',
                 JSON.stringify({
                     old_password: formState.inputs.old_password.value,

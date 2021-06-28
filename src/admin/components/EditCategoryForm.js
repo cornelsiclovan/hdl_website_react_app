@@ -6,6 +6,8 @@ import { AuthContext } from '../../shared/context/auth-context';
 import Modal from '../../shared/components/UIElements/Modal';
 import Button from '../../shared/components/UIElements/Button';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const EditCategoryForm = (props) => {
     const auth = useContext(AuthContext);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -32,7 +34,7 @@ const EditCategoryForm = (props) => {
 
         try {
             const response = await sendRequest(
-                `http://localhost:3001/api/categories/${props.category._id}`,
+                `${BASE_URL}/api/categories/${props.category._id}`,
                 'PUT',
                 JSON.stringify({
                     name: formState.inputs.name.value,

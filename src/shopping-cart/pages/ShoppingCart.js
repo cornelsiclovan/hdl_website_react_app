@@ -7,7 +7,7 @@ import ShoppingMain from '../components/ShoppingMain';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from "../../shared/context/auth-context";
 
-
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const ShoppingCart = () => {
     const auth = useContext(AuthContext);
@@ -28,7 +28,7 @@ const ShoppingCart = () => {
 
         const fetchOrder = async () => {
             try{
-                const responseData = await sendRequest(`http://localhost:3001/api/orders/user/${auth.userId}?inCart=true`);
+                const responseData = await sendRequest(`${BASE_URL}/api/orders/user/${auth.userId}?inCart=true`);
                
 
                 if(currentOrderLoaded.current === false) {
@@ -85,7 +85,7 @@ const ShoppingCart = () => {
 
     const onAddToCartClickHandler = async (e) => {
         e.preventDefault();
-        // console.log("Add to cart click handler");
+        console.log("Add to cart click handler");
 
         if(qty != 0){
             if(currentOrder === undefined) {
@@ -117,7 +117,7 @@ const ShoppingCart = () => {
                 );
 
                 try {
-                    const responseData = await sendRequest(`http://localhost:3001/api/orders/`, 
+                    const responseData = await sendRequest(`${BASE_URL}/api/orders/`, 
                             'POST',
                             JSON.stringify({
                                 userId: auth.userId,
@@ -164,7 +164,7 @@ const ShoppingCart = () => {
                 setCurrentOrder(currentOrder);
 
                 try {
-                    const responseData = await sendRequest(`http://localhost:3001/api/orders/${currentOrder.orders[0]._id}`, 
+                    const responseData = await sendRequest(`${BASE_URL}/api/orders/${currentOrder.orders[0]._id}`, 
                             'PUT',
                             JSON.stringify({
                                 userId: auth.userId,
@@ -211,7 +211,7 @@ const ShoppingCart = () => {
             setCurrentOrder(currentOrder);
     
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/orders/${currentOrder.orders[0]._id}`, 
+                const responseData = await sendRequest(`${BASE_URL}/api/orders/${currentOrder.orders[0]._id}`, 
                         'PUT',
                         JSON.stringify({
                             userId: auth.userId,

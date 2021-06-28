@@ -10,6 +10,8 @@ import Pagination from '../../products/components/Pagination';
 import OrderList from '../components/OrdersList';
 import OrderMenu from '../components/OrdersMenu';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const Rejected = () => {
     const auth = useContext(AuthContext);
     const [orders, setOrders] = useState();
@@ -22,7 +24,7 @@ const Rejected = () => {
             try { 
                 
             const responseData = await sendRequest(
-                `http://localhost:3001/api/orders?status=3&inCart=false`,
+                `${BASE_URL}/api/orders?status=3&inCart=false`,
                 'GET',
                 null,
                 {
@@ -49,7 +51,7 @@ const Rejected = () => {
 
         try {
             const responseData = await sendRequest(
-                `http://localhost:3001/api/orders/${event.target.dataset.order_id}?unreject=true`,
+                `${BASE_URL}/api/orders/${event.target.dataset.order_id}?unreject=true`,
                 'PUT',
                 JSON.stringify({
                     status: 0

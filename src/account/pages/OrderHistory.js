@@ -8,6 +8,8 @@ import OrderHistoryMain from '../components/OrderHistoryMain';
 import {AuthContext} from '../../shared/context/auth-context';
 import {useHttpClient} from '../../shared/hooks/http-hook';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const OrderHistory = () => {
     const auth = useContext(AuthContext);
     const [orders, setOrders] = useState();
@@ -17,7 +19,7 @@ const OrderHistory = () => {
        try { 
            
         const responseData = await sendRequest(
-            `http://localhost:3001/api/orders/user/${auth.userId}/completed?inCart=false`,
+            `${BASE_URL}/api/orders/user/${auth.userId}/completed?inCart=false`,
             'GET',
             null,
             {

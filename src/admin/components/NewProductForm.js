@@ -13,6 +13,8 @@ import { AuthContext } from '../../shared/context/auth-context';
 import { useParams, useHistory } from 'react-router-dom';
 import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const NewProductForm  = (props) => {
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [ selectedCategory, setSelectedCategory ] = useState(props.categories[0]);
@@ -32,6 +34,8 @@ const NewProductForm  = (props) => {
     const [previewDocs, setPreviewDocs] = useState();
     const [docs, setDocs] = useState([]);
 
+    const [fileSetter, setFileSetter] = useState(false);
+
     const filePickerRef = useRef();
     const docsPickerRef = useRef();
 
@@ -39,19 +43,26 @@ const NewProductForm  = (props) => {
     useEffect(() => {
       
         const fetchTypesBySelectedCategory = async () => {
-            setSelectedType(null);
             
+            if(!fileSetter) {
+                setSelectedType(null);
+               
+            }
+
+            setFileSetter(false);
+
             if(initialLoad) { 
 
                 
                 setInitialLoad(false);
             } else {
 
-                const responseData = await sendRequest(`http://localhost:3001/api/types/category/${selectedCategory._id}`);
+                const responseData = await sendRequest(`${BASE_URL}/api/types/category/${selectedCategory._id}`);
 
                 //console.log(responseData);
                 setTypes(responseData);
                 console.log(selectedCategory._id);
+        
                 setInitialLoad(false);
             }
         }
@@ -247,6 +258,7 @@ const NewProductForm  = (props) => {
 
     const picPickedHandler = (event) => {
        
+        setFileSetter(true);
         setImages(event.target.files);
     }
 
@@ -257,6 +269,7 @@ const NewProductForm  = (props) => {
 
     const docPickedHandler = (event) => {
 
+        setFileSetter(true);
        setDocs(event.target.files);
     }
 
@@ -268,6 +281,7 @@ const NewProductForm  = (props) => {
     const onClickCancelPhoto = (event) => {
         event.preventDefault();
 
+        setFileSetter(true);
         const imagesTemp = [];
         const previewUrlsTemp = [];
 
@@ -290,7 +304,7 @@ const NewProductForm  = (props) => {
 
     const onClickCancelDoc = (event) => {
         event.preventDefault();
-
+        setFileSetter(true);
         console.log("cancel doc");
 
         const docsTemp = [];

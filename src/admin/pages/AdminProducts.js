@@ -12,6 +12,7 @@ import MainMenu from "../../products/components/MainMenu";
 import OrderMenu from "../../products/components/OrderMenu";
 import Pagination from "../../products/components/Pagination";
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const AdminProducts = (props) => {
 
@@ -41,7 +42,7 @@ const AdminProducts = (props) => {
         const fetchSideMenuItems = async () => {
         
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/types/category/${mainMenuSelected}`);
+                const responseData = await sendRequest(`${BASE_URL}/api/types/category/${mainMenuSelected}`);
 
                 setLoadedSideMenuItems(responseData);
             } catch (err) {}
@@ -50,7 +51,7 @@ const AdminProducts = (props) => {
         const fetchItems = async () => {
 
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/products/category/${mainMenuSelected}`)
+                const responseData = await sendRequest(`${BASE_URL}/api/products/category/${mainMenuSelected}`)
            
                 setLoadedProducts(responseData);
 
@@ -61,7 +62,7 @@ const AdminProducts = (props) => {
         const fetchPagination = async () => {
 
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/pagination/category/${mainMenuSelected}`)
+                const responseData = await sendRequest(`${BASE_URL}/api/pagination/category/${mainMenuSelected}`)
 
                 setPageNumber(Math.ceil(responseData.count/4));
             } catch (err) {}
@@ -93,7 +94,7 @@ const AdminProducts = (props) => {
         const fetchSideMenuItems = async () => {
         
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/types/category/${e.target.dataset.letter}`);
+                const responseData = await sendRequest(`${BASE_URL}/api/types/category/${e.target.dataset.letter}`);
                 setLoadedSideMenuItems(responseData);
                 
                 
@@ -103,7 +104,7 @@ const AdminProducts = (props) => {
         const fetchItems = async () => {
 
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/products/category/${e.target.dataset.letter}`)
+                const responseData = await sendRequest(`${BASE_URL}/api/products/category/${e.target.dataset.letter}`)
            
                 setLoadedProducts(responseData);
             } catch (err) {}
@@ -112,7 +113,7 @@ const AdminProducts = (props) => {
         const fetchPagination = async () => {
 
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/pagination/category/${e.target.dataset.letter}`)
+                const responseData = await sendRequest(`${BASE_URL}/api/pagination/category/${e.target.dataset.letter}`)
 
                 setPageNumber(Math.ceil(responseData.count/4));
             } catch (err) {}
@@ -132,7 +133,7 @@ const AdminProducts = (props) => {
         const fetchItems = async () => {
 
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/products/type/${e.target.dataset.letter}`)
+                const responseData = await sendRequest(`${BASE_URL}/api/products/type/${e.target.dataset.letter}`)
            
                 setLoadedProducts(responseData);
             } catch (err) {}
@@ -141,7 +142,7 @@ const AdminProducts = (props) => {
         const fetchPagination = async () => {
 
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/pagination/type/${e.target.dataset.letter}`)
+                const responseData = await sendRequest(`${BASE_URL}/api/pagination/type/${e.target.dataset.letter}`)
 
                 setPageNumber(Math.ceil(responseData.count/4));
             } catch (err) {}
@@ -167,7 +168,7 @@ const AdminProducts = (props) => {
         const fetchItems = async () => {
           
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/products/category/${mainMenuSelected}?page=${myPage}`)
+                const responseData = await sendRequest(`${BASE_URL}/api/products/category/${mainMenuSelected}?page=${myPage}`)
            
                 setLoadedProducts(responseData);
             } catch (err) {}
@@ -188,7 +189,7 @@ const AdminProducts = (props) => {
         const fetchItems = async () => {
           
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/products/category/${mainMenuSelected}?page=${myPage}`)
+                const responseData = await sendRequest(`${BASE_URL}/api/products/category/${mainMenuSelected}?page=${myPage}`)
            
                 setLoadedProducts(responseData);
             } catch (err) {}
@@ -205,7 +206,7 @@ const AdminProducts = (props) => {
         const fetchItems = async () => {
           
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/products/category/${mainMenuSelected}?page=${e.target.dataset.letter}`)
+                const responseData = await sendRequest(`${BASE_URL}/api/products/category/${mainMenuSelected}?page=${e.target.dataset.letter}`)
            
                 setLoadedProducts(responseData);
             } catch (err) {}
@@ -223,7 +224,7 @@ const AdminProducts = (props) => {
       
 
         try {
-            const responseData = await sendRequest(`http://localhost:3001/api/products/unitsInStock/${e.target.dataset.product_id}`, 
+            const responseData = await sendRequest(`${BASE_URL}/api/products/unitsInStock/${e.target.dataset.product_id}`, 
                     'PUT',
                     JSON.stringify({
                        unitsInStock: qty
@@ -249,7 +250,7 @@ const AdminProducts = (props) => {
         console.log("remove from stock");
         productsFetched.current = false;
         try {
-            const responseData = await sendRequest(`http://localhost:3001/api/products/unitsInStock/${e.target.dataset.product_id}`, 
+            const responseData = await sendRequest(`${BASE_URL}/api/products/unitsInStock/${e.target.dataset.product_id}`, 
                     'PUT',
                     JSON.stringify({
                        unitsInStock: 0
@@ -278,7 +279,7 @@ const AdminProducts = (props) => {
 
         try { 
             const responseData = sendRequest(
-                `http://localhost:3001/api/products/${event.target.dataset.product_id}`,
+                `${BASE_URL}/api/products/${event.target.dataset.product_id}`,
                 'DELETE',
                 null,
                 {

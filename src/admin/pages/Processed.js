@@ -10,6 +10,8 @@ import Pagination from '../../products/components/Pagination'
 import OrderList from '../components/OrdersList';
 import OrderMenu from '../components/OrdersMenu';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const Processed = () => {
     const auth = useContext(AuthContext);
     const [orders, setOrders] = useState();
@@ -23,7 +25,7 @@ const Processed = () => {
             try { 
                 
             const responseData = await sendRequest(
-                `http://localhost:3001/api/orders?status=1&inCart=false`,
+                `${BASE_URL}/api/orders?status=1&inCart=false`,
                 'GET',
                 null,
                 {

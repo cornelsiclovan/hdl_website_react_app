@@ -9,6 +9,8 @@ import {useHttpClient} from '../../shared/hooks/http-hook';
 import Pagination from '../../products/components/Pagination'
 import CustomerList from '../components/CustomerList';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const Customers = (props) => {
     const auth = useContext(AuthContext);
     const [customers, setCustomers] = useState();
@@ -20,7 +22,7 @@ const Customers = (props) => {
             try { 
                 
             const responseData = await sendRequest(
-                `http://localhost:3001/api/users/admin/${auth.userId}`,
+                `${BASE_URL}/api/users/admin/${auth.userId}`,
                 'GET',
                 null,
                 {

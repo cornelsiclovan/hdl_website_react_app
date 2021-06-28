@@ -9,6 +9,7 @@ import {useHttpClient} from '../../shared/hooks/http-hook';
 
 import EditProductForm from '../components/EditProductForm';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const EditProduct = (props) => {
     const auth = useContext(AuthContext);
@@ -25,7 +26,7 @@ const EditProduct = (props) => {
         const fetchProduct = async () => {
             try {
 
-                const responseData = await sendRequest(`http://localhost:3001/api/products/${productId}`);
+                const responseData = await sendRequest(`${BASE_URL}/api/products/${productId}`);
                console.log(responseData);
                 setLoadedProduct(responseData);
             } catch(error) {}
@@ -33,7 +34,7 @@ const EditProduct = (props) => {
 
         const fetchCategories = async () => {
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/categories`);
+                const responseData = await sendRequest(`${BASE_URL}/api/categories`);
             
                 setLoadedCategories(responseData);
             } catch (error) {}

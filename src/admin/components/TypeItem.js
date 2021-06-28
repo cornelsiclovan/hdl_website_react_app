@@ -3,6 +3,8 @@ import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const TypeItem = (props) =>  {
     const auth = useContext(AuthContext);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -17,8 +19,8 @@ const TypeItem = (props) =>  {
 
         try {
             const response = await sendRequest(
-                `http://localhost:3001/api/types/${props.type._id}`,
-                'DELETE',
+                `${BASE_URL}/api/types/${props.type._id}`,
+                'DELETE',  
                 null,
                 {
                     'x-auth-token': auth.token

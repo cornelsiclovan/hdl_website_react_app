@@ -6,6 +6,8 @@ import ProductMain from '../components/ProductMain';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { useParams, useHistory } from 'react-router-dom';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const Product = () => {
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
     const productId = useParams().productId;
@@ -14,7 +16,7 @@ const Product = () => {
     useEffect(() => {
 
         const fetchProduct = async () => {
-            const responseData = await sendRequest(`http://localhost:3001/api/products/${productId}`);
+            const responseData = await sendRequest(`${BASE_URL}/api/products/${productId}`);
             
             setProduct(responseData);
 

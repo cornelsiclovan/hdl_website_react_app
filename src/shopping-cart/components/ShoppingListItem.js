@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const ShoppingListItem = (props) => {
     let qty = 0;
@@ -26,7 +26,7 @@ const ShoppingListItem = (props) => {
                         <li class="section-cart__left--item">
                             <div class="section-cart__left--item-pull-left">
                             
-                                <img src={"http:\\\\localhost:3001\\"+image} /> 
+                                <img src={`${BASE_URL}/${image}`} /> 
                                 
                                 <div class="section-cart__left--item-col">
 

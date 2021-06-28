@@ -9,6 +9,8 @@ import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from "../../shared/context/auth-context";
 import EditCategoryForm from '../components/EditCategoryForm';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const EditCategory = () => {
     const auth = useContext(AuthContext);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -24,7 +26,7 @@ const EditCategory = () => {
         const fetchCategory = async () => {
             
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/categories/${categoryId}`);
+                const responseData = await sendRequest(`${BASE_URL}/api/categories/${categoryId}`);
                 
                 setCategory(responseData);
             }catch(error) {}
@@ -33,7 +35,7 @@ const EditCategory = () => {
         const fetchTypes = async () => {
 
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/types/category/${categoryId}`)
+                const responseData = await sendRequest(`${BASE_URL}/api/types/category/${categoryId}`)
                 
                 setTypes(responseData);
             } catch(error) {}

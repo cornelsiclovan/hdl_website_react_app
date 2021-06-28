@@ -1,6 +1,8 @@
 import React, { useEffect, useState }  from "react";
 import { useHttpClient } from '../../shared/hooks/http-hook';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const MainMenu = (props) => {
     const [loadedMainMenuItems, setLoadedMainMenuItems] = useState();
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -18,7 +20,7 @@ const MainMenu = (props) => {
         const fetchMainMenuItems = async () => {
         
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/categories`);
+                const responseData = await sendRequest(`${BASE_URL}/api/categories`);
 
                 setLoadedMainMenuItems(responseData);
                 props.setMainMenuSelected(responseData[0]);

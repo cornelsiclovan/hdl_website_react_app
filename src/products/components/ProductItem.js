@@ -4,6 +4,8 @@ import { AuthContext } from '../../shared/context/auth-context';
 
 // import {useForm} from '../../shared/hooks/form-hook';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const ProductItem = props => {
     const auth = useContext(AuthContext);
 
@@ -59,7 +61,9 @@ const ProductItem = props => {
                         }
 
                         
-                        <img  className="card-item__picture" src={"http:\\\\localhost:3001\\"+props.image} />   
+                        {/* <img  className="card-item__picture" src={"http:\\\\localhost:3001\\"+props.image} />   */}
+
+                        <img  className="card-item__picture" src={`${BASE_URL}/${props.image}`} />    
                         
                     
                         <div className="card-item__details">

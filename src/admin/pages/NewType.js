@@ -6,6 +6,8 @@ import { useHttpClient } from '../../shared/hooks/http-hook';
 import TypeList from '../components/TypeList';
 import Footer from '../../shared/components/UIElements/Footer';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const NewType = () => {
     const [types, setTypes] = useState();
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -14,7 +16,7 @@ const NewType = () => {
 
         const fetchTypes = async () => {
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/types`);
+                const responseData = await sendRequest(`${BASE_URL}/api/types`);
             
                 setTypes(responseData);
             } catch (error) {}

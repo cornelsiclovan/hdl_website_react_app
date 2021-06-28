@@ -6,6 +6,8 @@ import Menu from '../components/Menu';
 import NewProductForm from '../components/NewProductForm';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const NewProduct = () => {
     const [categories, setCategories] = useState();
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -14,7 +16,7 @@ const NewProduct = () => {
 
         const fetchCategories = async () => {
             try {
-                const responseData = await sendRequest(`http://localhost:3001/api/categories`);
+                const responseData = await sendRequest(`${BASE_URL}/api/categories`);
             
                 setCategories(responseData);
             } catch (error) {}

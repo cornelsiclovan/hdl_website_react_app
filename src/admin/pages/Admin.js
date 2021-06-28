@@ -10,6 +10,8 @@ import Pagination from '../../products/components/Pagination'
 import OrderList from '../components/OrdersList';
 import OrderMenu from '../components/OrdersMenu';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const Admin = () => {
     const auth = useContext(AuthContext);
     const [orders, setOrders] = useState();
@@ -32,7 +34,7 @@ const Admin = () => {
             try { 
                 
             const responseData = await sendRequest(
-                `http://localhost:3001/api/orders?status=0&inCart=false`,
+                `${BASE_URL}/api/orders?status=0&inCart=false`,
                 'GET',
                 null,
                 {
@@ -59,7 +61,7 @@ const Admin = () => {
        
         try {
         const responseData = await sendRequest(
-            `http://localhost:3001/api/orders/${event.target.dataset.order_id}`,
+            `${BASE_URL}/api/orders/${event.target.dataset.order_id}`,
             'PUT',
             JSON.stringify({
                 status: 1
@@ -81,7 +83,7 @@ const Admin = () => {
        
         try {
         const responseData = await sendRequest(
-            `http://localhost:3001/api/orders/${event.target.dataset.order_id}`,
+            `${BASE_URL}/api/orders/${event.target.dataset.order_id}`,
             'PUT',
             JSON.stringify({
                 status: 3
