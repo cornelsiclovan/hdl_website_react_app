@@ -17,7 +17,7 @@ const Products = () => {
     const auth = useContext(AuthContext);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
     const [loadedSideMenuItems, setLoadedSideMenuItems] = useState();
-    const [sideMenuName, setSideMenuName] = useState('Buspro')
+    const [sideMenuName, setSideMenuName] = useState()
     const [loadedProducts, setLoadedProducts] = useState();
     // Sets the state for intial page of products
     const [mainMenuSelected, setMainMenuSelected] = useState();
@@ -45,9 +45,22 @@ const Products = () => {
                 const responseData = await sendRequest(`${BASE_URL}/api/categories`);
 
                setMainMenuSelected(responseData[0]);
+               console.log(responseData[0]);
+               setSideMenuName(responseData[0].name);
                const resp = await sendRequest(`${BASE_URL}/api/types/category/${responseData[0]._id}`);
 
+               console.log(resp);
                setLoadedSideMenuItems(resp);
+
+                const productsResp = await sendRequest(`${BASE_URL}/api/products/category/${responseData[0]._id}`)
+                
+                console.log("fetchAllProducts: ", productsResp);
+                
+                setLoadedProducts(productsResp);
+
+                const responseDataPagination = await sendRequest(`${BASE_URL}/api/pagination/category/${responseData[0]._id}`)
+
+                setPageNumber(Math.ceil(responseDataPagination.count/4));
                 
             } catch (err) {}
         };
@@ -68,6 +81,9 @@ const Products = () => {
             try {
 
                 const responseData = await sendRequest(`${BASE_URL}/api/products`)
+                
+                console.log("fetchAllProducts: ", responseData);
+                
                 setLoadedProducts(responseData);
                 productsFetched.current = true;
             } catch(err) {
@@ -83,6 +99,7 @@ const Products = () => {
                 const responseData = await sendRequest(`${BASE_URL}/api/products/category/${mainMenuSelected._id}`)
            
                 setLoadedProducts(responseData);
+                console.log("fetchItems: ", responseData);
 
                 productsFetched.current = true;
             } catch (err) {}
@@ -100,16 +117,11 @@ const Products = () => {
         const fetchOrder = async () => {
             try{
                 const responseData = await sendRequest(`${BASE_URL}/api/orders/user/${auth.userId}?inCart=true`);
-               
-                console.log("fetchORder:", responseData);
 
                 if(currentOrderLoaded.current === false) {
                     setCurrentOrder(responseData);
                     currentOrderLoaded.current = true;
                 }
-               
-
-                //console.log("fetch order", currentOrder.orders[0].qtyArray);
 
                 let orderedProductsTemp = [];
                
@@ -126,7 +138,7 @@ const Products = () => {
 
 
                 let qtyArrayTemp = [];
-                currentOrder.orders[0].qtyArray.forEach(item => {
+                responseData.orders[0].qtyArray.forEach(item => {
       
                     let itemQty = {
                         productId: item.productId,
@@ -138,6 +150,7 @@ const Products = () => {
                    
                 });
   
+                console.log("am here 3");
 
                 if(!qtyArraySet.current) {
                     setQtyArray(qtyArrayTemp);
@@ -153,19 +166,17 @@ const Products = () => {
                 console.log("fetch qtyArray", qtyArray);
                 console.log("fetch products", orderedProducts);
 
-              
-
             } catch (err) {} 
         }
 
-        if(!mainMenuSelected && !productsFetched.current) {
-            fetchAllProducts();
-        }
+        // if(!mainMenuSelected && !productsFetched.current) {
+        //     fetchAllProducts();
+        // }
 
         if(!productsFetched.current)
             fetchOrder();
         
-        fetchPagination();
+        //fetchPagination();
        
         fetchSideMenuItems();
 
@@ -314,17 +325,7 @@ const Products = () => {
 
     const onAddToCartClickHandler = async (e) => {
         e.preventDefault();
-        // console.log("Add to cart click handler");
-        
-        console.log("onadd orderd products before", orderedProducts);
 
-        if(orderedProducts.length !== 0) {
-          console.log("onADD", orderedProducts);
-        }
-        // console.log("poduct id", e.target.dataset.product_id);
-        // console.log("quantity", qty);
-
-        
         if(qty != 0){
             if(currentOrder === undefined) {
                  console.log("creating order");
@@ -358,7 +359,6 @@ const Products = () => {
                             }
                         )
 
-                    console.log(responseData);
                     setCurrentOrder(
                         {
                             orders:[{
@@ -375,10 +375,10 @@ const Products = () => {
                 } catch (err) {}
 
             } else {
-                console.log("order exists");
                 let qtyArrayTemp = qtyArray.filter( item =>
                         item.productId != e.target.dataset.product_id
                     );
+
                 
                 let  orderedProductsTemp = orderedProducts.filter( product =>  
                         product.productId != e.target.dataset.product_id
@@ -401,7 +401,6 @@ const Products = () => {
                 setQtyArray(qtyArrayTemp);
                 setOrderedProducts(orderedProductsTemp);
 
-                console.log("onadd orderd products after", orderedProductsTemp);
 
                 try {
                     //console.log("PUT");
@@ -417,6 +416,7 @@ const Products = () => {
                             'Content-Type': 'application/json'
                             }
                         );
+
                 } catch (err) {}
             }
         }
@@ -431,13 +431,13 @@ const Products = () => {
         e.preventDefault();
         if(currentOrder != undefined) {
 
-            if(orderedProducts.length !== 0) {
-                console.log("onRemove Products", orderedProducts);
-            }
+            // if(orderedProducts.length !== 0) {
+            //     console.log("onRemove Products", orderedProducts);
+            // }
 
-            if(qtyArray.length !== 0) {
-                console.log("onRemove qtyArr", qtyArray);
-            }
+            // if(qtyArray.length !== 0) {
+            //     console.log("onRemove qtyArr", qtyArray);
+            // }
         
 
             let qtyArrayTemp = qtyArray.filter(item =>{
@@ -457,7 +457,6 @@ const Products = () => {
             currentOrder.orders[0].qtyArray = qtyArrayTemp;
 
             setCurrentOrder(currentOrder);
-            console.log("removed item", currentOrder);
 
             // console.log(JSON.stringify({
             //     userId: auth.userId,
@@ -488,10 +487,7 @@ const Products = () => {
         setQty(e.target.value)
     }
 
-    console.log("currentOrder: ", currentOrder);
-
   
-
     return (
         <React.Fragment>
             <Header />  
